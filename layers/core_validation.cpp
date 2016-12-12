@@ -524,6 +524,7 @@ static bool ValidateMemoryIsValid(layer_data *dev_data, VkDeviceMemory mem, uint
     DEVICE_MEM_INFO *mem_info = getMemObjInfo(dev_data, mem);
     if (mem_info) {
         if (!mem_info->bound_ranges[bound_object_handle].valid) {
+            // TODO: Is this captured by valid usage?
             return log_msg(dev_data->report_data, VK_DEBUG_REPORT_WARNING_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT,
                            reinterpret_cast<uint64_t &>(mem), __LINE__, MEMTRACK_INVALID_MEM_REGION, "MEM",
                            "%s: Cannot read invalid region of memory allocation 0x%" PRIx64 " for bound %s object 0x%" PRIx64
@@ -539,6 +540,7 @@ static bool ValidateMemoryIsValid(layer_data *dev_data, VkDeviceMemory mem, uint
 static bool ValidateImageMemoryIsValid(layer_data *dev_data, IMAGE_STATE *image_state, const char *functionName) {
     if (image_state->binding.mem == MEMTRACKER_SWAP_CHAIN_IMAGE_KEY) {
         if (!image_state->valid) {
+            // TODO: Is this captured by valid usage?
             return log_msg(dev_data->report_data, VK_DEBUG_REPORT_WARNING_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT,
                            reinterpret_cast<uint64_t &>(image_state->binding.mem), __LINE__, MEMTRACK_INVALID_MEM_REGION, "MEM",
                            "%s: Cannot read invalid swapchain image 0x%" PRIx64 ", please fill the memory before using.",
@@ -721,12 +723,14 @@ bool VerifyBoundMemoryIsValid(const layer_data *dev_data, VkDeviceMemory mem, ui
                               const char *type_name) {
     bool result = false;
     if (VK_NULL_HANDLE == mem) {
+        // TODO: Is this captured by valid usage?
         result = log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, handle,
                          __LINE__, MEMTRACK_OBJECT_NOT_BOUND, "MEM",
                          "%s: Vk%s object 0x%" PRIxLEAST64 " used with no memory bound. Memory should be bound by calling "
                          "vkBind%sMemory().",
                          api_name, type_name, handle, type_name);
     } else if (MEMORY_UNBOUND == mem) {
+        // TODO: Is this captured by valid usage?
         result = log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT, handle,
                          __LINE__, MEMTRACK_OBJECT_NOT_BOUND, "MEM",
                          "%s: Vk%s object 0x%" PRIxLEAST64 " used with no memory bound and previously bound memory was freed. "
@@ -762,6 +766,7 @@ bool ValidateMemoryIsBoundToBuffer(const layer_data *dev_data, const BUFFER_STAT
 //  IF a previous binding existed, output validation error
 //  Otherwise, add reference from objectInfo to memoryInfo
 //  Add reference off of objInfo
+// TODO: We may need to refactor or pass in multiple valid usage statements to handle multiple valid usage conditions.
 static bool SetMemBinding(layer_data *dev_data, VkDeviceMemory mem, uint64_t handle, VkDebugReportObjectTypeEXT type,
                           const char *apiName) {
     bool skip_call = false;
@@ -780,6 +785,7 @@ static bool SetMemBinding(layer_data *dev_data, VkDeviceMemory mem, uint64_t han
         if (mem_info) {
             DEVICE_MEM_INFO *prev_binding = getMemObjInfo(dev_data, mem_binding->binding.mem);
             if (prev_binding) {
+                // TODO: VALIDATION_ERROR_00791 and VALIDATION_ERROR_00803
                 skip_call |=
                     log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT,
                             reinterpret_cast<uint64_t &>(mem), __LINE__, MEMTRACK_REBIND_OBJECT, "MEM",
@@ -787,6 +793,7 @@ static bool SetMemBinding(layer_data *dev_data, VkDeviceMemory mem, uint64_t han
                             ") which has already been bound to mem object 0x%" PRIxLEAST64,
                             apiName, reinterpret_cast<uint64_t &>(mem), handle, reinterpret_cast<uint64_t &>(prev_binding->mem));
             } else if (mem_binding->binding.mem == MEMORY_UNBOUND) {
+                // TODO: Is this captured by valid usage?
                 skip_call |=
                     log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT,
                             reinterpret_cast<uint64_t &>(mem), __LINE__, MEMTRACK_REBIND_OBJECT, "MEM",
@@ -1564,6 +1571,7 @@ static std::vector<std::pair<descriptor_slot_t, interface_var>> collect_interfac
     return out;
 }
 
+// TODO: Unsure whether the log_msg calls in this function are captured by valid usage? VALIDATION_ERROR_02105 perhaps?
 static bool validate_interface_between_stages(debug_report_data *report_data, shader_module const *producer,
                                               spirv_inst_iter producer_entrypoint, shader_stage_attributes const *producer_stage,
                                               shader_module const *consumer, spirv_inst_iter consumer_entrypoint,
@@ -1747,6 +1755,7 @@ static bool validate_vi_consistency(debug_report_data *report_data, VkPipelineVe
         auto desc = &vi->pVertexBindingDescriptions[i];
         auto &binding = bindings[desc->binding];
         if (binding) {
+            // TODO: Is this captured by valid usage? VALIDATION_ERROR_02105 perhaps?
             if (log_msg(report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VkDebugReportObjectTypeEXT(0), 0,
                         __LINE__, SHADER_CHECKER_INCONSISTENT_VI, "SC",
                         "Duplicate vertex input binding descriptions for binding %d", desc->binding)) {
@@ -1760,6 +1769,7 @@ static bool validate_vi_consistency(debug_report_data *report_data, VkPipelineVe
     return pass;
 }
 
+// TODO: Unsure whether the log_msg calls in this function are captured by valid usage? VALIDATION_ERROR_02105 perhaps?
 static bool validate_vi_against_vs_inputs(debug_report_data *report_data, VkPipelineVertexInputStateCreateInfo const *vi,
                                           shader_module const *vs, spirv_inst_iter entrypoint) {
     bool pass = true;
@@ -1825,6 +1835,7 @@ static bool validate_vi_against_vs_inputs(debug_report_data *report_data, VkPipe
     return pass;
 }
 
+// TODO: Unsure whether the log_msg calls in this function are captured by valid usage? VALIDATION_ERROR_02105 perhaps?
 static bool validate_fs_outputs_against_render_pass(debug_report_data *report_data, shader_module const *fs,
                                                     spirv_inst_iter entrypoint, VkRenderPassCreateInfo const *rpci,
                                                     uint32_t subpass_index) {
@@ -2012,6 +2023,7 @@ static std::unordered_set<uint32_t> mark_accessible_ids(shader_module const *src
     return ids;
 }
 
+// TODO: Unsure whether the log_msg calls in this function are captured by valid usage?
 static bool validate_push_constant_block_against_pipeline(debug_report_data *report_data,
                                                           std::vector<VkPushConstantRange> const *push_constant_ranges,
                                                           shader_module const *src, spirv_inst_iter type,

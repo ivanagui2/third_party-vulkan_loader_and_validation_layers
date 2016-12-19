@@ -237,6 +237,10 @@ struct loader_icd_term {
     PFN_vkGetPhysicalDeviceXlibPresentationSupportKHR
         GetPhysicalDeviceXlibPresentationSupportKHR;
 #endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    PFN_vkCreateMagmaSurfaceKHR CreateMagmaSurfaceKHR;
+    PFN_vkGetPhysicalDeviceMagmaPresentationSupportKHR GetPhysicalDeviceMagmaPresentationSupportKHR;
+#endif
     PFN_vkGetPhysicalDeviceDisplayPropertiesKHR
         GetPhysicalDeviceDisplayPropertiesKHR;
     PFN_vkGetPhysicalDeviceDisplayPlanePropertiesKHR
@@ -325,6 +329,9 @@ struct loader_instance {
 #endif
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
     bool wsi_android_surface_enabled;
+#endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    bool wsi_magma_surface_enabled;
 #endif
     bool wsi_display_enabled;
 };

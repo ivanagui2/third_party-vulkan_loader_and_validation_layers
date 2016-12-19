@@ -689,6 +689,13 @@ static inline void loader_init_instance_extension_dispatch_table(
         (PFN_vkGetPhysicalDeviceXlibPresentationSupportKHR)gpa(
             inst, "vkGetPhysicalDeviceXlibPresentationSupportKHR");
 #endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    table->CreateMagmaSurfaceKHR =
+        (PFN_vkCreateMagmaSurfaceKHR)gpa(inst, "vkCreateMagmaSurfaceKHR");
+    table->GetPhysicalDeviceMagmaPresentationSupportKHR =
+        (PFN_vkGetPhysicalDeviceMagmaPresentationSupportKHR)gpa(
+            inst, "vkGetPhysicalDeviceMagmaPresentationSupportKHR");
+#endif
     table->GetPhysicalDeviceDisplayPropertiesKHR =
         (PFN_vkGetPhysicalDeviceDisplayPropertiesKHR)gpa(
             inst, "vkGetPhysicalDeviceDisplayPropertiesKHR");
@@ -790,6 +797,12 @@ loader_lookup_instance_dispatch_table(const VkLayerInstanceDispatchTable *table,
         return (void *)table->CreateXlibSurfaceKHR;
     if (!strcmp(name, "GetPhysicalDeviceXlibPresentationSupportKHR"))
         return (void *)table->GetPhysicalDeviceXlibPresentationSupportKHR;
+#endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    if (!strcmp(name, "CreateMagmaSurfaceKHR"))
+        return (void *)table->CreateMagmaSurfaceKHR;
+    if (!strcmp(name, "GetPhysicalDeviceMagmaPresentationSupportKHR"))
+        return (void *)table->GetPhysicalDeviceMagmaPresentationSupportKHR;
 #endif
     if (!strcmp(name, "GetPhysicalDeviceDisplayPropertiesKHR"))
         return (void *)table->GetPhysicalDeviceDisplayPropertiesKHR;

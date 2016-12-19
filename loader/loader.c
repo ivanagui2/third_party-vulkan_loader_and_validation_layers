@@ -148,6 +148,11 @@ const VkLayerInstanceDispatchTable instance_disp = {
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
     .CreateAndroidSurfaceKHR = terminator_CreateAndroidSurfaceKHR,
 #endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    .CreateMagmaSurfaceKHR = terminator_CreateMagmaSurfaceKHR,
+    .GetPhysicalDeviceMagmaPresentationSupportKHR =
+        terminator_GetPhysicalDeviceMagmaPresentationSupportKHR,
+#endif
     .GetPhysicalDeviceDisplayPropertiesKHR =
         terminator_GetPhysicalDeviceDisplayPropertiesKHR,
     .GetPhysicalDeviceDisplayPlanePropertiesKHR =
@@ -1683,6 +1688,10 @@ static bool loader_icd_init_entrys(struct loader_icd_term *icd_term,
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
     LOOKUP_GIPA(CreateWaylandSurfaceKHR, false);
     LOOKUP_GIPA(GetPhysicalDeviceWaylandPresentationSupportKHR, false);
+#endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    LOOKUP_GIPA(CreateMagmaSurfaceKHR, false);
+    LOOKUP_GIPA(GetPhysicalDeviceMagmaPresentationSupportKHR, false);
 #endif
     // NV_external_memory_capabilities
     LOOKUP_GIPA(GetPhysicalDeviceExternalImageFormatPropertiesNV, false);

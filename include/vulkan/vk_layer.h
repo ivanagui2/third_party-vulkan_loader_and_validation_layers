@@ -237,6 +237,11 @@ typedef struct VkLayerInstanceDispatchTable_ {
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
     PFN_vkCreateAndroidSurfaceKHR CreateAndroidSurfaceKHR;
 #endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    PFN_vkCreateMagmaSurfaceKHR CreateMagmaSurfaceKHR;
+    PFN_vkGetPhysicalDeviceMagmaPresentationSupportKHR
+        GetPhysicalDeviceMagmaPresentationSupportKHR;
+#endif
     PFN_vkGetPhysicalDeviceDisplayPropertiesKHR
         GetPhysicalDeviceDisplayPropertiesKHR;
     PFN_vkGetPhysicalDeviceDisplayPlanePropertiesKHR

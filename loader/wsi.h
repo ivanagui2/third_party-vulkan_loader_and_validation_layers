@@ -42,6 +42,9 @@ typedef struct {
 #ifdef VK_USE_PLATFORM_XLIB_KHR
         VkIcdSurfaceXlib xlib_surf;
 #endif  // VK_USE_PLATFORM_XLIB_KHR
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+        VkIcdSurfaceMagma magma_surf;
+#endif  // VK_USE_PLATFORM_MAGMA_KHR
         VkIcdSurfaceDisplay display_surf;
     };
     uint32_t base_size;            // Size of VkIcdSurfaceBase
@@ -115,6 +118,13 @@ VKAPI_ATTR VkBool32 VKAPI_CALL terminator_GetPhysicalDeviceXlibPresentationSuppo
                                                                                       uint32_t queueFamilyIndex, Display *dpy,
                                                                                       VisualID visualID);
 #endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateMagmaSurfaceKHR(VkInstance instance, const VkMagmaSurfaceCreateInfoKHR *pCreateInfo,
+                                                                const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface);
+VKAPI_ATTR VkBool32 VKAPI_CALL terminator_GetPhysicalDeviceMagmaPresentationSupportKHR(VkPhysicalDevice physicalDevice,
+                                                                                       uint32_t queueFamilyIndex);
+#endif
+
 VKAPI_ATTR VkResult VKAPI_CALL terminator_GetPhysicalDeviceDisplayPropertiesKHR(VkPhysicalDevice physicalDevice,
                                                                                 uint32_t *pPropertyCount,
                                                                                 VkDisplayPropertiesKHR *pProperties);

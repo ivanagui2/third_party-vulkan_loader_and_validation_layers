@@ -285,6 +285,9 @@ struct loader_instance {
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
     bool wsi_android_surface_enabled;
 #endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    bool wsi_magma_surface_enabled;
+#endif
     bool wsi_display_enabled;
 };
 

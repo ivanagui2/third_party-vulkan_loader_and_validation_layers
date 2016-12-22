@@ -5938,6 +5938,7 @@ GetBufferMemoryRequirements(VkDevice device, VkBuffer buffer, VkMemoryRequiremen
     }
 }
 
+// START Jira VL-62
 VKAPI_ATTR void VKAPI_CALL
 GetImageMemoryRequirements(VkDevice device, VkImage image, VkMemoryRequirements *pMemoryRequirements) {
     layer_data *dev_data = get_my_data_ptr(get_dispatch_key(device), layer_data_map);
@@ -7563,6 +7564,7 @@ CmdBindPipeline(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindP
     if (!skip)
         dev_data->dispatch_table.CmdBindPipeline(commandBuffer, pipelineBindPoint, pipeline);
 }
+// END Jira VL-62
 
 VKAPI_ATTR void VKAPI_CALL
 CmdSetViewport(VkCommandBuffer commandBuffer, uint32_t firstViewport, uint32_t viewportCount, const VkViewport *pViewports) {

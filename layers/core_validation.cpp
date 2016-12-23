@@ -13339,3 +13339,5 @@ VK_LAYER_EXPORT VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL vkGetDeviceProcAddr(VkD
 VK_LAYER_EXPORT VKAPI_ATTR PFN_vkVoidFunction VKAPI_CALL vkGetInstanceProcAddr(VkInstance instance, const char *funcName) {
     return core_validation::GetInstanceProcAddr(instance, funcName);
 }
+// VALIDATION_ERROR_
+// validation_error_map[VALIDATION_ERROR_

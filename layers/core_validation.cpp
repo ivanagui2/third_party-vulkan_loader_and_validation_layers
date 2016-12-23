@@ -7592,6 +7592,8 @@ CmdBindPipeline(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelineBindP
         dev_data->dispatch_table.CmdBindPipeline(commandBuffer, pipelineBindPoint, pipeline);
 }
 
+// mewmew [
+
 VKAPI_ATTR void VKAPI_CALL
 CmdSetViewport(VkCommandBuffer commandBuffer, uint32_t firstViewport, uint32_t viewportCount, const VkViewport *pViewports) {
     bool skip_call = false;
@@ -7636,6 +7638,7 @@ VKAPI_ATTR void VKAPI_CALL CmdSetLineWidth(VkCommandBuffer commandBuffer, float 
 
         PIPELINE_STATE *pPipeTrav = pCB->lastBound[VK_PIPELINE_BIND_POINT_GRAPHICS].pipeline_state;
         if (pPipeTrav != NULL && !isDynamic(pPipeTrav, VK_DYNAMIC_STATE_LINE_WIDTH)) {
+// mewmew
             skip_call |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_WARNING_BIT_EXT, (VkDebugReportObjectTypeEXT)0,
                                  reinterpret_cast<uint64_t &>(commandBuffer), __LINE__, DRAWSTATE_INVALID_SET, "DS",
                                  "vkCmdSetLineWidth called but pipeline was created without VK_DYNAMIC_STATE_LINE_WIDTH "
@@ -7769,11 +7772,13 @@ CmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelin
                 if (pSet) {
                     pCB->lastBound[pipelineBindPoint].pipeline_layout = *pipeline_layout;
                     pCB->lastBound[pipelineBindPoint].boundDescriptorSets[i + firstSet] = pSet;
+// mewmew
                     skip_call |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_INFORMATION_BIT_EXT,
                                          VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, (uint64_t)pDescriptorSets[i], __LINE__,
                                          DRAWSTATE_NONE, "DS", "Descriptor Set 0x%" PRIxLEAST64 " bound on pipeline %s",
                                          (uint64_t)pDescriptorSets[i], string_VkPipelineBindPoint(pipelineBindPoint));
                     if (!pSet->IsUpdated() && (pSet->GetTotalDescriptorCount() != 0)) {
+// mewmew
                         skip_call |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_WARNING_BIT_EXT,
                                              VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, (uint64_t)pDescriptorSets[i], __LINE__,
                                              DRAWSTATE_DESCRIPTOR_SET_NOT_UPDATED, "DS",
@@ -7783,6 +7788,7 @@ CmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelin
                     }
                     // Verify that set being bound is compatible with overlapping setLayout of pipelineLayout
                     if (!verify_set_layout_compatibility(dev_data, pSet, pipeline_layout, i + firstSet, errorString)) {
+// mewmew
                         skip_call |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT,
                                              VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, (uint64_t)pDescriptorSets[i], __LINE__,
                                              DRAWSTATE_PIPELINE_LAYOUTS_INCOMPATIBLE, "DS",
@@ -7799,6 +7805,7 @@ CmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelin
                         // First make sure we won't overstep bounds of pDynamicOffsets array
                         if ((totalDynamicDescriptors + setDynamicDescriptorCount) > dynamicOffsetCount) {
                             skip_call |=
+// mewmew
                                 log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT,
                                         VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, (uint64_t)pDescriptorSets[i], __LINE__,
                                         DRAWSTATE_INVALID_DYNAMIC_OFFSET_COUNT, "DS",
@@ -7815,6 +7822,7 @@ CmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelin
                                     if (vk_safe_modulo(
                                             pDynamicOffsets[cur_dyn_offset],
                                             dev_data->phys_dev_properties.properties.limits.minUniformBufferOffsetAlignment) != 0) {
+// mewmew
                                         skip_call |= log_msg(
                                             dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT,
                                             VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, 0, __LINE__,
@@ -7829,6 +7837,7 @@ CmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelin
                                     if (vk_safe_modulo(
                                             pDynamicOffsets[cur_dyn_offset],
                                             dev_data->phys_dev_properties.properties.limits.minStorageBufferOffsetAlignment) != 0) {
+// mewmew
                                         skip_call |= log_msg(
                                             dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT,
                                             VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, 0, __LINE__,
@@ -7851,6 +7860,7 @@ CmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelin
                         }
                     }
                 } else {
+// mewmew
                     skip_call |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT,
                                          VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, (uint64_t)pDescriptorSets[i], __LINE__,
                                          DRAWSTATE_INVALID_SET, "DS", "Attempt to bind descriptor set 0x%" PRIxLEAST64
@@ -7865,6 +7875,7 @@ CmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelin
                         if (pCB->lastBound[pipelineBindPoint].boundDescriptorSets[i] &&
                             !verify_set_layout_compatibility(dev_data, pCB->lastBound[pipelineBindPoint].boundDescriptorSets[i],
                                                              pipeline_layout, i, errorString)) {
+// mewmew
                             skip_call |= log_msg(
                                 dev_data->report_data, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT,
                                 VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT,
@@ -7882,6 +7893,7 @@ CmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelin
                         !verify_set_layout_compatibility(dev_data, oldFinalBoundSet, pipeline_layout, lastSetIndex, errorString)) {
                         auto old_set = oldFinalBoundSet->GetSet();
                         skip_call |=
+// mewmew
                             log_msg(dev_data->report_data, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT,
                                     VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_SET_EXT, reinterpret_cast<uint64_t &>(old_set), __LINE__,
                                     DRAWSTATE_NONE, "DS", "DescriptorSet 0x%" PRIxLEAST64
@@ -7898,6 +7910,7 @@ CmdBindDescriptorSets(VkCommandBuffer commandBuffer, VkPipelineBindPoint pipelin
             //  dynamicOffsetCount must equal the total number of dynamic descriptors in the sets being bound
             if (totalDynamicDescriptors != dynamicOffsetCount) {
                 skip_call |=
+// mewmew
                     log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT,
                             (uint64_t)commandBuffer, __LINE__, DRAWSTATE_INVALID_DYNAMIC_OFFSET_COUNT, "DS",
                             "Attempting to bind %u descriptorSets with %u dynamic descriptors, but dynamicOffsetCount "
@@ -7944,6 +7957,7 @@ CmdBindIndexBuffer(VkCommandBuffer commandBuffer, VkBuffer buffer, VkDeviceSize 
             break;
         }
         if (!offset_align || (offset % offset_align)) {
+// mewmew
             skip_call |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                                  DRAWSTATE_VTX_INDEX_ALIGNMENT_ERROR, "DS",
                                  "vkCmdBindIndexBuffer() offset (0x%" PRIxLEAST64 ") does not fall on alignment (%s) boundary.",
@@ -8369,6 +8383,7 @@ static bool VerifySourceImageLayout(layer_data *dev_data, GLOBAL_CB_NODE *cb_nod
         if (node.layout != srcImageLayout) {
             // TODO: Improve log message in the next pass
             skip_call |=
+// mewmew
                 log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT, 0,
                         __LINE__, DRAWSTATE_INVALID_IMAGE_LAYOUT, "DS", "Cannot copy from an image whose source layout is %s "
                                                                         "and doesn't match the current layout %s.",
@@ -8381,11 +8396,13 @@ static bool VerifySourceImageLayout(layer_data *dev_data, GLOBAL_CB_NODE *cb_nod
             auto image_state = getImageState(dev_data, srcImage);
             if (image_state->createInfo.tiling != VK_IMAGE_TILING_LINEAR) {
                 // LAYOUT_GENERAL is allowed, but may not be performance optimal, flag as perf warning.
+// mewmew
                 skip_call |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT,
                                      (VkDebugReportObjectTypeEXT)0, 0, __LINE__, DRAWSTATE_INVALID_IMAGE_LAYOUT, "DS",
                                      "Layout for input image should be TRANSFER_SRC_OPTIMAL instead of GENERAL.");
             }
         } else {
+// mewmew
             skip_call |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                                  DRAWSTATE_INVALID_IMAGE_LAYOUT, "DS", "Layout for input image is %s but can only be "
                                                                        "TRANSFER_SRC_OPTIMAL or GENERAL.",
@@ -8409,6 +8426,7 @@ static bool VerifyDestImageLayout(layer_data *dev_data, GLOBAL_CB_NODE *cb_node,
         }
         if (node.layout != destImageLayout) {
             skip_call |=
+// mewmew
                 log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT, 0,
                         __LINE__, DRAWSTATE_INVALID_IMAGE_LAYOUT, "DS", "Cannot copy from an image whose dest layout is %s and "
                                                                         "doesn't match the current layout %s.",
@@ -8420,11 +8438,13 @@ static bool VerifyDestImageLayout(layer_data *dev_data, GLOBAL_CB_NODE *cb_node,
             auto image_state = getImageState(dev_data, destImage);
             if (image_state->createInfo.tiling != VK_IMAGE_TILING_LINEAR) {
                 // LAYOUT_GENERAL is allowed, but may not be performance optimal, flag as perf warning.
+// mewmew
                 skip_call |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT,
                                      (VkDebugReportObjectTypeEXT)0, 0, __LINE__, DRAWSTATE_INVALID_IMAGE_LAYOUT, "DS",
                                      "Layout for output image should be TRANSFER_DST_OPTIMAL instead of GENERAL.");
             }
         } else {
+// mewmew
             skip_call |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                                  DRAWSTATE_INVALID_IMAGE_LAYOUT, "DS", "Layout for output image is %s but can only be "
                                                                        "TRANSFER_DST_OPTIMAL or GENERAL.",
@@ -8446,6 +8466,7 @@ static bool VerifyClearImageLayout(layer_data *dev_data, GLOBAL_CB_NODE *cb_node
             auto image_state = getImageState(dev_data, image);
             if (image_state->createInfo.tiling != VK_IMAGE_TILING_LINEAR) {
                 // LAYOUT_GENERAL is allowed, but may not be performance optimal, flag as perf warning.
+// mewmew
                 skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT, (VkDebugReportObjectTypeEXT)0,
                                 0, __LINE__, DRAWSTATE_INVALID_IMAGE_LAYOUT, "DS",
                                 "%s: Layout for cleared image should be TRANSFER_DST_OPTIMAL instead of GENERAL.", func_name);
@@ -8457,6 +8478,7 @@ static bool VerifyClearImageLayout(layer_data *dev_data, GLOBAL_CB_NODE *cb_node
             } else {
                 assert(strcmp(func_name, "vkCmdClearColorImage()") == 0);
             }
+// mewmew
             skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                             error_code, "DS", "%s: Layout for cleared image is %s but can only be "
                                               "TRANSFER_DST_OPTIMAL or GENERAL. %s",
@@ -8482,6 +8504,7 @@ static bool VerifyClearImageLayout(layer_data *dev_data, GLOBAL_CB_NODE *cb_node
                     assert(strcmp(func_name, "vkCmdClearColorImage()") == 0);
                 }
                 skip |=
+// mewmew
                     log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT, 0,
                             __LINE__, error_code, "DS", "%s: Cannot clear an image whose layout is %s and "
                                                         "doesn't match the current layout %s. %s",
@@ -8556,6 +8579,7 @@ static inline bool CheckItgOffset(layer_data *dev_data, const GLOBAL_CB_NODE *cb
     if (IsExtentZero(granularity)) {
         // If the queue family image transfer granularity is (0, 0, 0), then the offset must always be (0, 0, 0)
         if (IsExtentZero(&offset_extent) == false) {
+// mewmew
             skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                             DRAWSTATE_IMAGE_TRANSFER_GRANULARITY, "DS",
                             "%s: pRegion[%d].%s (x=%d, y=%d, z=%d) must be (x=0, y=0, z=0) "
@@ -8566,6 +8590,7 @@ static inline bool CheckItgOffset(layer_data *dev_data, const GLOBAL_CB_NODE *cb
         // If the queue family image transfer granularity is not (0, 0, 0), then the offset dimensions must always be even
         // integer multiples of the image transfer granularity.
         if (IsExtentAligned(&offset_extent, granularity) == false) {
+// mewmew
             skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                             DRAWSTATE_IMAGE_TRANSFER_GRANULARITY, "DS",
                             "%s: pRegion[%d].%s (x=%d, y=%d, z=%d) dimensions must be even integer "
@@ -8586,6 +8611,7 @@ static inline bool CheckItgExtent(layer_data *dev_data, const GLOBAL_CB_NODE *cb
         // If the queue family image transfer granularity is (0, 0, 0), then the extent must always match the image
         // subresource extent.
         if (IsExtentEqual(extent, subresource_extent) == false) {
+// mewmew
             skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                             DRAWSTATE_IMAGE_TRANSFER_GRANULARITY, "DS",
                             "%s: pRegion[%d].%s (w=%d, h=%d, d=%d) must match the image subresource extents (w=%d, h=%d, d=%d) "
@@ -8603,6 +8629,7 @@ static inline bool CheckItgExtent(layer_data *dev_data, const GLOBAL_CB_NODE *cb
         offset_extent_sum.depth = static_cast<uint32_t>(abs(offset->z)) + extent->depth;
         if ((IsExtentAligned(extent, granularity) == false) && (IsExtentEqual(&offset_extent_sum, subresource_extent) == false)) {
             skip |=
+// mewmew
                 log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                         DRAWSTATE_IMAGE_TRANSFER_GRANULARITY, "DS",
                         "%s: pRegion[%d].%s (w=%d, h=%d, d=%d) dimensions must be even integer multiples of this command buffer's "
@@ -8621,6 +8648,7 @@ static inline bool CheckItgInt(layer_data *dev_data, const GLOBAL_CB_NODE *cb_no
                                const uint32_t granularity, const uint32_t i, const char *function, const char *member) {
     bool skip = false;
     if (vk_safe_modulo(value, granularity) != 0) {
+// mewmew
         skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                         DRAWSTATE_IMAGE_TRANSFER_GRANULARITY, "DS",
                         "%s: pRegion[%d].%s (%d) must be an even integer multiple of this command buffer's queue family image "
@@ -8635,6 +8663,7 @@ static inline bool CheckItgSize(layer_data *dev_data, const GLOBAL_CB_NODE *cb_n
                                 const uint32_t granularity, const uint32_t i, const char *function, const char *member) {
     bool skip = false;
     if (vk_safe_modulo(value, granularity) != 0) {
+// mewmew
         skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                         DRAWSTATE_IMAGE_TRANSFER_GRANULARITY, "DS",
                         "%s: pRegion[%d].%s (%" PRIdLEAST64
@@ -8744,6 +8773,7 @@ static inline bool ValidateImageSampleCount(layer_data *dev_data, IMAGE_STATE *i
                                             const char *location) {
     bool skip = false;
     if (image_state->createInfo.samples != sample_count) {
+// mewmew
         skip = log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT,
                        reinterpret_cast<uint64_t &>(image_state->image), 0, DRAWSTATE_NUM_SAMPLES_MISMATCH, "DS",
                        "%s for image 0x%" PRIxLEAST64 " was created with a sample count of %s but must be %s.", location,
@@ -8975,6 +9005,7 @@ VKAPI_ATTR void VKAPI_CALL CmdClearAttachments(VkCommandBuffer commandBuffer, ui
             // Can we make this warning more specific? I'd like to avoid triggering this test if we can tell it's a use that must
             // call CmdClearAttachments
             // Otherwise this seems more like a performance warning.
+// mewmew
             skip_call |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT,
                                  VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT, reinterpret_cast<uint64_t &>(commandBuffer), 0,
                                  DRAWSTATE_CLEAR_CMD_BEFORE_DRAW, "DS",
@@ -8997,6 +9028,7 @@ VKAPI_ATTR void VKAPI_CALL CmdClearAttachments(VkCommandBuffer commandBuffer, ui
 
             if (clear_desc->aspectMask & VK_IMAGE_ASPECT_COLOR_BIT) {
                 if (clear_desc->colorAttachment >= pSD->colorAttachmentCount) {
+// mewmew
                     skip_call |= log_msg(
                         dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT,
                         (uint64_t)commandBuffer, __LINE__, VALIDATION_ERROR_01114, "DS",
@@ -9004,6 +9036,7 @@ VKAPI_ATTR void VKAPI_CALL CmdClearAttachments(VkCommandBuffer commandBuffer, ui
                         clear_desc->colorAttachment, pCB->activeSubpass, validation_error_map[VALIDATION_ERROR_01114]);
                 }
                 else if (pSD->pColorAttachments[clear_desc->colorAttachment].attachment == VK_ATTACHMENT_UNUSED) {
+// mewmew
                     skip_call |= log_msg(
                         dev_data->report_data, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT,
                         (uint64_t)commandBuffer, __LINE__, DRAWSTATE_MISSING_ATTACHMENT_REFERENCE, "DS",
@@ -9018,6 +9051,7 @@ VKAPI_ATTR void VKAPI_CALL CmdClearAttachments(VkCommandBuffer commandBuffer, ui
                     (pSD->pDepthStencilAttachment->attachment ==
                      VK_ATTACHMENT_UNUSED)) { // Says no DS will be used in active subpass
 
+// mewmew
                     skip_call |= log_msg(
                         dev_data->report_data, VK_DEBUG_REPORT_PERFORMANCE_WARNING_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT,
                         (uint64_t)commandBuffer, __LINE__, DRAWSTATE_MISSING_ATTACHMENT_REFERENCE, "DS",
@@ -9034,6 +9068,7 @@ VKAPI_ATTR void VKAPI_CALL CmdClearAttachments(VkCommandBuffer commandBuffer, ui
                 auto extra_aspects = clear_desc->aspectMask & ~aspects_present;
 
                 if (extra_aspects) {
+// mewmew
                     skip_call |= log_msg(
                             dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_VIEW_EXT,
                             reinterpret_cast<uint64_t &>(image_view), __LINE__, VALIDATION_ERROR_01125, "DS",
@@ -9256,6 +9291,7 @@ static bool TransitionImageLayouts(VkCommandBuffer cmdBuffer, uint32_t memBarrie
                 if (mem_barrier->oldLayout == VK_IMAGE_LAYOUT_UNDEFINED) {
                     // TODO: Set memory invalid which is in mem_tracker currently
                 } else if (node.layout != mem_barrier->oldLayout) {
+// mewmew
                     skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0,
                                     __LINE__, DRAWSTATE_INVALID_IMAGE_LAYOUT, "DS", "You cannot transition the layout from %s "
                                                                                     "when current layout is %s.",
@@ -9300,12 +9336,14 @@ static bool ValidateMaskBits(const layer_data *my_data, VkCommandBuffer cmdBuffe
         if (accessMask & ~(required_bit | optional_bits)) {
             // TODO: Verify against Valid Use
             skip_call |=
+// mewmew
                 log_msg(my_data->report_data, VK_DEBUG_REPORT_WARNING_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                         DRAWSTATE_INVALID_BARRIER, "DS", "Additional bits in %s accessMask 0x%X %s are specified when layout is %s.",
                         type, accessMask, string_VkAccessFlags(accessMask).c_str(), string_VkImageLayout(layout));
         }
     } else {
         if (!required_bit) {
+// mewmew
             skip_call |= log_msg(my_data->report_data, VK_DEBUG_REPORT_WARNING_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                                  DRAWSTATE_INVALID_BARRIER, "DS", "%s AccessMask %d %s must contain at least one of access bits %d "
                                                                   "%s when layout is %s, unless the app has previously added a "
@@ -9319,6 +9357,7 @@ static bool ValidateMaskBits(const layer_data *my_data, VkCommandBuffer cmdBuffe
                 ss << optional_bits;
                 opt_bits = "and may have optional bits " + ss.str() + ' ' + string_VkAccessFlags(optional_bits);
             }
+// mewmew
             skip_call |= log_msg(my_data->report_data, VK_DEBUG_REPORT_WARNING_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                                  DRAWSTATE_INVALID_BARRIER, "DS", "%s AccessMask %d %s must have required access bit %d %s %s when "
                                                                   "layout is %s, unless the app has previously added a barrier for "
@@ -9371,6 +9410,7 @@ static bool ValidateMaskBitsFromLayouts(const layer_data *my_data, VkCommandBuff
         if (accessMask != 0) {
             // TODO: Verify against Valid Use section spec
             skip_call |=
+// mewmew
                 log_msg(my_data->report_data, VK_DEBUG_REPORT_WARNING_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                         DRAWSTATE_INVALID_BARRIER, "DS", "Additional bits in %s accessMask 0x%X %s are specified when layout is %s.",
                         type, accessMask, string_VkAccessFlags(accessMask).c_str(), string_VkImageLayout(layout));
@@ -9392,6 +9432,7 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
     GLOBAL_CB_NODE *pCB = getCBNode(dev_data, cmdBuffer);
     if (pCB->activeRenderPass && memBarrierCount) {
         if (!pCB->activeRenderPass->hasSelfDependency[pCB->activeSubpass]) {
+// mewmew
             skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                             DRAWSTATE_INVALID_BARRIER, "DS", "%s: Barriers cannot be set during subpass %d "
                                                              "with no self dependency specified.",
@@ -9408,6 +9449,7 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
                 // srcQueueFamilyIndex and dstQueueFamilyIndex must both
                 // be VK_QUEUE_FAMILY_IGNORED
                 if ((src_q_f_index != VK_QUEUE_FAMILY_IGNORED) || (dst_q_f_index != VK_QUEUE_FAMILY_IGNORED)) {
+// mewmew
                     skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0,
                                     __LINE__, DRAWSTATE_INVALID_QUEUE_INDEX, "DS",
                                     "%s: Image Barrier for image 0x%" PRIx64 " was created with sharingMode of "
@@ -9422,6 +9464,7 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
                 if (((src_q_f_index == VK_QUEUE_FAMILY_IGNORED) || (dst_q_f_index == VK_QUEUE_FAMILY_IGNORED)) &&
                     (src_q_f_index != dst_q_f_index)) {
                     skip |=
+// mewmew
                         log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                                 DRAWSTATE_INVALID_QUEUE_INDEX, "DS", "%s: Image 0x%" PRIx64 " was created with sharingMode "
                                                                      "of VK_SHARING_MODE_EXCLUSIVE. If one of src- or "
@@ -9431,6 +9474,7 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
                 } else if (((src_q_f_index != VK_QUEUE_FAMILY_IGNORED) && (dst_q_f_index != VK_QUEUE_FAMILY_IGNORED)) &&
                            ((src_q_f_index >= dev_data->phys_dev_properties.queue_family_properties.size()) ||
                             (dst_q_f_index >= dev_data->phys_dev_properties.queue_family_properties.size()))) {
+// mewmew
                     skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0,
                                     __LINE__, DRAWSTATE_INVALID_QUEUE_INDEX, "DS",
                                     "%s: Image 0x%" PRIx64 " was created with sharingMode "
@@ -9451,6 +9495,7 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
                     ValidateMaskBitsFromLayouts(dev_data, cmdBuffer, mem_barrier->dstAccessMask, mem_barrier->newLayout, "Dest");
             }
             if (mem_barrier->newLayout == VK_IMAGE_LAYOUT_UNDEFINED || mem_barrier->newLayout == VK_IMAGE_LAYOUT_PREINITIALIZED) {
+// mewmew
                 skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                                 DRAWSTATE_INVALID_BARRIER, "DS", "%s: Image Layout cannot be transitioned to UNDEFINED or "
                                                                  "PREINITIALIZED.",
@@ -9484,6 +9529,7 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
                                      ? 1
                                      : mem_barrier->subresourceRange.layerCount;
                 if ((mem_barrier->subresourceRange.baseArrayLayer + layerCount) > arrayLayers) {
+// mewmew
                     skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0,
                                     __LINE__, DRAWSTATE_INVALID_BARRIER, "DS", "%s: Subresource must have the sum of the "
                                                                                "baseArrayLayer (%d) and layerCount (%d) be less "
@@ -9495,6 +9541,7 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
                                      ? 1
                                      : mem_barrier->subresourceRange.levelCount;
                 if ((mem_barrier->subresourceRange.baseMipLevel + levelCount) > mipLevels) {
+// mewmew
                     skip |= log_msg(
                         dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                         DRAWSTATE_INVALID_BARRIER, "DS", "%s: Subresource must have the sum of the baseMipLevel "
@@ -9508,6 +9555,7 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
     for (uint32_t i = 0; i < bufferBarrierCount; ++i) {
         auto mem_barrier = &pBufferMemBarriers[i];
         if (pCB->activeRenderPass) {
+// mewmew
             skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                             DRAWSTATE_INVALID_BARRIER, "DS", "%s: Buffer Barriers cannot be used during a render pass.", funcName);
         }
@@ -9519,6 +9567,7 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
              mem_barrier->srcQueueFamilyIndex >= dev_data->phys_dev_properties.queue_family_properties.size()) ||
             (mem_barrier->dstQueueFamilyIndex != VK_QUEUE_FAMILY_IGNORED &&
              mem_barrier->dstQueueFamilyIndex >= dev_data->phys_dev_properties.queue_family_properties.size())) {
+// mewmew
             skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                             DRAWSTATE_INVALID_QUEUE_INDEX, "DS",
                             "%s: Buffer Barrier 0x%" PRIx64 " has QueueFamilyIndex greater "
@@ -9531,6 +9580,7 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
         if (buffer_state) {
             auto buffer_size = buffer_state->requirements.size;
             if (mem_barrier->offset >= buffer_size) {
+// mewmew
                 skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                                 DRAWSTATE_INVALID_BARRIER, "DS", "%s: Buffer Barrier 0x%" PRIx64 " has offset 0x%" PRIx64
                                                                  " which is not less than total size 0x%" PRIx64 ".",
@@ -9538,6 +9588,7 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
                                 reinterpret_cast<const uint64_t &>(mem_barrier->offset),
                                 reinterpret_cast<const uint64_t &>(buffer_size));
             } else if (mem_barrier->size != VK_WHOLE_SIZE && (mem_barrier->offset + mem_barrier->size > buffer_size)) {
+// mewmew
                 skip |= log_msg(
                     dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, (VkDebugReportObjectTypeEXT)0, 0, __LINE__,
                     DRAWSTATE_INVALID_BARRIER, "DS", "%s: Buffer Barrier 0x%" PRIx64 " has offset 0x%" PRIx64 " and size 0x%" PRIx64
@@ -9550,6 +9601,8 @@ static bool ValidateBarriers(const char *funcName, VkCommandBuffer cmdBuffer, ui
     }
     return skip;
 }
+
+// mewmew ]
 
 bool validateEventStageMask(VkQueue queue, GLOBAL_CB_NODE *pCB, uint32_t eventCount, size_t firstEventIndex, VkPipelineStageFlags sourceStageMask) {
     bool skip_call = false;

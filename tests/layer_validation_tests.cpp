@@ -16887,6 +16887,7 @@ TEST_F(VkPositiveLayerTest, TestAliasedMemoryTracking) {
 
     pass = m_device->phy().set_memory_type(mem_reqs.memoryTypeBits, &mem_alloc, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT);
     if (!pass) {
+        vkFreeMemory(m_device->device(), mem, NULL);
         vkDestroyImage(m_device->device(), image, NULL);
         return;
     }

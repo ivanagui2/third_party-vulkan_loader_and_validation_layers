@@ -1,0 +1,170 @@
+# Copyright 2016 The Fuchsia Authors
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice (including the next
+# paragraph) shall be included in all copies or substantial portions of the
+# Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+# IN THE SOFTWARE.
+
+import("//magma/gnbuild/magma.gni")
+
+group("layers") {
+  deps = [
+    ":VkLayer_core_validation",
+    ":VkLayer_image",
+    ":VkLayer_object_tracker",
+    ":VkLayer_parameter_validation",
+    ":VkLayer_swapchain",
+    ":VkLayer_threading",
+  ]
+}
+
+config("layer_include_config") {
+  cflags_cc = [ "-Wno-unused-function" ]
+  include_dirs = [
+    ".",
+    "../include",
+    "../loader",
+    "../build-fuchsia/generated/include",
+  ]
+}
+
+source_set("layer_common") {
+  public_configs = [ ":layer_include_config" ]
+  sources = [
+    "vk_layer_config.cpp",
+    "vk_layer_extension_utils.cpp",
+    "vk_layer_table.cpp",
+    "vk_layer_utils.cpp",
+  ]
+  public_deps = [
+    "../:vulkan",
+    "../:extra_vulkan_headers"
+  ]
+}
+
+shared_library("VkLayer_object_tracker") {
+  deps = [
+    ":VkLayer_object_tracker_src($magma_shared_toolchain)",
+  ]
+}
+
+source_set("VkLayer_object_tracker_src") {
+  sources = [
+    "object_tracker.cpp",
+  ]
+  deps = [
+    ":layer_common",
+  ]
+}
+
+shared_library("VkLayer_core_validation") {
+  deps = [
+    ":VkLayer_core_validation_src($magma_shared_toolchain)",
+  ]
+}
+
+source_set("VkLayer_core_validation_src") {
+  include_dirs = [
+    "//third_party/shaderc/third_party/spirv-tools/include",
+    "//third_party/shaderc/third_party/glslang",
+  ]
+  sources = [
+    "core_validation.cpp",
+    "descriptor_sets.cpp",
+  ]
+  deps = [
+    ":layer_common",
+    "//third_party/shaderc/third_party/spirv-tools",
+    "//third_party/shaderc/third_party/glslang",
+  ]
+}
+
+shared_library("VkLayer_image") {
+  deps = [
+    ":VkLayer_image_src($magma_shared_toolchain)",
+  ]
+}
+
+source_set("VkLayer_image_src") {
+  sources = [
+    "image.cpp",
+  ]
+  deps = [
+    ":layer_common",
+  ]
+}
+
+shared_library("VkLayer_parameter_validation") {
+  deps = [
+    ":VkLayer_parameter_validation_src($magma_shared_toolchain)",
+  ]
+}
+
+source_set("VkLayer_parameter_validation_src") {
+  sources = [
+    "parameter_validation.cpp",
+  ]
+  deps = [
+    ":layer_common",
+  ]
+}
+
+shared_library("VkLayer_swapchain") {
+  deps = [
+    ":VkLayer_swapchain_src($magma_shared_toolchain)",
+  ]
+}
+
+source_set("VkLayer_swapchain_src") {
+  sources = [
+    "swapchain.cpp",
+  ]
+  deps = [
+    ":layer_common",
+  ]
+}
+
+shared_library("VkLayer_threading") {
+  cflags_cc = [ "-Wno-unused-function" ]
+  deps = [
+    ":VkLayer_threading_src($magma_shared_toolchain)",
+  ]
+}
+
+source_set("VkLayer_threading_src") {
+  sources = [
+    "threading.cpp",
+  ]
+  deps = [
+    ":layer_common",
+  ]
+}
+
+shared_library("VkLayer_unique_objects") {
+  deps = [
+    ":VkLayer_unique_objects_src($magma_shared_toolchain)",
+  ]
+}
+
+source_set("VkLayer_unique_objects_src") {
+  sources = [
+    "unique_objects.cpp",
+  ]
+  deps = [
+    ":layer_common",
+  ]
+}

@@ -10950,6 +10950,13 @@ VKAPI_ATTR VkResult VKAPI_CALL CreateWin32SurfaceKHR(VkInstance instance, const 
 }
 #endif  // VK_USE_PLATFORM_WIN32_KHR
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+VKAPI_ATTR VkResult VKAPI_CALL CreateMagmaSurfaceKHR(VkInstance instance, const VkMagmaSurfaceCreateInfoKHR *pCreateInfo,
+                                                     const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
+    return CreateSurface(instance, pCreateInfo, pAllocator, pSurface, &VkLayerInstanceDispatchTable::CreateMagmaSurfaceKHR);
+}
+#endif // VK_USE_PLATFORM_MAGMA_KHR
+
 #ifdef VK_USE_PLATFORM_XCB_KHR
 VKAPI_ATTR VkResult VKAPI_CALL CreateXcbSurfaceKHR(VkInstance instance, const VkXcbSurfaceCreateInfoKHR *pCreateInfo,
                                                    const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
@@ -11599,6 +11606,10 @@ static PFN_vkVoidFunction intercept_khr_surface_command(const char *name, VkInst
         {"vkCreateXlibSurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(CreateXlibSurfaceKHR),
          &E::khr_xlib_surface},
 #endif  // VK_USE_PLATFORM_XLIB_KHR
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+        {"vkCreateMagmaSurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(CreateMagmaSurfaceKHR),
+            &instance_layer_data::magmaSurfaceExtensionEnabled},
+#endif // VK_USE_PLATFORM_MAGMA_KHR
         {"vkCreateDisplayPlaneSurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(CreateDisplayPlaneSurfaceKHR),
          &E::khr_display},
         {"vkDestroySurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(DestroySurfaceKHR),

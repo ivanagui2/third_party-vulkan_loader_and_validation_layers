@@ -94,6 +94,9 @@ void Environment::SetUp() {
 #ifdef VK_USE_PLATFORM_XCB_KHR
     instance_extension_names.push_back(VK_KHR_XCB_SURFACE_EXTENSION_NAME);
 #endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    instance_extension_names.push_back(VK_KHR_MAGMA_SURFACE_EXTENSION_NAME);
+#endif
 
     VkBool32 extFound;
 

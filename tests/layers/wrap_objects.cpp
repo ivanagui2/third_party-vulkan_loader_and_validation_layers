@@ -1041,6 +1041,28 @@ vkGetPhysicalDeviceWin32PresentationSupportKHR(VkPhysicalDevice physicalDevice, 
 }
 #endif // VK_USE_PLATFORM_WIN32_KHR
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+
+VKAPI_ATTR VkResult VKAPI_CALL
+vkCreateMagmaSurfaceKHR(VkInstance instance, const VkMagmaSurfaceCreateInfoKHR *pCreateInfo,
+                        const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
+    VkResult result;
+    wrapped_inst_obj *inst;
+    auto vk_inst = unwrap_instance(instance, &inst);
+    result = inst->layer_disp.CreateMagmaSurfaceKHR(vk_inst, pCreateInfo, pAllocator, pSurface);
+    return result;
+}
+
+VKAPI_ATTR VkBool32 VKAPI_CALL
+vkGetPhysicalDeviceMagmaPresentationSupportKHR(VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex) {
+    VkBool32 result;
+    wrapped_phys_dev_obj *phys_dev;
+    auto vk_phys_dev = unwrap_phys_dev(physicalDevice, &phys_dev);
+    result = phys_dev->inst->layer_disp.GetPhysicalDeviceMagmaPresentationSupportKHR(vk_phys_dev, queueFamilyIndex);
+    return result;
+}
+#endif // VK_USE_PLATFORM_MAGMA_KHR
+
 #ifdef VK_USE_PLATFORM_XCB_KHR
 
 VKAPI_ATTR VkResult VKAPI_CALL vkCreateXcbSurfaceKHR(VkInstance instance, const VkXcbSurfaceCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface)

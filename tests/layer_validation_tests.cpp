@@ -358,6 +358,9 @@ class VkLayerTest : public VkRenderFramework {
             instance_extension_names.push_back(VK_KHR_WIN32_SURFACE_EXTENSION_NAME);
 #endif // VK_USE_PLATFORM_WIN32_KHR
 #endif // NEED_TO_TEST_THIS_ON_PLATFORM
+#if defined(VK_USE_PLATFORM_MAGMA_KHR)
+            instance_extension_names.push_back(VK_KHR_MAGMA_SURFACE_EXTENSION_NAME);
+#endif // VK_USE_PLATFORM_MAGMA_KHR
 #if defined(VK_USE_PLATFORM_XCB_KHR)
             instance_extension_names.push_back(VK_KHR_XCB_SURFACE_EXTENSION_NAME);
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
@@ -1664,6 +1667,33 @@ TEST_F(VkLayerTest, EnableWsiBeforeUse) {
 // Set this (for now, until all platforms are supported and tested):
 #define NEED_TO_TEST_THIS_ON_PLATFORM
 #endif // VK_USE_PLATFORM_WIN32_KHR
+#if defined(VK_USE_PLATFORM_MAGMA_KHR)
+    // FIXME: REMOVE THIS HERE, AND UNCOMMENT ABOVE, WHEN THIS TEST HAS BEEN PORTED
+    // TO NON-LINUX PLATFORMS:
+    VkSurfaceKHR surface = VK_NULL_HANDLE;
+    // Use the functions from the VK_KHR_magma_surface extension without
+    // enabling that extension:
+
+    // Create a surface:
+    VkMagmaSurfaceCreateInfoKHR magma_create_info = {
+        .sType = VK_STRUCTURE_TYPE_MAGMA_SURFACE_CREATE_INFO_KHR,
+        .pNext = nullptr,
+    };
+    m_errorMonitor->SetDesiredFailureMsg(VK_DEBUG_REPORT_ERROR_BIT_EXT, "VK_KHR_magma_surface extension not enabled.  vkCreateMagmaSurfaceKHR not executed!");
+    err = vkCreateMagmaSurfaceKHR(instance(), &magma_create_info, nullptr, &surface);
+
+    pass = (err != VK_SUCCESS);
+    ASSERT_TRUE(pass);
+    m_errorMonitor->VerifyFound();
+
+    // Tell whether magma supports presentation:
+    m_errorMonitor->SetDesiredFailureMsg(VK_DEBUG_REPORT_ERROR_BIT_EXT, "VK_KHR_magma_surface extension not enabled.  vkGetPhysicalDeviceMagmaPresentationSupportKHR not executed!");
+    vkGetPhysicalDeviceMagmaPresentationSupportKHR(gpu(), 0);
+    m_errorMonitor->VerifyFound();
+
+// Set this (for now, until all platforms are supported and tested):
+#define NEED_TO_TEST_THIS_ON_PLATFORM
+#endif // VK_USE_PLATFORM_MAGMA_KHR
 #if defined(VK_USE_PLATFORM_XCB_KHR) || defined (VK_USE_PLATFORM_XLIB_KHR)
     // FIXME: REMOVE THIS HERE, AND UNCOMMENT ABOVE, WHEN THIS TEST HAS BEEN PORTED
     // TO NON-LINUX PLATFORMS:

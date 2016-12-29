@@ -1,0 +1,86 @@
+# Copyright 2017 The Fuchsia Authors
+#
+# Permission is hereby granted, free of charge, to any person obtaining a
+# copy of this software and associated documentation files (the "Software"),
+# to deal in the Software without restriction, including without limitation
+# the rights to use, copy, modify, merge, publish, distribute, sublicense,
+# and/or sell copies of the Software, and to permit persons to whom the
+# Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice (including the next
+# paragraph) shall be included in all copies or substantial portions of the
+# Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
+# THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+# FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
+# IN THE SOFTWARE.
+
+import("//magma/gnbuild/magma.gni")
+
+group("tests") {
+  testonly = true
+  deps = [
+    ":layer_validation_tests",
+    ":loader_validation_tests",
+  ]
+}
+
+config("validation_tests_include_config") {
+  include_dirs = [
+    "../common",
+    "../layers",
+    "gtest-1.7.0",
+    "gtest-1.7.0/include",
+    "//third_party/glm",
+    "//third_party/shaderc/third_party/glslang"
+  ]
+}
+
+source_set("validation_tests_common") {
+  testonly = true
+  public_configs = [ ":validation_tests_include_config" ]
+  defines = [ "VK_USE_PLATFORM_MAGMA_KHR" ]
+  sources = [
+    "vkrenderframework.cpp",
+    "vktestbinding.cpp",
+    "vktestframework.cpp",
+    "test_environment.cpp",
+    "gtest-1.7.0/src/gtest-all.cc",
+  ]
+  public_deps = [
+    "//third_party/shaderc/third_party/glslang",
+    "//third_party/shaderc/third_party/glslang:SPVRemapper",
+    "//third_party/shaderc/third_party/glslang:SPIRV",
+    "../:vulkan",
+  ]
+}
+
+executable("loader_validation_tests") {
+  testonly = true
+  cflags_cc = [
+    "-Wno-missing-field-initializers",
+  ]
+  sources = [
+    "loader_validation_tests.cpp",
+  ]
+  deps = [
+    ":validation_tests_common",
+  ]
+}
+
+executable("layer_validation_tests") {
+  testonly = true
+  cflags_cc = [
+    "-Wno-missing-field-initializers",
+  ]
+  sources = [
+    "layer_validation_tests.cpp",
+  ]
+  deps = [
+    ":validation_tests_common",
+  ]
+}

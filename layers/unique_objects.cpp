@@ -99,6 +99,11 @@ static void checkInstanceRegisterExtensions(const VkInstanceCreateInfo *pCreateI
             instance_ext_map[disp_table].win32_enabled = true;
         }
 #endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+        if (strcmp(pCreateInfo->ppEnabledExtensionNames[i], VK_KHR_MAGMA_SURFACE_EXTENSION_NAME) == 0) {
+            instance_ext_map[disp_table].magma_enabled = true;
+        }
+#endif
 
         // Check for recognized instance extensions
         layer_data *instance_data = get_my_data_ptr(get_dispatch_key(instance), layer_data_map);

@@ -2799,6 +2799,45 @@ VKAPI_ATTR VkBool32 VKAPI_CALL GetPhysicalDeviceWin32PresentationSupportKHR(VkPh
 }
 #endif // VK_USE_PLATFORM_WIN32_KHR
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+VKAPI_ATTR VkResult VKAPI_CALL CreateMagmaSurfaceKHR(VkInstance instance, const VkMagmaSurfaceCreateInfoKHR *pCreateInfo,
+                                                     const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
+    bool skip_call = false;
+    {
+        std::lock_guard<std::mutex> lock(global_lock);
+        skip_call |= ValidateObject(instance, instance, VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT, false, VALIDATION_ERROR_01820);
+    }
+    if (skip_call) {
+        return VK_ERROR_VALIDATION_FAILED_EXT;
+    }
+    VkResult result =
+        get_dispatch_table(ot_instance_table_map, instance)->CreateMagmaSurfaceKHR(instance, pCreateInfo, pAllocator, pSurface);
+    {
+        std::lock_guard<std::mutex> lock(global_lock);
+        if (result == VK_SUCCESS) {
+            CreateObject(instance, *pSurface, VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT, pAllocator);
+        }
+    }
+    return result;
+}
+
+VKAPI_ATTR VkBool32 VKAPI_CALL GetPhysicalDeviceMagmaPresentationSupportKHR(VkPhysicalDevice physicalDevice,
+                                                                            uint32_t queueFamilyIndex) {
+    bool skip_call = false;
+    {
+        std::lock_guard<std::mutex> lock(global_lock);
+        skip_call |= ValidateObject(physicalDevice, physicalDevice, VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, false,
+                                    VALIDATION_ERROR_01900);
+    }
+    if (skip_call) {
+        return VK_FALSE;
+    }
+    VkBool32 result = get_dispatch_table(ot_instance_table_map, physicalDevice)
+                          ->GetPhysicalDeviceMagmaPresentationSupportKHR(physicalDevice, queueFamilyIndex);
+    return result;
+}
+#endif // VK_USE_PLATFORM_MAGMA_KHR
+
 #ifdef VK_USE_PLATFORM_XCB_KHR
 VKAPI_ATTR VkResult VKAPI_CALL CreateXcbSurfaceKHR(VkInstance instance, const VkXcbSurfaceCreateInfoKHR *pCreateInfo,
                                                    const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
@@ -3140,6 +3179,12 @@ static inline PFN_vkVoidFunction InterceptWsiEnabledCommand(const char *name, Vk
     if ((instanceExtMap[pTable].android_enabled == true) && !strcmp("vkCreateAndroidSurfaceKHR", name))
         return reinterpret_cast<PFN_vkVoidFunction>(CreateAndroidSurfaceKHR);
 #endif // VK_USE_PLATFORM_ANDROID_KHR
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    if ((instanceExtMap[pTable].magma_enabled == true) && !strcmp("vkCreateMagmaSurfaceKHR", name))
+        return reinterpret_cast<PFN_vkVoidFunction>(CreateMagmaSurfaceKHR);
+    if ((instanceExtMap[pTable].magma_enabled == true) && !strcmp("vkGetPhysicalDeviceMagmaPresentationSupportKHR", name))
+        return reinterpret_cast<PFN_vkVoidFunction>(GetPhysicalDeviceMagmaPresentationSupportKHR);
+#endif // VK_USE_PLATFORM_MAGMA_KHR
 
     return nullptr;
 }
@@ -3208,6 +3253,11 @@ static void CheckInstanceRegisterExtensions(const VkInstanceCreateInfo *pCreateI
 #ifdef VK_USE_PLATFORM_WIN32_KHR
         if (strcmp(pCreateInfo->ppEnabledExtensionNames[i], VK_KHR_WIN32_SURFACE_EXTENSION_NAME) == 0) {
             instanceExtMap[pDisp].win32_enabled = true;
+        }
+#endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+        if (strcmp(pCreateInfo->ppEnabledExtensionNames[i], VK_KHR_MAGMA_SURFACE_EXTENSION_NAME) == 0) {
+            instanceExtMap[pDisp].magma_enabled = true;
         }
 #endif
     }

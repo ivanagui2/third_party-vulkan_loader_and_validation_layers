@@ -121,6 +121,7 @@ struct instance_layer_data {
     bool win32SurfaceExtensionEnabled = false;
     bool xcbSurfaceExtensionEnabled = false;
     bool xlibSurfaceExtensionEnabled = false;
+    bool magmaSurfaceExtensionEnabled = false;
 };
 
 struct layer_data {
@@ -4090,6 +4091,10 @@ static void checkInstanceRegisterExtensions(const VkInstanceCreateInfo *pCreateI
 #ifdef VK_USE_PLATFORM_XLIB_KHR
         if (!strcmp(pCreateInfo->ppEnabledExtensionNames[i], VK_KHR_XLIB_SURFACE_EXTENSION_NAME))
             instance_data->xlibSurfaceExtensionEnabled = true;
+#endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+        if (!strcmp(pCreateInfo->ppEnabledExtensionNames[i], VK_KHR_MAGMA_SURFACE_EXTENSION_NAME))
+            instance_data->magmaSurfaceExtensionEnabled = true;
 #endif
     }
 }
@@ -12648,6 +12653,13 @@ VKAPI_ATTR VkResult VKAPI_CALL CreateWin32SurfaceKHR(VkInstance instance, const 
 }
 #endif // VK_USE_PLATFORM_WIN32_KHR
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+VKAPI_ATTR VkResult VKAPI_CALL CreateMagmaSurfaceKHR(VkInstance instance, const VkMagmaSurfaceCreateInfoKHR *pCreateInfo,
+                                                     const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
+    return CreateSurface(instance, pCreateInfo, pAllocator, pSurface, &VkLayerInstanceDispatchTable::CreateMagmaSurfaceKHR);
+}
+#endif // VK_USE_PLATFORM_MAGMA_KHR
+
 #ifdef VK_USE_PLATFORM_XCB_KHR
 VKAPI_ATTR VkResult VKAPI_CALL CreateXcbSurfaceKHR(VkInstance instance, const VkXcbSurfaceCreateInfoKHR *pCreateInfo,
                                                    const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
@@ -13165,6 +13177,10 @@ intercept_khr_surface_command(const char *name, VkInstance instance) {
         {"vkCreateXlibSurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(CreateXlibSurfaceKHR),
             &instance_layer_data::xlibSurfaceExtensionEnabled},
 #endif // VK_USE_PLATFORM_XLIB_KHR
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+        {"vkCreateMagmaSurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(CreateMagmaSurfaceKHR),
+            &instance_layer_data::magmaSurfaceExtensionEnabled},
+#endif // VK_USE_PLATFORM_MAGMA_KHR
         { "vkCreateDisplayPlaneSurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(CreateDisplayPlaneSurfaceKHR),
             &instance_layer_data::displayExtensionEnabled},
         {"vkDestroySurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(DestroySurfaceKHR),

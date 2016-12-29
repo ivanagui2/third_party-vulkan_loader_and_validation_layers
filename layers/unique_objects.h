@@ -50,6 +50,9 @@ static const char *kUniqueObjectsSupportedInstanceExtensions =
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     VK_KHR_WIN32_SURFACE_EXTENSION_NAME
 #endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    VK_KHR_MAGMA_SURFACE_EXTENSION_NAME
+#endif
     VK_EXT_DEBUG_MARKER_EXTENSION_NAME
     VK_EXT_DEBUG_REPORT_EXTENSION_NAME
     VK_KHR_DISPLAY_EXTENSION_NAME
@@ -112,6 +115,7 @@ struct instance_extension_enables {
     bool mir_enabled;
     bool android_enabled;
     bool win32_enabled;
+    bool magma_enabled;
     bool display_enabled;
 };
 

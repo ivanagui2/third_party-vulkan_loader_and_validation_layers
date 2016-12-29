@@ -1590,6 +1590,11 @@ static void CheckInstanceRegisterExtensions(const VkInstanceCreateInfo *pCreateI
             instance_data->extensions.win32_enabled = true;
         }
 #endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+        if (strcmp(name, VK_KHR_MAGMA_SURFACE_EXTENSION_NAME) == 0) {
+            instance_data->extensions.magma_enabled = true;
+        }
+#endif
         if (strcmp(name, VK_KHR_DISPLAY_EXTENSION_NAME) == 0) {
             instance_data->extensions.display_enabled = true;
         }

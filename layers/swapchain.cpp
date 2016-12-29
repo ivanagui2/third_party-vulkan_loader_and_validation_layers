@@ -528,6 +528,74 @@ VKAPI_ATTR VkBool32 VKAPI_CALL GetPhysicalDeviceWin32PresentationSupportKHR(VkPh
 }
 #endif // VK_USE_PLATFORM_WIN32_KHR
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+VKAPI_ATTR VkResult VKAPI_CALL CreateMagmaSurfaceKHR(VkInstance instance, const VkMagmaSurfaceCreateInfoKHR *pCreateInfo,
+                                                     const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
+    VkResult result = VK_SUCCESS;
+    bool skip_call = false;
+    layer_data *my_data = get_my_data_ptr(get_dispatch_key(instance), layer_data_map);
+    std::unique_lock<std::mutex> lock(global_lock);
+    SwpInstance *pInstance = NULL;
+    {
+        auto it = my_data->instanceMap.find(instance);
+        pInstance = (it == my_data->instanceMap.end()) ? NULL : &it->second;
+    }
+
+    lock.unlock();
+
+    if (!skip_call) {
+        // Call down the call chain:
+        result = my_data->instance_dispatch_table->CreateMagmaSurfaceKHR(instance, pCreateInfo, pAllocator, pSurface);
+        lock.lock();
+
+        // Obtain this pointer again after locking:
+        {
+            auto it = my_data->instanceMap.find(instance);
+            pInstance = (it == my_data->instanceMap.end()) ? NULL : &it->second;
+        }
+        if ((result == VK_SUCCESS) && pInstance && pSurface) {
+            // Record the VkSurfaceKHR returned by the ICD:
+            my_data->surfaceMap[*pSurface].surface = *pSurface;
+            my_data->surfaceMap[*pSurface].pInstance = pInstance;
+            my_data->surfaceMap[*pSurface].numQueueFamilyIndexSupport = 0;
+            my_data->surfaceMap[*pSurface].pQueueFamilyIndexSupport = NULL;
+            // Point to the associated SwpInstance:
+            pInstance->surfaces[*pSurface] = &my_data->surfaceMap[*pSurface];
+        }
+        lock.unlock();
+
+        return result;
+    }
+    return VK_ERROR_VALIDATION_FAILED_EXT;
+}
+
+VKAPI_ATTR VkBool32 VKAPI_CALL GetPhysicalDeviceMagmaPresentationSupportKHR(VkPhysicalDevice physicalDevice,
+                                                                            uint32_t queueFamilyIndex) {
+    VkBool32 result = VK_FALSE;
+    bool skip_call = false;
+    layer_data *my_data = get_my_data_ptr(get_dispatch_key(physicalDevice), layer_data_map);
+    std::unique_lock<std::mutex> lock(global_lock);
+    SwpPhysicalDevice *pPhysicalDevice = NULL;
+    {
+        auto it = my_data->physicalDeviceMap.find(physicalDevice);
+        pPhysicalDevice = (it == my_data->physicalDeviceMap.end()) ? NULL : &it->second;
+    }
+
+    if (pPhysicalDevice->gotQueueFamilyPropertyCount) {
+        skip_call |= ValidateQueueFamilyIndex(my_data, queueFamilyIndex, pPhysicalDevice->numOfQueueFamilies,
+                                              pPhysicalDevice->physicalDevice, "vkGetPhysicalDeviceMagmaPresentationSupportKHR",
+                                              VALIDATION_ERROR_01899);
+    }
+    lock.unlock();
+
+    if (!skip_call) {
+        // Call down the call chain:
+        result = my_data->instance_dispatch_table->GetPhysicalDeviceMagmaPresentationSupportKHR(physicalDevice, queueFamilyIndex);
+    }
+    return result;
+}
+#endif // VK_USE_PLATFORM_MAGMA_KHR
+
 #ifdef VK_USE_PLATFORM_XCB_KHR
 VKAPI_ATTR VkResult VKAPI_CALL CreateXcbSurfaceKHR(VkInstance instance, const VkXcbSurfaceCreateInfoKHR *pCreateInfo,
                                                    const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
@@ -1424,6 +1492,11 @@ static PFN_vkVoidFunction intercept_khr_surface_command(const char *name, VkInst
         {"vkGetPhysicalDeviceXlibPresentationSupportKHR",
          reinterpret_cast<PFN_vkVoidFunction>(GetPhysicalDeviceXlibPresentationSupportKHR)},
 #endif // VK_USE_PLATFORM_XLIB_KHR
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+        {"vkCreateMagmaSurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(CreateMagmaSurfaceKHR)},
+        {"vkGetPhysicalDeviceMagmaPresentationSupportKHR",
+         reinterpret_cast<PFN_vkVoidFunction>(GetPhysicalDeviceMagmaPresentationSupportKHR)},
+#endif // VK_USE_PLATFORM_MAGMA_KHR
         {"vkDestroySurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(DestroySurfaceKHR)},
         {"vkGetPhysicalDeviceSurfaceSupportKHR", reinterpret_cast<PFN_vkVoidFunction>(GetPhysicalDeviceSurfaceSupportKHR)},
         {"vkGetPhysicalDeviceDisplayPlanePropertiesKHR",

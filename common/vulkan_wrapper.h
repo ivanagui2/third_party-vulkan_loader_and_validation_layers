@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// This file is generated.
+// This file is generated, and then has been manually modified to add
+// Magma-specific functions.
 #ifndef VULKAN_WRAPPER_H
 #define VULKAN_WRAPPER_H
 
@@ -228,6 +229,13 @@ extern PFN_vkCreateAndroidSurfaceKHR vkCreateAndroidSurfaceKHR;
 extern PFN_vkCreateWin32SurfaceKHR vkCreateWin32SurfaceKHR;
 extern PFN_vkGetPhysicalDeviceWin32PresentationSupportKHR vkGetPhysicalDeviceWin32PresentationSupportKHR;
 #endif
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+// VK_KHR_magma_surface
+extern PFN_vkCreateMagmaSurfaceKHR vkCreateMagmaSurfaceKHR;
+extern PFN_vkGetPhysicalDeviceMagmaPresentationSupportKHR vkGetPhysicalDeviceMagmaPresentationSupportKHR;
+#endif
+
 
 // VK_KHR_sampler_mirror_clamp_to_edge
 

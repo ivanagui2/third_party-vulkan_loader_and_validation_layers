@@ -2804,7 +2804,7 @@ loader_get_manifest_files(const struct loader_instance *inst,
             sysdir = NULL;
         }
         file = next_file;
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__Fuchsia__)
         if (home_location != NULL &&
             (next_file == NULL || *next_file == '\0') && override == NULL) {
             char *xdgdatahome = secure_getenv("XDG_DATA_HOME");

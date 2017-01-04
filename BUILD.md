@@ -18,6 +18,10 @@ To create your local git repository:
 git clone https://github.com/KhronosGroup/Vulkan-LoaderAndValidationLayers
 ```
 
+## Fuchsia Build
+
+The loader is built using gn from the BUILD.gn files.
+
 ## Linux Build
 
 The build process uses CMake to generate makefiles for this project.

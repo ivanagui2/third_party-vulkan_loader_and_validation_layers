@@ -2619,7 +2619,7 @@ static VkResult loader_get_manifest_files(const struct loader_instance *inst, co
             sysdir = NULL;
         }
         file = next_file;
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__Fuchsia__)
         if (relative_location != NULL && (next_file == NULL || *next_file == '\0') && override == NULL) {
             char *xdgdatahome = loader_secure_getenv("XDG_DATA_HOME", inst);
             size_t len;

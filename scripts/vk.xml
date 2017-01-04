@@ -212,6 +212,7 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkWin32SurfaceCreateFlagsKHR</name>;</type>       <!-- creation flags -->
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkXlibSurfaceCreateFlagsKHR</name>;</type>        <!-- creation flags -->
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkXcbSurfaceCreateFlagsKHR</name>;</type>         <!-- creation flags -->
+        <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkMagmaSurfaceCreateFlagsKHR</name>;</type>         <!-- creation flags -->
 
         <type requires="VkDebugReportFlagBitsEXT"      category="bitmask">typedef <type>VkFlags</type> <name>VkDebugReportFlagsEXT</name>;</type>
         <type requires="VkExternalMemoryHandleTypeFlagBitsNV" category="bitmask">typedef <type>VkFlags</type> <name>VkExternalMemoryHandleTypeFlagsNV</name>;</type>
@@ -1476,6 +1477,10 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
             <member optional="true"><type>VkWin32SurfaceCreateFlagsKHR</type>   <name>flags</name></member>      <!-- Reserved -->
             <member><type>HINSTANCE</type>                        <name>hinstance</name></member>
             <member><type>HWND</type>                             <name>hwnd</name></member>
+        </type>
+        <type category="struct" name="VkMagmaSurfaceCreateInfoKHR">
+            <member values="VK_STRUCTURE_TYPE_MAGMA_SURFACE_CREATE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
+            <member>const <type>void</type>*                      <name>pNext</name></member>                    <!-- Pointer to next structure -->
         </type>
         <type category="struct" name="VkXlibSurfaceCreateInfoKHR">
             <member values="VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
@@ -3692,6 +3697,18 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
             <param><type>uint32_t</type> <name>queueFamilyIndex</name></param>
         </command>
         <command successcodes="VK_SUCCESS" errorcodes="VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY">
+            <proto><type>VkResult</type> <name>vkCreateMagmaSurfaceKHR</name></proto>
+            <param><type>VkInstance</type> <name>instance</name></param>
+            <param>const <type>VkMagmaSurfaceCreateInfoKHR</type>* <name>pCreateInfo</name></param>
+            <param optional="true">const <type>VkAllocationCallbacks</type>* <name>pAllocator</name></param>
+            <param><type>VkSurfaceKHR</type>* <name>pSurface</name></param>
+        </command>
+        <command>
+            <proto><type>VkBool32</type> <name>vkGetPhysicalDeviceMagmaPresentationSupportKHR</name></proto>
+            <param><type>VkPhysicalDevice</type> <name>physicalDevice</name></param>
+            <param><type>uint32_t</type> <name>queueFamilyIndex</name></param>
+        </command>
+        <command successcodes="VK_SUCCESS" errorcodes="VK_ERROR_OUT_OF_HOST_MEMORY,VK_ERROR_OUT_OF_DEVICE_MEMORY">
             <proto><type>VkResult</type> <name>vkCreateXlibSurfaceKHR</name></proto>
             <param><type>VkInstance</type> <name>instance</name></param>
             <param>const <type>VkXlibSurfaceCreateInfoKHR</type>* <name>pCreateInfo</name></param>
@@ -4224,6 +4241,17 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
                 <type name="VkWin32SurfaceCreateInfoKHR"/>
                 <command name="vkCreateWin32SurfaceKHR"/>
                 <command name="vkGetPhysicalDeviceWin32PresentationSupportKHR"/>
+            </require>
+        </extension>
+        <extension name="VK_KHR_magma_surface" number="10" type="instance" requires="VK_KHR_surface" protect="VK_USE_PLATFORM_MAGMA_KHR" supported="vulkan">
+            <require>
+                <enum value="5"                                         name="VK_KHR_MAGMA_SURFACE_SPEC_VERSION"/>
+                <enum value="&quot;VK_KHR_magma_surface&quot;"          name="VK_KHR_MAGMA_SURFACE_EXTENSION_NAME"/>
+                <enum offset="0" extends="VkStructureType"              name="VK_STRUCTURE_TYPE_MAGMA_SURFACE_CREATE_INFO_KHR"/>
+                <type name="VkMagmaSurfaceCreateFlagsKHR"/>
+                <type name="VkMagmaSurfaceCreateInfoKHR"/>
+                <command name="vkCreateMagmaSurfaceKHR"/>
+                <command name="vkGetPhysicalDeviceMagmaPresentationSupportKHR"/>
             </require>
         </extension>
         <extension name="VK_ANDROID_native_buffer" number="11" supported="disabled">

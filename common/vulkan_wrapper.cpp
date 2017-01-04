@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-// This file is generated.
+// This file is generated, and then has been manually modified to add
+// Magma-specific functions.
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -210,6 +211,11 @@ int InitVulkan(void) {
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     vkCreateWin32SurfaceKHR = reinterpret_cast<PFN_vkCreateWin32SurfaceKHR>(dlsym(libvulkan, "vkCreateWin32SurfaceKHR"));
     vkGetPhysicalDeviceWin32PresentationSupportKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceWin32PresentationSupportKHR>(dlsym(libvulkan, "vkGetPhysicalDeviceWin32PresentationSupportKHR"));
+#endif
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    vkCreateMagmaSurfaceKHR = reinterpret_cast<PFN_vkCreateMagmaSurfaceKHR>(dlsym(libvulkan, "vkCreateMagmaSurfaceKHR"));
+    vkGetPhysicalDeviceMagmaPresentationSupportKHR = reinterpret_cast<PFN_vkGetPhysicalDeviceMagmaPresentationSupportKHR>(dlsym(libvulkan, "vkGetPhysicalDeviceMagmaPresentationSupportKHR"));
 #endif
     return 1;
 }

@@ -4742,6 +4742,7 @@ TEST_F(VkLayerTest, WriteDescriptorSetIntegrityCheck) {
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkLayerTest, InvalidCmdBufferBufferDestroyed) {
     TEST_DESCRIPTION(
         "Attempt to draw with a command buffer that is invalid "
@@ -4795,6 +4796,7 @@ TEST_F(VkLayerTest, InvalidCmdBufferBufferDestroyed) {
     vkQueueWaitIdle(m_device->m_queue);
     vkFreeMemory(m_device->handle(), mem, NULL);
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
 TEST_F(VkLayerTest, InvalidCmdBufferBufferViewDestroyed) {
     TEST_DESCRIPTION("Delete bufferView bound to cmd buffer, then attempt to submit cmd buffer.");
@@ -5818,6 +5820,7 @@ TEST_F(VkLayerTest, InvalidCmdBufferDescriptorSetBufferDestroyed) {
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkLayerTest, InvalidCmdBufferDescriptorSetImageSamplerDestroyed) {
     TEST_DESCRIPTION(
         "Attempt to draw with a command buffer that is invalid "
@@ -6112,6 +6115,7 @@ TEST_F(VkLayerTest, InvalidCmdBufferDescriptorSetImageSamplerDestroyed) {
     vkDestroyDescriptorSetLayout(m_device->device(), ds_layout, NULL);
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
 TEST_F(VkLayerTest, ImageDescriptorLayoutMismatch) {
     TEST_DESCRIPTION("Update an image sampler with a layout that doesn't match the actual image layout at the image is used.");
@@ -6618,6 +6622,7 @@ TEST_F(VkLayerTest, DescriptorImageUpdateNoMemoryBound) {
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkLayerTest, InvalidPipeline) {
     // Attempt to bind an invalid Pipeline to a valid Command Buffer
     // ObjectTracker should catch this.
@@ -6645,7 +6650,9 @@ TEST_F(VkLayerTest, InvalidPipeline) {
     vkCmdDispatch(m_commandBuffer->GetBufferHandle(), 0, 0, 0);
     m_errorMonitor->VerifyFound();
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkLayerTest, DescriptorSetNotUpdated) {
     TEST_DESCRIPTION("Bind a descriptor set that hasn't been updated.");
     VkResult err;
@@ -6727,7 +6734,9 @@ TEST_F(VkLayerTest, DescriptorSetNotUpdated) {
     vkDestroyDescriptorSetLayout(m_device->device(), ds_layout, NULL);
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkLayerTest, InvalidBufferViewObject) {
     // Create a single TEXEL_BUFFER descriptor and send it an invalid bufferView
     VkResult err;
@@ -6792,7 +6801,9 @@ TEST_F(VkLayerTest, InvalidBufferViewObject) {
     vkDestroyDescriptorSetLayout(m_device->device(), ds_layout, NULL);
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkLayerTest, CreateBufferViewNoMemoryBoundToBuffer) {
     TEST_DESCRIPTION("Attempt to create a buffer view with a buffer that has no memory bound to it.");
 
@@ -6828,7 +6839,9 @@ TEST_F(VkLayerTest, CreateBufferViewNoMemoryBoundToBuffer) {
         vkDestroyBufferView(m_device->device(), buff_view, NULL);
     }
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkLayerTest, InvalidDynamicOffsetCases) {
     // Create a descriptorSet w/ dynamic descriptor and then hit 3 offset error
     // cases:
@@ -7008,6 +7021,7 @@ TEST_F(VkLayerTest, InvalidDynamicOffsetCases) {
     vkDestroyDescriptorSetLayout(m_device->device(), ds_layout, NULL);
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
 TEST_F(VkLayerTest, DescriptorBufferUpdateNoMemoryBound) {
     TEST_DESCRIPTION(
@@ -9154,6 +9168,7 @@ TEST_F(VkLayerTest, BufferMemoryBarrierNoBuffer) {
     m_errorMonitor->VerifyFound();
 }
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkLayerTest, InvalidBarriers) {
     TEST_DESCRIPTION("A variety of ways to get VK_INVALID_BARRIER ");
 
@@ -9523,6 +9538,7 @@ TEST_F(VkLayerTest, InvalidBarriers) {
     vkEndCommandBuffer(bad_command_buffer);
     vkDestroyCommandPool(m_device->device(), command_pool, NULL);
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
 TEST_F(VkPositiveLayerTest, LayoutFromPresentWithoutAccessMemoryRead) {
     // Transition an image away from PRESENT_SRC_KHR without ACCESS_MEMORY_READ
@@ -10628,6 +10644,7 @@ TEST_F(VkLayerTest, InvalidDSUpdateIndex) {
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkLayerTest, DSUpdateEmptyBinding) {
     // Create layout w/ empty binding and attempt to update it
     VkResult err;
@@ -10714,6 +10731,7 @@ TEST_F(VkLayerTest, DSUpdateEmptyBinding) {
     vkDestroyDescriptorSetLayout(m_device->device(), ds_layout, NULL);
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
 TEST_F(VkLayerTest, InvalidDSUpdateStruct) {
     // Call UpdateDS w/ struct type other than valid VK_STRUCTUR_TYPE_UPDATE_*
@@ -12378,6 +12396,7 @@ TEST_F(VkLayerTest, InvalidStorageImageLayout) {
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkLayerTest, SimultaneousUse) {
     TEST_DESCRIPTION(
         "Use vkCmdExecuteCommands with invalid state "
@@ -12449,6 +12468,7 @@ TEST_F(VkLayerTest, SimultaneousUse) {
 
     m_errorMonitor->SetUnexpectedError("All elements of pCommandBuffers must not be in the pending state");
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
 TEST_F(VkLayerTest, SimultaneousUseOneShot) {
     TEST_DESCRIPTION(
@@ -19318,6 +19338,7 @@ TEST_F(VkLayerTest, ViewportAndScissorBoundsChecking) {
     m_commandBuffer->EndCommandBuffer();
 }
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 // This is a positive test. No failures are expected.
 TEST_F(VkPositiveLayerTest, EmptyDescriptorUpdateTest) {
     TEST_DESCRIPTION("Update last descriptor in a set that includes an empty binding");
@@ -19428,6 +19449,7 @@ TEST_F(VkPositiveLayerTest, EmptyDescriptorUpdateTest) {
     vkDestroyBuffer(m_device->device(), buffer, NULL);
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
 // This is a positive test. No failures are expected.
 TEST_F(VkPositiveLayerTest, TestAliasedMemoryTracking) {
@@ -20165,6 +20187,7 @@ TEST_F(VkPositiveLayerTest, FenceCreateSignaledWaitHandling) {
     m_errorMonitor->VerifyNotFound();
 }
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkPositiveLayerTest, ValidUsage) {
     TEST_DESCRIPTION(
         "Verify that creating an image view from an image with valid usage "
@@ -20192,6 +20215,7 @@ TEST_F(VkPositiveLayerTest, ValidUsage) {
     m_errorMonitor->VerifyNotFound();
     vkDestroyImageView(m_device->device(), imageView, NULL);
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
 // This is a positive test. No failures are expected.
 TEST_F(VkPositiveLayerTest, BindSparse) {
@@ -20653,6 +20677,7 @@ TEST_F(VkPositiveLayerTest, DepthStencilLayoutTransitionForDepthOnlyImageview) {
     vkDestroyImageView(m_device->device(), view, nullptr);
 }
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkPositiveLayerTest, RenderPassTransitionsAttachmentUnused) {
     TEST_DESCRIPTION(
         "Ensure that layout transitions work correctly without "
@@ -20692,6 +20717,7 @@ TEST_F(VkPositiveLayerTest, RenderPassTransitionsAttachmentUnused) {
     vkDestroyFramebuffer(m_device->device(), fb, nullptr);
     vkDestroyRenderPass(m_device->device(), rp, nullptr);
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
 // This is a positive test. No errors are expected.
 TEST_F(VkPositiveLayerTest, StencilLoadOp) {
@@ -22871,6 +22897,7 @@ TEST_F(VkPositiveLayerTest, CreatePipeline64BitAttributesPositive) {
     m_errorMonitor->VerifyNotFound();
 }
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkPositiveLayerTest, CreatePipelineInputAttachmentPositive) {
     TEST_DESCRIPTION("Positive test for a correctly matched input attachment");
     m_errorMonitor->ExpectSuccess();
@@ -22945,6 +22972,7 @@ TEST_F(VkPositiveLayerTest, CreatePipelineInputAttachmentPositive) {
     vkDestroyPipelineLayout(m_device->device(), pl, nullptr);
     vkDestroyDescriptorSetLayout(m_device->device(), dsl, nullptr);
 }
+#endif // SKIP_TESTS_CRASHING_ON_MAGMA
 
 TEST_F(VkPositiveLayerTest, CreateComputePipelineMissingDescriptorUnusedPositive) {
     TEST_DESCRIPTION(

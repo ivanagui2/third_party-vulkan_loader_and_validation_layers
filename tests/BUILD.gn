@@ -74,6 +74,7 @@ executable("loader_validation_tests") {
 
 executable("layer_validation_tests") {
   testonly = true
+  defines = [ "SKIP_TESTS_CRASHING_ON_MAGMA" ]
   cflags_cc = [
     "-Wno-missing-field-initializers",
   ]

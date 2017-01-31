@@ -278,6 +278,12 @@ static inline void loader_init_device_extension_dispatch_table(
     table->GetMemoryWin32HandleNV =
         (PFN_vkGetMemoryWin32HandleNV)gpa(dev, "vkGetMemoryWin32HandleNV");
 #endif // VK_USE_PLATFORM_WIN32_KHR
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    table->ExportDeviceMemoryMAGMA =
+        (PFN_vkExportDeviceMemoryMAGMA)gpa(dev, "vkExportDeviceMemoryMAGMA");
+    table->ImportDeviceMemoryMAGMA =
+        (PFN_vkImportDeviceMemoryMAGMA)gpa(dev, "vkImportDeviceMemoryMAGMA");
+#endif // VK_USE_PLATFORM_MAGMA_KHR
     table->CreateSharedSwapchainsKHR =
         (PFN_vkCreateSharedSwapchainsKHR)gpa(dev, "vkCreateSharedSwapchainsKHR");
     table->DebugMarkerSetObjectTagEXT =

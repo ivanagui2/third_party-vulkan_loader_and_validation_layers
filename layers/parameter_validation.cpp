@@ -5553,6 +5553,38 @@ VKAPI_ATTR VkResult VKAPI_CALL GetMemoryWin32HandleNV(VkDevice device, VkDeviceM
 }
 #endif // VK_USE_PLATFORM_WIN32_KHR
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+VKAPI_ATTR VkResult VKAPI_CALL ExportDeviceMemoryMAGMA(VkDevice device, VkDeviceMemory memory, uint32_t* pHandle) {
+    VkResult result = VK_ERROR_VALIDATION_FAILED_EXT;
+    bool skip = false;
+    layer_data *my_data = get_my_data_ptr(get_dispatch_key(device), layer_data_map);
+    assert(my_data != NULL);
+
+    skip |= parameter_validation_vkExportDeviceMemoryMAGMA(my_data->report_data, memory, pHandle);
+
+    if (!skip) {
+        result = my_data->dispatch_table.ExportDeviceMemoryMAGMA(device, memory, pHandle);
+    }
+
+    return result;
+}
+
+VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(VkDevice device, uint32_t handle, const VkAllocationCallbacks* pAllocator, VkDeviceMemory* pMemory) {
+    VkResult result = VK_ERROR_VALIDATION_FAILED_EXT;
+    bool skip = false;
+    layer_data *my_data = get_my_data_ptr(get_dispatch_key(device), layer_data_map);
+    assert(my_data != NULL);
+
+    skip |= parameter_validation_vkImportDeviceMemoryMAGMA(my_data->report_data, handle, pAllocator, pMemory);
+
+    if (!skip) {
+        result = my_data->dispatch_table.ImportDeviceMemoryMAGMA(device, handle, pAllocator, pMemory);
+    }
+
+    return result;
+}
+#endif // VK_USE_PLATFORM_MAGMA_KHR
+
 // VK_NVX_device_generated_commands extension
 
 VKAPI_ATTR void VKAPI_CALL CmdProcessCommandsNVX(VkCommandBuffer commandBuffer,
@@ -5918,6 +5950,10 @@ static PFN_vkVoidFunction intercept_core_device_command(const char *name) {
 #ifdef VK_USE_PLATFORM_WIN32_KHR
         {"vkGetMemoryWin32HandleNV", reinterpret_cast<PFN_vkVoidFunction>(GetMemoryWin32HandleNV)},
 #endif // VK_USE_PLATFORM_WIN32_KHR
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+        {"vkExportDeviceMemoryMAGMA", reinterpret_cast<PFN_vkVoidFunction>(ExportDeviceMemoryMAGMA)},
+        {"vkImportDeviceMemoryMAGMA", reinterpret_cast<PFN_vkVoidFunction>(ImportDeviceMemoryMAGMA)},
+#endif // VK_USE_PLATFORM_MAGMA_KHR
         // NVX_device_generated_commands
         {"vkCmdProcessCommandsNVX", reinterpret_cast<PFN_vkVoidFunction>(CmdProcessCommandsNVX)},
         {"vkCmdReserveSpaceForCommandsNVX", reinterpret_cast<PFN_vkVoidFunction>(CmdReserveSpaceForCommandsNVX)},

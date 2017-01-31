@@ -167,6 +167,10 @@ typedef struct VkLayerDispatchTable_ {
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     PFN_vkGetMemoryWin32HandleNV GetMemoryWin32HandleNV;
 #endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    PFN_vkExportDeviceMemoryMAGMA ExportDeviceMemoryMAGMA;
+    PFN_vkImportDeviceMemoryMAGMA ImportDeviceMemoryMAGMA;
+#endif
     PFN_vkCreateSharedSwapchainsKHR CreateSharedSwapchainsKHR;
     PFN_vkDebugMarkerSetObjectTagEXT DebugMarkerSetObjectTagEXT;
     PFN_vkDebugMarkerSetObjectNameEXT DebugMarkerSetObjectNameEXT;

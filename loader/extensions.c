@@ -215,6 +215,20 @@ VKAPI_ATTR VkResult VKAPI_CALL vkGetMemoryWin32HandleNV(
 
 #endif // VK_USE_PLATFORM_WIN32_KHR
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+
+LOADER_EXPORT VKAPI_ATTR VkResult VKAPI_CALL vkExportDeviceMemoryMAGMA(VkDevice device, VkDeviceMemory memory, uint32_t* pHandle) {
+    const VkLayerDispatchTable *disp = loader_get_dispatch(device);
+    return disp->ExportDeviceMemoryMAGMA(device, memory, pHandle);
+}
+
+LOADER_EXPORT VKAPI_ATTR VkResult VKAPI_CALL vkImportDeviceMemoryMAGMA(VkDevice device, uint32_t handle, const VkAllocationCallbacks* pAllocator, VkDeviceMemory* pMemory) {
+    const VkLayerDispatchTable *disp = loader_get_dispatch(device);
+    return disp->ImportDeviceMemoryMAGMA(device, handle, pAllocator, pMemory);
+}
+
+#endif // VK_USE_PLATFORM_MAGMA_KHR
+
 // Definitions for the VK_NVX_device_generated_commands
 
 VKAPI_ATTR void VKAPI_CALL vkCmdProcessCommandsNVX(
@@ -361,6 +375,20 @@ bool extension_instance_gpa(struct loader_instance *ptr_instance,
     }
 
 #endif // VK_USE_PLATFORM_WIN32_KHR
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+
+    if (!strcmp("vkExportDeviceMemoryMAGMA", name)) {
+        *addr = (void *)vkExportDeviceMemoryMAGMA;
+        return true;
+    }
+
+    if (!strcmp("vkImportDeviceMemoryMAGMA", name)) {
+        *addr = (void *)vkImportDeviceMemoryMAGMA;
+        return true;
+    }
+
+#endif // VK_USE_PLATFORM_MAGMA_KHR
 
     // Functions for the VK_NVX_device_generated_commands extension
 

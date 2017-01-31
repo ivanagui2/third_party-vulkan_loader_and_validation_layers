@@ -408,7 +408,7 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
     # Generate source for creating a non-dispatchable object
     def generate_create_ndo_code(self, indent, proto, params, cmd_info):
         create_ndo_code = ''
-        if True in [create_txt in proto.text for create_txt in ['Create', 'Allocate']]:
+        if True in [create_txt in proto.text for create_txt in ['Create', 'Allocate', 'Import']]:
             handle_type = params[-1].find('type')
             if self.isHandleTypeNonDispatchable(handle_type.text):
                 # Check for special case where multiple handles are returned
@@ -685,7 +685,7 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
                     islocal = True
 
             isdestroy = True if True in [destroy_txt in cmdname for destroy_txt in ['Destroy', 'Free']] else False
-            iscreate = True if True in [create_txt in cmdname for create_txt in ['Create', 'Allocate']] else False
+            iscreate = True if True in [create_txt in cmdname for create_txt in ['Create', 'Allocate', 'Import']] else False
 
             membersInfo.append(self.CommandParam(type=type,
                                                  name=name,

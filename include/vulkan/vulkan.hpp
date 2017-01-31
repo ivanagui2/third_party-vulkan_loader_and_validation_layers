@@ -26592,6 +26592,47 @@ namespace vk
   {
     vkGetPhysicalDeviceMemoryProperties2KHR( m_physicalDevice, reinterpret_cast<VkPhysicalDeviceMemoryProperties2KHR*>( pMemoryProperties ) );
   }
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    Result exportDeviceMemoryMAGMA( DeviceMemory memory, uint32_t* pHandle ) const
+    {
+      return static_cast<Result>( vkExportDeviceMemoryMAGMA( m_device, static_cast<VkDeviceMemory>( memory ),  pHandle ) );
+    }
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    ResultValueType<uint32_t>::type exportDeviceMemoryMAGMA( DeviceMemory memory ) const
+    {
+      uint32_t handle;
+      Result result = static_cast<Result>( vkExportDeviceMemoryMAGMA( m_device, static_cast<VkDeviceMemory>( memory ), &handle ) );
+      return createResultValue( result, handle, "vk::Device::exportDeviceMemoryMAGMA" );
+    }
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    Result importDeviceMemoryMAGMA( uint32_t handle, const AllocationCallbacks* pAllocator, DeviceMemory* memory) const
+    {
+      return static_cast<Result>( vkImportDeviceMemoryMAGMA( m_device, handle, reinterpret_cast<const VkAllocationCallbacks*>( pAllocator ), reinterpret_cast<VkDeviceMemory*>( memory ) ) );
+    }
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    ResultValueType<void>::type importDeviceMemoryMAGMA( uint32_t handle, DeviceMemory* memory, Optional<const AllocationCallbacks> allocator = nullptr ) const
+    {
+      Result result = static_cast<Result>( vkImportDeviceMemoryMAGMA( m_device, handle, reinterpret_cast<const VkAllocationCallbacks*>( static_cast<const AllocationCallbacks*>( allocator)), reinterpret_cast<VkDeviceMemory*>( memory ) ) );
+      return createResultValue( result, "vk::Device::importDeviceMemoryMAGMA" );
+    }
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+
+    Result createIndirectCommandsLayoutNVX( const IndirectCommandsLayoutCreateInfoNVX* pCreateInfo, const AllocationCallbacks* pAllocator, IndirectCommandsLayoutNVX* pIndirectCommandsLayout ) const
+    {
+      return static_cast<Result>( vkCreateIndirectCommandsLayoutNVX( m_device, reinterpret_cast<const VkIndirectCommandsLayoutCreateInfoNVX*>( pCreateInfo ), reinterpret_cast<const VkAllocationCallbacks*>( pAllocator ), reinterpret_cast<VkIndirectCommandsLayoutNVX*>( pIndirectCommandsLayout ) ) );
+    }
+
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
   VULKAN_HPP_INLINE PhysicalDeviceMemoryProperties2KHR PhysicalDevice::getMemoryProperties2KHR() const
   {

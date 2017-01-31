@@ -5791,6 +5791,38 @@ static bool PostGetPhysicalDeviceSparseImageFormatProperties2KHR(VkPhysicalDevic
     return true;
 }
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+VKAPI_ATTR VkResult VKAPI_CALL ExportDeviceMemoryMAGMA(VkDevice device, VkDeviceMemory memory, uint32_t* pHandle) {
+    VkResult result = VK_ERROR_VALIDATION_FAILED_EXT;
+    bool skip = false;
+    layer_data *my_data = get_my_data_ptr(get_dispatch_key(device), layer_data_map);
+    assert(my_data != NULL);
+
+    skip |= parameter_validation_vkExportDeviceMemoryMAGMA(my_data->report_data, memory, pHandle);
+
+    if (!skip) {
+        result = my_data->dispatch_table.ExportDeviceMemoryMAGMA(device, memory, pHandle);
+    }
+
+    return result;
+}
+
+VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(VkDevice device, uint32_t handle, const VkAllocationCallbacks* pAllocator, VkDeviceMemory* pMemory) {
+    VkResult result = VK_ERROR_VALIDATION_FAILED_EXT;
+    bool skip = false;
+    layer_data *my_data = get_my_data_ptr(get_dispatch_key(device), layer_data_map);
+    assert(my_data != NULL);
+
+    skip |= parameter_validation_vkImportDeviceMemoryMAGMA(my_data->report_data, handle, pAllocator, pMemory);
+
+    if (!skip) {
+        result = my_data->dispatch_table.ImportDeviceMemoryMAGMA(device, handle, pAllocator, pMemory);
+    }
+
+    return result;
+}
+#endif // VK_USE_PLATFORM_MAGMA_KHR
+
 VKAPI_ATTR void VKAPI_CALL GetPhysicalDeviceSparseImageFormatProperties2KHR(
     VkPhysicalDevice physicalDevice, const VkPhysicalDeviceSparseImageFormatInfo2KHR *pFormatInfo, uint32_t *pPropertyCount,
     VkSparseImageFormatProperties2KHR *pProperties) {

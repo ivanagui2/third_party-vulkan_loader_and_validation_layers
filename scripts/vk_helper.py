@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 #
 # Copyright (c) 2015-2016 The Khronos Group Inc.
 # Copyright (c) 2015-2016 Valve Corporation

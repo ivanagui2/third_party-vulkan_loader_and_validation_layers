@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 #
 # Copyright (c) 2013-2017 The Khronos Group Inc.
 #

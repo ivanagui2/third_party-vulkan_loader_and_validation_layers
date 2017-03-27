@@ -5198,6 +5198,7 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
                 <type name="VkMagmaSurfaceCreateFlagsKHR"/>
                 <type name="VkMagmaSurfaceCreateInfoKHR"/>
                 <command name="vkCreateMagmaSurfaceKHR"/>
+                <command name="vkGetPhysicalDeviceMagmaPresentationSupportKHR"/>
                 <command name="vkExportDeviceMemoryMAGMA"/>
                 <command name="vkImportDeviceMemoryMAGMA"/>
             </require>

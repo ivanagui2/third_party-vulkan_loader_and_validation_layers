@@ -696,6 +696,39 @@ VKAPI_ATTR VkResult VKAPI_CALL AllocateMemory(VkDevice device, const VkMemoryAll
     return result;
 }
 
+VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(VkDevice device, uint32_t handle, const VkAllocationCallbacks *pAllocator,
+                                                       VkDeviceMemory *pMemory) {
+    bool skip_call = false;
+    {
+        std::lock_guard<std::mutex> lock(global_lock);
+        skip_call |= ValidateObject(device, device, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, false, VALIDATION_ERROR_00612);
+    }
+    if (skip_call) {
+        return VK_ERROR_VALIDATION_FAILED_EXT;
+    }
+    VkResult result = get_dispatch_table(ot_device_table_map, device)->ImportDeviceMemoryMAGMA(device, handle, pAllocator, pMemory);
+    {
+        std::lock_guard<std::mutex> lock(global_lock);
+        if (result == VK_SUCCESS) {
+            CreateObject(device, *pMemory, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT, pAllocator);
+        }
+    }
+    return result;
+}
+
+VKAPI_ATTR VkResult VKAPI_CALL ExportDeviceMemoryMAGMA(VkDevice device, VkDeviceMemory memory, uint32_t *pHandle) {
+    bool skip_call = false;
+    std::unique_lock<std::mutex> lock(global_lock);
+    skip_call |= ValidateObject(device, device, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, false, VALIDATION_ERROR_00621);
+    skip_call |= ValidateObject(device, memory, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT, true, VALIDATION_ERROR_00622);
+    lock.unlock();
+    if (skip_call) {
+        return VK_ERROR_VALIDATION_FAILED_EXT;
+    }
+
+    return get_dispatch_table(ot_device_table_map, device)->ExportDeviceMemoryMAGMA(device, memory, pHandle);
+}
+
 VKAPI_ATTR VkResult VKAPI_CALL FlushMappedMemoryRanges(VkDevice device, uint32_t memoryRangeCount,
                                                        const VkMappedMemoryRange *pMemoryRanges) {
     bool skip = false;

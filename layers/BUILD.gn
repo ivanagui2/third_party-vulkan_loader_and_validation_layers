@@ -29,6 +29,7 @@ group("layers") {
     ":VkLayer_parameter_validation",
     ":VkLayer_swapchain",
     ":VkLayer_threading",
+    ":VkLayer_unique_objects",
   ]
 }
 

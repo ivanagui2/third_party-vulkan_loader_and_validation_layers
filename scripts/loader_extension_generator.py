@@ -31,6 +31,7 @@ WSI_EXT_NAMES = ['VK_KHR_surface',
                  'VK_KHR_wayland_surface',
                  'VK_KHR_mir_surface',
                  'VK_KHR_win32_surface',
+                 'VK_KHR_magma_surface',
                  'VK_KHR_android_surface',
                  'VK_KHR_swapchain',
                  'VK_KHR_display_swapchain']

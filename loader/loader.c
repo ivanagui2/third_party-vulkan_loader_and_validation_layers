@@ -280,6 +280,14 @@ static inline char *loader_getenv(const char *name, const struct loader_instance
     (void)name;
     return NULL;
 }
+
+static inline char *loader_secure_getenv(const char *name, const struct loader_instance *inst) {
+    // stub func
+    (void)inst;
+    (void)name;
+    return NULL;
+}
+
 static inline void loader_free_getenv(char *val, const struct loader_instance *inst) {
     // stub func
     (void)val;
@@ -2383,7 +2391,7 @@ static VkResult loader_get_manifest_files(const struct loader_instance *inst, co
     // Also handle getting the location(s) from registry on Windows
     if (override == NULL) {
         size_t loc_size = 0;
-#if !defined(_WIN32)
+#if defined(__linux__)
         const char *xdgconfdirs = loader_secure_getenv("XDG_CONFIG_DIRS", inst);
         const char *xdgdatadirs = loader_secure_getenv("XDG_DATA_DIRS", inst);
         if (xdgconfdirs == NULL || xdgconfdirs[0] == '\0')
@@ -2414,7 +2422,7 @@ static VkResult loader_get_manifest_files(const struct loader_instance *inst, co
             goto out;
         }
         char *loc_write = loc;
-#if !defined(_WIN32)
+#if defined(__linux__)
         const char *loc_read;
         size_t start, stop;
 

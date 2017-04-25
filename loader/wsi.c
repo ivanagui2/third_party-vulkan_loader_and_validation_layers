@@ -390,8 +390,7 @@ LOADER_EXPORT VKAPI_ATTR VkResult VKAPI_CALL vkCreateSwapchainKHR(VkDevice devic
 }
 
 VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateSwapchainKHR(VkDevice device, const VkSwapchainCreateInfoKHR *pCreateInfo,
-                                                             const VkAllocationCallbacks *pAllocator,
-                                                             VkSwapchainKHR *pSwapchain) {
+                                                             const VkAllocationCallbacks *pAllocator, VkSwapchainKHR *pSwapchain) {
     uint32_t icd_index = 0;
     struct loader_device *dev;
     struct loader_icd_term *icd_term = loader_get_icd_and_device(device, &dev, &icd_index);
@@ -594,7 +593,7 @@ LOADER_EXPORT VKAPI_ATTR VkResult VKAPI_CALL vkCreateMagmaSurfaceKHR(VkInstance 
                                                                      const VkAllocationCallbacks *pAllocator,
                                                                      VkSurfaceKHR *pSurface) {
     const VkLayerInstanceDispatchTable *disp;
-    disp = loader_get_instance_dispatch(instance);
+    disp = loader_get_instance_layer_dispatch(instance);
     VkResult res;
 
     res = disp->CreateMagmaSurfaceKHR(instance, pCreateInfo, pAllocator, pSurface);
@@ -632,9 +631,9 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateMagmaSurfaceKHR(VkInstance insta
     // Loop through each ICD and determine if they need to create a surface
     for (struct loader_icd_term *icd_term = ptr_instance->icd_terms; icd_term != NULL; icd_term = icd_term->next, i++) {
         if (icd_term->scanned_icd->interface_version >= ICD_VER_SUPPORTS_ICD_SURFACE_KHR) {
-            if (NULL != icd_term->CreateMagmaSurfaceKHR) {
-                vkRes = icd_term->CreateMagmaSurfaceKHR(icd_term->instance, pCreateInfo, pAllocator,
-                                                        &pIcdSurface->real_icd_surfaces[i]);
+            if (NULL != icd_term->dispatch.CreateMagmaSurfaceKHR) {
+                vkRes = icd_term->dispatch.CreateMagmaSurfaceKHR(icd_term->instance, pCreateInfo, pAllocator,
+                                                                 &pIcdSurface->real_icd_surfaces[i]);
                 if (VK_SUCCESS != vkRes) {
                     goto out;
                 }
@@ -650,8 +649,8 @@ out:
         if (NULL != pIcdSurface->real_icd_surfaces) {
             i = 0;
             for (struct loader_icd_term *icd_term = ptr_instance->icd_terms; icd_term != NULL; icd_term = icd_term->next, i++) {
-                if ((VkSurfaceKHR)NULL != pIcdSurface->real_icd_surfaces[i] && NULL != icd_term->DestroySurfaceKHR) {
-                    icd_term->DestroySurfaceKHR(cd_term->instance, pIcdSurface->real_icd_surfaces[i], pAllocator);
+                if ((VkSurfaceKHR)NULL != pIcdSurface->real_icd_surfaces[i] && NULL != icd_term->dispatch.DestroySurfaceKHR) {
+                    icd_term->dispatch.DestroySurfaceKHR(icd_term->instance, pIcdSurface->real_icd_surfaces[i], pAllocator);
                 }
             }
             loader_instance_heap_free(ptr_instance, pIcdSurface->real_icd_surfaces);
@@ -668,7 +667,7 @@ LOADER_EXPORT VKAPI_ATTR VkBool32 VKAPI_CALL vkGetPhysicalDeviceMagmaPresentatio
                                                                                             uint32_t queueFamilyIndex) {
     VkPhysicalDevice unwrapped_phys_dev = loader_unwrap_physical_device(physicalDevice);
     const VkLayerInstanceDispatchTable *disp;
-    disp = loader_get_instance_dispatch(physicalDevice);
+    disp = loader_get_instance_layer_dispatch(physicalDevice);
     VkBool32 res = disp->GetPhysicalDeviceMagmaPresentationSupportKHR(unwrapped_phys_dev, queueFamilyIndex);
     return res;
 }
@@ -689,11 +688,11 @@ VKAPI_ATTR VkBool32 VKAPI_CALL terminator_GetPhysicalDeviceMagmaPresentationSupp
     }
 
     // Next, if so, proceed with the implementation of this function:
-    assert(icd_term->GetPhysicalDeviceMagmaPresentationSupportKHR &&
+    assert(icd_term->dispatch.GetPhysicalDeviceMagmaPresentationSupportKHR &&
            "loader: null GetPhysicalDeviceMagmaPresentationSupportKHR ICD "
            "pointer");
 
-    return icd_term->GetPhysicalDeviceMagmaPresentationSupportKHR(phys_dev_term->phys_dev, queueFamilyIndex);
+    return icd_term->dispatch.GetPhysicalDeviceMagmaPresentationSupportKHR(phys_dev_term->phys_dev, queueFamilyIndex);
 }
 #endif  // VK_USE_PLATFORM_MAGMA_KHR
 

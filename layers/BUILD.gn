@@ -24,7 +24,6 @@ import("//magma/gnbuild/magma.gni")
 group("layers") {
   deps = [
     ":VkLayer_core_validation",
-    ":VkLayer_image",
     ":VkLayer_object_tracker",
     ":VkLayer_parameter_validation",
     ":VkLayer_swapchain",
@@ -39,7 +38,6 @@ config("layer_include_config") {
     ".",
     "../include",
     "../loader",
-    "../build-fuchsia/generated/include",
   ]
 }
 
@@ -79,6 +77,7 @@ shared_library("VkLayer_core_validation") {
 }
 
 source_set("VkLayer_core_validation_src") {
+  cflags_cc = [ "-Wno-missing-field-initializers" ]
   include_dirs = [
     "//third_party/shaderc/third_party/spirv-tools/include",
     "//third_party/shaderc/third_party/glslang",
@@ -91,21 +90,6 @@ source_set("VkLayer_core_validation_src") {
     ":layer_common",
     "//third_party/shaderc/third_party/spirv-tools",
     "//third_party/shaderc/third_party/glslang",
-  ]
-}
-
-shared_library("VkLayer_image") {
-  deps = [
-    ":VkLayer_image_src($magma_shared_toolchain)",
-  ]
-}
-
-source_set("VkLayer_image_src") {
-  sources = [
-    "image.cpp",
-  ]
-  deps = [
-    ":layer_common",
   ]
 }
 

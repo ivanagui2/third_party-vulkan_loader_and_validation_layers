@@ -701,7 +701,7 @@ VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(VkDevice device, uint32_t
     bool skip_call = false;
     {
         std::lock_guard<std::mutex> lock(global_lock);
-        skip_call |= ValidateObject(device, device, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, false, VALIDATION_ERROR_00612);
+        skip_call |= ValidateObject(device, device, kVulkanObjectTypeDevice, false, VALIDATION_ERROR_00612, VALIDATION_ERROR_UNDEFINED);
     }
     if (skip_call) {
         return VK_ERROR_VALIDATION_FAILED_EXT;
@@ -710,7 +710,7 @@ VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(VkDevice device, uint32_t
     {
         std::lock_guard<std::mutex> lock(global_lock);
         if (result == VK_SUCCESS) {
-            CreateObject(device, *pMemory, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT, pAllocator);
+            CreateObject(device, *pMemory, kVulkanObjectTypeDeviceMemory, pAllocator);
         }
     }
     return result;
@@ -719,8 +719,8 @@ VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(VkDevice device, uint32_t
 VKAPI_ATTR VkResult VKAPI_CALL ExportDeviceMemoryMAGMA(VkDevice device, VkDeviceMemory memory, uint32_t *pHandle) {
     bool skip_call = false;
     std::unique_lock<std::mutex> lock(global_lock);
-    skip_call |= ValidateObject(device, device, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT, false, VALIDATION_ERROR_00621);
-    skip_call |= ValidateObject(device, memory, VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_MEMORY_EXT, true, VALIDATION_ERROR_00622);
+    skip_call |= ValidateObject(device, device, kVulkanObjectTypeDevice, false, VALIDATION_ERROR_00621, VALIDATION_ERROR_UNDEFINED);
+    skip_call |= ValidateObject(device, memory, kVulkanObjectTypeDeviceMemory, false, VALIDATION_ERROR_00622, VALIDATION_ERROR_UNDEFINED);
     lock.unlock();
     if (skip_call) {
         return VK_ERROR_VALIDATION_FAILED_EXT;
@@ -2879,7 +2879,8 @@ VKAPI_ATTR VkResult VKAPI_CALL CreateMagmaSurfaceKHR(VkInstance instance, const 
     bool skip_call = false;
     {
         std::lock_guard<std::mutex> lock(global_lock);
-        skip_call |= ValidateObject(instance, instance, VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT, false, VALIDATION_ERROR_01820);
+        skip_call |= ValidateObject(instance, instance, kVulkanObjectTypeInstance, false, VALIDATION_ERROR_01820,
+                                    VALIDATION_ERROR_UNDEFINED);
     }
     if (skip_call) {
         return VK_ERROR_VALIDATION_FAILED_EXT;
@@ -2889,7 +2890,7 @@ VKAPI_ATTR VkResult VKAPI_CALL CreateMagmaSurfaceKHR(VkInstance instance, const 
     {
         std::lock_guard<std::mutex> lock(global_lock);
         if (result == VK_SUCCESS) {
-            CreateObject(instance, *pSurface, VK_DEBUG_REPORT_OBJECT_TYPE_SURFACE_KHR_EXT, pAllocator);
+            CreateObject(instance, *pSurface, kVulkanObjectTypeSurfaceKHR, pAllocator);
         }
     }
     return result;
@@ -2900,8 +2901,8 @@ VKAPI_ATTR VkBool32 VKAPI_CALL GetPhysicalDeviceMagmaPresentationSupportKHR(VkPh
     bool skip_call = false;
     {
         std::lock_guard<std::mutex> lock(global_lock);
-        skip_call |= ValidateObject(physicalDevice, physicalDevice, VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT, false,
-                                    VALIDATION_ERROR_01900);
+        skip_call |= ValidateObject(physicalDevice, physicalDevice, kVulkanObjectTypePhysicalDevice, false,
+                                    VALIDATION_ERROR_01900, VALIDATION_ERROR_UNDEFINED);
     }
     if (skip_call) {
         return VK_FALSE;

@@ -5795,7 +5795,7 @@ static bool PostGetPhysicalDeviceSparseImageFormatProperties2KHR(VkPhysicalDevic
 VKAPI_ATTR VkResult VKAPI_CALL ExportDeviceMemoryMAGMA(VkDevice device, VkDeviceMemory memory, uint32_t* pHandle) {
     VkResult result = VK_ERROR_VALIDATION_FAILED_EXT;
     bool skip = false;
-    layer_data *my_data = get_my_data_ptr(get_dispatch_key(device), layer_data_map);
+    layer_data *my_data = GetLayerDataPtr(get_dispatch_key(device), layer_data_map);
     assert(my_data != NULL);
 
     skip |= parameter_validation_vkExportDeviceMemoryMAGMA(my_data->report_data, memory, pHandle);
@@ -5810,7 +5810,7 @@ VKAPI_ATTR VkResult VKAPI_CALL ExportDeviceMemoryMAGMA(VkDevice device, VkDevice
 VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(VkDevice device, uint32_t handle, const VkAllocationCallbacks* pAllocator, VkDeviceMemory* pMemory) {
     VkResult result = VK_ERROR_VALIDATION_FAILED_EXT;
     bool skip = false;
-    layer_data *my_data = get_my_data_ptr(get_dispatch_key(device), layer_data_map);
+    layer_data *my_data = GetLayerDataPtr(get_dispatch_key(device), layer_data_map);
     assert(my_data != NULL);
 
     skip |= parameter_validation_vkImportDeviceMemoryMAGMA(my_data->report_data, handle, pAllocator, pMemory);

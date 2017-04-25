@@ -36,15 +36,16 @@ config("validation_tests_include_config") {
     "gtest-1.7.0",
     "gtest-1.7.0/include",
     "//third_party/glm",
-    "//third_party/shaderc/third_party/glslang"
+    "//third_party/shaderc/third_party/glslang",
   ]
 }
 
 source_set("validation_tests_common") {
   testonly = true
-  public_configs = [ ":validation_tests_include_config" ]
+  public_configs = [ ":validation_tests_include_config", ]
   defines = [ "VK_USE_PLATFORM_MAGMA_KHR" ]
   sources = [
+    "../layers/vk_format_utils.cpp",
     "vkrenderframework.cpp",
     "vktestbinding.cpp",
     "vktestframework.cpp",
@@ -56,6 +57,7 @@ source_set("validation_tests_common") {
     "//third_party/shaderc/third_party/glslang:SPVRemapper",
     "//third_party/shaderc/third_party/glslang:SPIRV",
     "../:vulkan",
+    "../:extra_vulkan_headers",
   ]
 }
 

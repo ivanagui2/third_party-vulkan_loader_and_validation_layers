@@ -225,10 +225,10 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkXcbSurfaceCreateFlagsKHR</name>;</type>         <!-- creation flags -->
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkIOSSurfaceCreateFlagsMVK</name>;</type>         <!-- creation flags -->
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkMacOSSurfaceCreateFlagsMVK</name>;</type>       <!-- creation flags -->
+        <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkMagmaSurfaceCreateFlagsKHR</name>;</type>       <!-- creation flags -->
         <type requires="VkPeerMemoryFeatureFlagBitsKHX"   category="bitmask">typedef <type>VkFlags</type> <name>VkPeerMemoryFeatureFlagsKHX</name>;</type>        <!-- Peer memory feature flags -->
         <type requires="VkMemoryAllocateFlagBitsKHX"      category="bitmask">typedef <type>VkFlags</type> <name>VkMemoryAllocateFlagsKHX</name>;</type>           <!-- Memory allocation flags -->
         <type requires="VkDeviceGroupPresentModeFlagBitsKHX" category="bitmask">typedef <type>VkFlags</type> <name>VkDeviceGroupPresentModeFlagsKHX</name>;</type><!-- Device group present mode flags -->
-        <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkMagmaSurfaceCreateFlagsKHR</name>;</type>       <!-- creation flags -->
 
         <type requires="VkDebugReportFlagBitsEXT"      category="bitmask">typedef <type>VkFlags</type> <name>VkDebugReportFlagsEXT</name>;</type>
         <type                                             category="bitmask">typedef <type>VkFlags</type> <name>VkCommandPoolTrimFlagsKHR</name>;</type>
@@ -5190,7 +5190,7 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
                 <command name="vkGetPhysicalDeviceWin32PresentationSupportKHR"/>
             </require>
         </extension>
-        <extension name="VK_KHR_magma_surface" number="10" type="instance" requires="VK_KHR_surface" protect="VK_USE_PLATFORM_MAGMA_KHR" supported="vulkan">
+        <extension name="VK_KHR_magma_surface" number="210" type="instance" requires="VK_KHR_surface" protect="VK_USE_PLATFORM_MAGMA_KHR" supported="vulkan">
             <require>
                 <enum value="1"                                         name="VK_KHR_MAGMA_SURFACE_SPEC_VERSION"/>
                 <enum value="&quot;VK_KHR_magma_surface&quot;"          name="VK_KHR_MAGMA_SURFACE_EXTENSION_NAME"/>
@@ -5199,8 +5199,6 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
                 <type name="VkMagmaSurfaceCreateInfoKHR"/>
                 <command name="vkCreateMagmaSurfaceKHR"/>
                 <command name="vkGetPhysicalDeviceMagmaPresentationSupportKHR"/>
-                <command name="vkExportDeviceMemoryMAGMA"/>
-                <command name="vkImportDeviceMemoryMAGMA"/>
             </require>
         </extension>
         <extension name="VK_ANDROID_native_buffer" number="11" supported="disabled">
@@ -5556,6 +5554,14 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
                 <type name="VkImportMemoryWin32HandleInfoNV"/>
                 <type name="VkExportMemoryWin32HandleInfoNV"/>
                 <command name="vkGetMemoryWin32HandleNV"/>
+            </require>
+        </extension>
+        <extension name="VK_GOOGLE_external_memory_magma" number="258" type="device" protect="VK_USE_PLATFORM_MAGMA_KHR" supported="vulkan">
+            <require>
+                <enum value="1"                                         name="VK_GOOGLE_EXTERNAL_MEMORY_MAGMA_SPEC_VERSION"/>
+                <enum value="&quot;VK_GOOGLE_external_memory_magma&quot;" name="VK_GOOGLE_EXTERNAL_MEMORY_MAGMA_EXTENSION_NAME"/>
+                <command name="vkExportDeviceMemoryMAGMA"/>
+                <command name="vkImportDeviceMemoryMAGMA"/>
             </require>
         </extension>
         <extension name="VK_NV_win32_keyed_mutex" number="59" type="device" requires="VK_NV_external_memory_capabilities,VK_NV_external_memory_win32" author="NVIDIA" contact="Carsten Rohde" protect="VK_USE_PLATFORM_WIN32_KHR" supported="vulkan">

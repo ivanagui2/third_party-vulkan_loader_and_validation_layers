@@ -642,21 +642,11 @@ namespace vk
 
   using FramebufferCreateFlags = Flags<FramebufferCreateFlagBits, VkFramebufferCreateFlags>;
 
-  VULKAN_HPP_INLINE FramebufferCreateFlags operator|( FramebufferCreateFlagBits bit0, FramebufferCreateFlagBits bit1 )
-  {
-    return FramebufferCreateFlags( bit0 ) | bit1;
-  }
-
   enum class QueryPoolCreateFlagBits
   {
   };
 
   using QueryPoolCreateFlags = Flags<QueryPoolCreateFlagBits, VkQueryPoolCreateFlags>;
-
-  VULKAN_HPP_INLINE QueryPoolCreateFlags operator|( QueryPoolCreateFlagBits bit0, QueryPoolCreateFlagBits bit1 )
-  {
-    return QueryPoolCreateFlags( bit0 ) | bit1;
-  }
 
   enum class RenderPassCreateFlagBits
   {
@@ -664,21 +654,11 @@ namespace vk
 
   using RenderPassCreateFlags = Flags<RenderPassCreateFlagBits, VkRenderPassCreateFlags>;
 
-  VULKAN_HPP_INLINE RenderPassCreateFlags operator|( RenderPassCreateFlagBits bit0, RenderPassCreateFlagBits bit1 )
-  {
-    return RenderPassCreateFlags( bit0 ) | bit1;
-  }
-
   enum class SamplerCreateFlagBits
   {
   };
 
   using SamplerCreateFlags = Flags<SamplerCreateFlagBits, VkSamplerCreateFlags>;
-
-  VULKAN_HPP_INLINE SamplerCreateFlags operator|( SamplerCreateFlagBits bit0, SamplerCreateFlagBits bit1 )
-  {
-    return SamplerCreateFlags( bit0 ) | bit1;
-  }
 
   enum class PipelineLayoutCreateFlagBits
   {
@@ -686,21 +666,11 @@ namespace vk
 
   using PipelineLayoutCreateFlags = Flags<PipelineLayoutCreateFlagBits, VkPipelineLayoutCreateFlags>;
 
-  VULKAN_HPP_INLINE PipelineLayoutCreateFlags operator|( PipelineLayoutCreateFlagBits bit0, PipelineLayoutCreateFlagBits bit1 )
-  {
-    return PipelineLayoutCreateFlags( bit0 ) | bit1;
-  }
-
   enum class PipelineCacheCreateFlagBits
   {
   };
 
   using PipelineCacheCreateFlags = Flags<PipelineCacheCreateFlagBits, VkPipelineCacheCreateFlags>;
-
-  VULKAN_HPP_INLINE PipelineCacheCreateFlags operator|( PipelineCacheCreateFlagBits bit0, PipelineCacheCreateFlagBits bit1 )
-  {
-    return PipelineCacheCreateFlags( bit0 ) | bit1;
-  }
 
   enum class PipelineDepthStencilStateCreateFlagBits
   {
@@ -708,21 +678,11 @@ namespace vk
 
   using PipelineDepthStencilStateCreateFlags = Flags<PipelineDepthStencilStateCreateFlagBits, VkPipelineDepthStencilStateCreateFlags>;
 
-  VULKAN_HPP_INLINE PipelineDepthStencilStateCreateFlags operator|( PipelineDepthStencilStateCreateFlagBits bit0, PipelineDepthStencilStateCreateFlagBits bit1 )
-  {
-    return PipelineDepthStencilStateCreateFlags( bit0 ) | bit1;
-  }
-
   enum class PipelineDynamicStateCreateFlagBits
   {
   };
 
   using PipelineDynamicStateCreateFlags = Flags<PipelineDynamicStateCreateFlagBits, VkPipelineDynamicStateCreateFlags>;
-
-  VULKAN_HPP_INLINE PipelineDynamicStateCreateFlags operator|( PipelineDynamicStateCreateFlagBits bit0, PipelineDynamicStateCreateFlagBits bit1 )
-  {
-    return PipelineDynamicStateCreateFlags( bit0 ) | bit1;
-  }
 
   enum class PipelineColorBlendStateCreateFlagBits
   {
@@ -730,21 +690,11 @@ namespace vk
 
   using PipelineColorBlendStateCreateFlags = Flags<PipelineColorBlendStateCreateFlagBits, VkPipelineColorBlendStateCreateFlags>;
 
-  VULKAN_HPP_INLINE PipelineColorBlendStateCreateFlags operator|( PipelineColorBlendStateCreateFlagBits bit0, PipelineColorBlendStateCreateFlagBits bit1 )
-  {
-    return PipelineColorBlendStateCreateFlags( bit0 ) | bit1;
-  }
-
   enum class PipelineMultisampleStateCreateFlagBits
   {
   };
 
   using PipelineMultisampleStateCreateFlags = Flags<PipelineMultisampleStateCreateFlagBits, VkPipelineMultisampleStateCreateFlags>;
-
-  VULKAN_HPP_INLINE PipelineMultisampleStateCreateFlags operator|( PipelineMultisampleStateCreateFlagBits bit0, PipelineMultisampleStateCreateFlagBits bit1 )
-  {
-    return PipelineMultisampleStateCreateFlags( bit0 ) | bit1;
-  }
 
   enum class PipelineRasterizationStateCreateFlagBits
   {
@@ -752,21 +702,11 @@ namespace vk
 
   using PipelineRasterizationStateCreateFlags = Flags<PipelineRasterizationStateCreateFlagBits, VkPipelineRasterizationStateCreateFlags>;
 
-  VULKAN_HPP_INLINE PipelineRasterizationStateCreateFlags operator|( PipelineRasterizationStateCreateFlagBits bit0, PipelineRasterizationStateCreateFlagBits bit1 )
-  {
-    return PipelineRasterizationStateCreateFlags( bit0 ) | bit1;
-  }
-
   enum class PipelineViewportStateCreateFlagBits
   {
   };
 
   using PipelineViewportStateCreateFlags = Flags<PipelineViewportStateCreateFlagBits, VkPipelineViewportStateCreateFlags>;
-
-  VULKAN_HPP_INLINE PipelineViewportStateCreateFlags operator|( PipelineViewportStateCreateFlagBits bit0, PipelineViewportStateCreateFlagBits bit1 )
-  {
-    return PipelineViewportStateCreateFlags( bit0 ) | bit1;
-  }
 
   enum class PipelineTessellationStateCreateFlagBits
   {
@@ -774,21 +714,11 @@ namespace vk
 
   using PipelineTessellationStateCreateFlags = Flags<PipelineTessellationStateCreateFlagBits, VkPipelineTessellationStateCreateFlags>;
 
-  VULKAN_HPP_INLINE PipelineTessellationStateCreateFlags operator|( PipelineTessellationStateCreateFlagBits bit0, PipelineTessellationStateCreateFlagBits bit1 )
-  {
-    return PipelineTessellationStateCreateFlags( bit0 ) | bit1;
-  }
-
   enum class PipelineInputAssemblyStateCreateFlagBits
   {
   };
 
   using PipelineInputAssemblyStateCreateFlags = Flags<PipelineInputAssemblyStateCreateFlagBits, VkPipelineInputAssemblyStateCreateFlags>;
-
-  VULKAN_HPP_INLINE PipelineInputAssemblyStateCreateFlags operator|( PipelineInputAssemblyStateCreateFlagBits bit0, PipelineInputAssemblyStateCreateFlagBits bit1 )
-  {
-    return PipelineInputAssemblyStateCreateFlags( bit0 ) | bit1;
-  }
 
   enum class PipelineVertexInputStateCreateFlagBits
   {
@@ -796,21 +726,11 @@ namespace vk
 
   using PipelineVertexInputStateCreateFlags = Flags<PipelineVertexInputStateCreateFlagBits, VkPipelineVertexInputStateCreateFlags>;
 
-  VULKAN_HPP_INLINE PipelineVertexInputStateCreateFlags operator|( PipelineVertexInputStateCreateFlagBits bit0, PipelineVertexInputStateCreateFlagBits bit1 )
-  {
-    return PipelineVertexInputStateCreateFlags( bit0 ) | bit1;
-  }
-
   enum class PipelineShaderStageCreateFlagBits
   {
   };
 
   using PipelineShaderStageCreateFlags = Flags<PipelineShaderStageCreateFlagBits, VkPipelineShaderStageCreateFlags>;
-
-  VULKAN_HPP_INLINE PipelineShaderStageCreateFlags operator|( PipelineShaderStageCreateFlagBits bit0, PipelineShaderStageCreateFlagBits bit1 )
-  {
-    return PipelineShaderStageCreateFlags( bit0 ) | bit1;
-  }
 
   enum class BufferViewCreateFlagBits
   {
@@ -818,21 +738,11 @@ namespace vk
 
   using BufferViewCreateFlags = Flags<BufferViewCreateFlagBits, VkBufferViewCreateFlags>;
 
-  VULKAN_HPP_INLINE BufferViewCreateFlags operator|( BufferViewCreateFlagBits bit0, BufferViewCreateFlagBits bit1 )
-  {
-    return BufferViewCreateFlags( bit0 ) | bit1;
-  }
-
   enum class InstanceCreateFlagBits
   {
   };
 
   using InstanceCreateFlags = Flags<InstanceCreateFlagBits, VkInstanceCreateFlags>;
-
-  VULKAN_HPP_INLINE InstanceCreateFlags operator|( InstanceCreateFlagBits bit0, InstanceCreateFlagBits bit1 )
-  {
-    return InstanceCreateFlags( bit0 ) | bit1;
-  }
 
   enum class DeviceCreateFlagBits
   {
@@ -840,21 +750,11 @@ namespace vk
 
   using DeviceCreateFlags = Flags<DeviceCreateFlagBits, VkDeviceCreateFlags>;
 
-  VULKAN_HPP_INLINE DeviceCreateFlags operator|( DeviceCreateFlagBits bit0, DeviceCreateFlagBits bit1 )
-  {
-    return DeviceCreateFlags( bit0 ) | bit1;
-  }
-
   enum class DeviceQueueCreateFlagBits
   {
   };
 
   using DeviceQueueCreateFlags = Flags<DeviceQueueCreateFlagBits, VkDeviceQueueCreateFlags>;
-
-  VULKAN_HPP_INLINE DeviceQueueCreateFlags operator|( DeviceQueueCreateFlagBits bit0, DeviceQueueCreateFlagBits bit1 )
-  {
-    return DeviceQueueCreateFlags( bit0 ) | bit1;
-  }
 
   enum class ImageViewCreateFlagBits
   {
@@ -862,21 +762,11 @@ namespace vk
 
   using ImageViewCreateFlags = Flags<ImageViewCreateFlagBits, VkImageViewCreateFlags>;
 
-  VULKAN_HPP_INLINE ImageViewCreateFlags operator|( ImageViewCreateFlagBits bit0, ImageViewCreateFlagBits bit1 )
-  {
-    return ImageViewCreateFlags( bit0 ) | bit1;
-  }
-
   enum class SemaphoreCreateFlagBits
   {
   };
 
   using SemaphoreCreateFlags = Flags<SemaphoreCreateFlagBits, VkSemaphoreCreateFlags>;
-
-  VULKAN_HPP_INLINE SemaphoreCreateFlags operator|( SemaphoreCreateFlagBits bit0, SemaphoreCreateFlagBits bit1 )
-  {
-    return SemaphoreCreateFlags( bit0 ) | bit1;
-  }
 
   enum class ShaderModuleCreateFlagBits
   {
@@ -884,21 +774,11 @@ namespace vk
 
   using ShaderModuleCreateFlags = Flags<ShaderModuleCreateFlagBits, VkShaderModuleCreateFlags>;
 
-  VULKAN_HPP_INLINE ShaderModuleCreateFlags operator|( ShaderModuleCreateFlagBits bit0, ShaderModuleCreateFlagBits bit1 )
-  {
-    return ShaderModuleCreateFlags( bit0 ) | bit1;
-  }
-
   enum class EventCreateFlagBits
   {
   };
 
   using EventCreateFlags = Flags<EventCreateFlagBits, VkEventCreateFlags>;
-
-  VULKAN_HPP_INLINE EventCreateFlags operator|( EventCreateFlagBits bit0, EventCreateFlagBits bit1 )
-  {
-    return EventCreateFlags( bit0 ) | bit1;
-  }
 
   enum class MemoryMapFlagBits
   {
@@ -906,21 +786,11 @@ namespace vk
 
   using MemoryMapFlags = Flags<MemoryMapFlagBits, VkMemoryMapFlags>;
 
-  VULKAN_HPP_INLINE MemoryMapFlags operator|( MemoryMapFlagBits bit0, MemoryMapFlagBits bit1 )
-  {
-    return MemoryMapFlags( bit0 ) | bit1;
-  }
-
   enum class DescriptorPoolResetFlagBits
   {
   };
 
   using DescriptorPoolResetFlags = Flags<DescriptorPoolResetFlagBits, VkDescriptorPoolResetFlags>;
-
-  VULKAN_HPP_INLINE DescriptorPoolResetFlags operator|( DescriptorPoolResetFlagBits bit0, DescriptorPoolResetFlagBits bit1 )
-  {
-    return DescriptorPoolResetFlags( bit0 ) | bit1;
-  }
 
   enum class DescriptorUpdateTemplateCreateFlagBitsKHR
   {
@@ -928,32 +798,17 @@ namespace vk
 
   using DescriptorUpdateTemplateCreateFlagsKHR = Flags<DescriptorUpdateTemplateCreateFlagBitsKHR, VkDescriptorUpdateTemplateCreateFlagsKHR>;
 
-  VULKAN_HPP_INLINE DescriptorUpdateTemplateCreateFlagsKHR operator|( DescriptorUpdateTemplateCreateFlagBitsKHR bit0, DescriptorUpdateTemplateCreateFlagBitsKHR bit1 )
-  {
-    return DescriptorUpdateTemplateCreateFlagsKHR( bit0 ) | bit1;
-  }
-
   enum class DisplayModeCreateFlagBitsKHR
   {
   };
 
   using DisplayModeCreateFlagsKHR = Flags<DisplayModeCreateFlagBitsKHR, VkDisplayModeCreateFlagsKHR>;
 
-  VULKAN_HPP_INLINE DisplayModeCreateFlagsKHR operator|( DisplayModeCreateFlagBitsKHR bit0, DisplayModeCreateFlagBitsKHR bit1 )
-  {
-    return DisplayModeCreateFlagsKHR( bit0 ) | bit1;
-  }
-
   enum class DisplaySurfaceCreateFlagBitsKHR
   {
   };
 
   using DisplaySurfaceCreateFlagsKHR = Flags<DisplaySurfaceCreateFlagBitsKHR, VkDisplaySurfaceCreateFlagsKHR>;
-
-  VULKAN_HPP_INLINE DisplaySurfaceCreateFlagsKHR operator|( DisplaySurfaceCreateFlagBitsKHR bit0, DisplaySurfaceCreateFlagBitsKHR bit1 )
-  {
-    return DisplaySurfaceCreateFlagsKHR( bit0 ) | bit1;
-  }
 
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
   enum class AndroidSurfaceCreateFlagBitsKHR
@@ -963,11 +818,6 @@ namespace vk
 
 #ifdef VK_USE_PLATFORM_ANDROID_KHR
   using AndroidSurfaceCreateFlagsKHR = Flags<AndroidSurfaceCreateFlagBitsKHR, VkAndroidSurfaceCreateFlagsKHR>;
-
-  VULKAN_HPP_INLINE AndroidSurfaceCreateFlagsKHR operator|( AndroidSurfaceCreateFlagBitsKHR bit0, AndroidSurfaceCreateFlagBitsKHR bit1 )
-  {
-    return AndroidSurfaceCreateFlagsKHR( bit0 ) | bit1;
-  }
 #endif /*VK_USE_PLATFORM_ANDROID_KHR*/
 
 #ifdef VK_USE_PLATFORM_MIR_KHR
@@ -978,11 +828,6 @@ namespace vk
 
 #ifdef VK_USE_PLATFORM_MIR_KHR
   using MirSurfaceCreateFlagsKHR = Flags<MirSurfaceCreateFlagBitsKHR, VkMirSurfaceCreateFlagsKHR>;
-
-  VULKAN_HPP_INLINE MirSurfaceCreateFlagsKHR operator|( MirSurfaceCreateFlagBitsKHR bit0, MirSurfaceCreateFlagBitsKHR bit1 )
-  {
-    return MirSurfaceCreateFlagsKHR( bit0 ) | bit1;
-  }
 #endif /*VK_USE_PLATFORM_MIR_KHR*/
 
 #ifdef VK_USE_PLATFORM_VI_NN
@@ -993,11 +838,6 @@ namespace vk
 
 #ifdef VK_USE_PLATFORM_VI_NN
   using ViSurfaceCreateFlagsNN = Flags<ViSurfaceCreateFlagBitsNN, VkViSurfaceCreateFlagsNN>;
-
-  VULKAN_HPP_INLINE ViSurfaceCreateFlagsNN operator|( ViSurfaceCreateFlagBitsNN bit0, ViSurfaceCreateFlagBitsNN bit1 )
-  {
-    return ViSurfaceCreateFlagsNN( bit0 ) | bit1;
-  }
 #endif /*VK_USE_PLATFORM_VI_NN*/
 
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
@@ -1008,11 +848,6 @@ namespace vk
 
 #ifdef VK_USE_PLATFORM_WAYLAND_KHR
   using WaylandSurfaceCreateFlagsKHR = Flags<WaylandSurfaceCreateFlagBitsKHR, VkWaylandSurfaceCreateFlagsKHR>;
-
-  VULKAN_HPP_INLINE WaylandSurfaceCreateFlagsKHR operator|( WaylandSurfaceCreateFlagBitsKHR bit0, WaylandSurfaceCreateFlagBitsKHR bit1 )
-  {
-    return WaylandSurfaceCreateFlagsKHR( bit0 ) | bit1;
-  }
 #endif /*VK_USE_PLATFORM_WAYLAND_KHR*/
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
@@ -1023,11 +858,6 @@ namespace vk
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR
   using Win32SurfaceCreateFlagsKHR = Flags<Win32SurfaceCreateFlagBitsKHR, VkWin32SurfaceCreateFlagsKHR>;
-
-  VULKAN_HPP_INLINE Win32SurfaceCreateFlagsKHR operator|( Win32SurfaceCreateFlagBitsKHR bit0, Win32SurfaceCreateFlagBitsKHR bit1 )
-  {
-    return Win32SurfaceCreateFlagsKHR( bit0 ) | bit1;
-  }
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
 #ifdef VK_USE_PLATFORM_XLIB_KHR
@@ -1038,11 +868,6 @@ namespace vk
 
 #ifdef VK_USE_PLATFORM_XLIB_KHR
   using XlibSurfaceCreateFlagsKHR = Flags<XlibSurfaceCreateFlagBitsKHR, VkXlibSurfaceCreateFlagsKHR>;
-
-  VULKAN_HPP_INLINE XlibSurfaceCreateFlagsKHR operator|( XlibSurfaceCreateFlagBitsKHR bit0, XlibSurfaceCreateFlagBitsKHR bit1 )
-  {
-    return XlibSurfaceCreateFlagsKHR( bit0 ) | bit1;
-  }
 #endif /*VK_USE_PLATFORM_XLIB_KHR*/
 
 #ifdef VK_USE_PLATFORM_XCB_KHR
@@ -1053,11 +878,6 @@ namespace vk
 
 #ifdef VK_USE_PLATFORM_XCB_KHR
   using XcbSurfaceCreateFlagsKHR = Flags<XcbSurfaceCreateFlagBitsKHR, VkXcbSurfaceCreateFlagsKHR>;
-
-  VULKAN_HPP_INLINE XcbSurfaceCreateFlagsKHR operator|( XcbSurfaceCreateFlagBitsKHR bit0, XcbSurfaceCreateFlagBitsKHR bit1 )
-  {
-    return XcbSurfaceCreateFlagsKHR( bit0 ) | bit1;
-  }
 #endif /*VK_USE_PLATFORM_XCB_KHR*/
 
 #ifdef VK_USE_PLATFORM_IOS_MVK
@@ -1068,11 +888,6 @@ namespace vk
 
 #ifdef VK_USE_PLATFORM_IOS_MVK
   using IOSSurfaceCreateFlagsMVK = Flags<IOSSurfaceCreateFlagBitsMVK, VkIOSSurfaceCreateFlagsMVK>;
-
-  VULKAN_HPP_INLINE IOSSurfaceCreateFlagsMVK operator|( IOSSurfaceCreateFlagBitsMVK bit0, IOSSurfaceCreateFlagBitsMVK bit1 )
-  {
-    return IOSSurfaceCreateFlagsMVK( bit0 ) | bit1;
-  }
 #endif /*VK_USE_PLATFORM_IOS_MVK*/
 
 #ifdef VK_USE_PLATFORM_MACOS_MVK
@@ -1083,12 +898,17 @@ namespace vk
 
 #ifdef VK_USE_PLATFORM_MACOS_MVK
   using MacOSSurfaceCreateFlagsMVK = Flags<MacOSSurfaceCreateFlagBitsMVK, VkMacOSSurfaceCreateFlagsMVK>;
-
-  VULKAN_HPP_INLINE MacOSSurfaceCreateFlagsMVK operator|( MacOSSurfaceCreateFlagBitsMVK bit0, MacOSSurfaceCreateFlagBitsMVK bit1 )
-  {
-    return MacOSSurfaceCreateFlagsMVK( bit0 ) | bit1;
-  }
 #endif /*VK_USE_PLATFORM_MACOS_MVK*/
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+  enum class MagmaSurfaceCreateFlagBitsKHR
+  {
+  };
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+  using MagmaSurfaceCreateFlagsKHR = Flags<MagmaSurfaceCreateFlagBitsKHR, VkMagmaSurfaceCreateFlagsKHR>;
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
 
   enum class CommandPoolTrimFlagBitsKHR
   {
@@ -1096,32 +916,17 @@ namespace vk
 
   using CommandPoolTrimFlagsKHR = Flags<CommandPoolTrimFlagBitsKHR, VkCommandPoolTrimFlagsKHR>;
 
-  VULKAN_HPP_INLINE CommandPoolTrimFlagsKHR operator|( CommandPoolTrimFlagBitsKHR bit0, CommandPoolTrimFlagBitsKHR bit1 )
-  {
-    return CommandPoolTrimFlagsKHR( bit0 ) | bit1;
-  }
-
   enum class PipelineViewportSwizzleStateCreateFlagBitsNV
   {
   };
 
   using PipelineViewportSwizzleStateCreateFlagsNV = Flags<PipelineViewportSwizzleStateCreateFlagBitsNV, VkPipelineViewportSwizzleStateCreateFlagsNV>;
 
-  VULKAN_HPP_INLINE PipelineViewportSwizzleStateCreateFlagsNV operator|( PipelineViewportSwizzleStateCreateFlagBitsNV bit0, PipelineViewportSwizzleStateCreateFlagBitsNV bit1 )
-  {
-    return PipelineViewportSwizzleStateCreateFlagsNV( bit0 ) | bit1;
-  }
-
   enum class PipelineDiscardRectangleStateCreateFlagBitsEXT
   {
   };
 
   using PipelineDiscardRectangleStateCreateFlagsEXT = Flags<PipelineDiscardRectangleStateCreateFlagBitsEXT, VkPipelineDiscardRectangleStateCreateFlagsEXT>;
-
-  VULKAN_HPP_INLINE PipelineDiscardRectangleStateCreateFlagsEXT operator|( PipelineDiscardRectangleStateCreateFlagBitsEXT bit0, PipelineDiscardRectangleStateCreateFlagBitsEXT bit1 )
-  {
-    return PipelineDiscardRectangleStateCreateFlagsEXT( bit0 ) | bit1;
-  }
 
   class DeviceMemory
   {
@@ -6295,6 +6100,7 @@ namespace vk
     eMirSurfaceCreateInfoKHR = VK_STRUCTURE_TYPE_MIR_SURFACE_CREATE_INFO_KHR,
     eAndroidSurfaceCreateInfoKHR = VK_STRUCTURE_TYPE_ANDROID_SURFACE_CREATE_INFO_KHR,
     eWin32SurfaceCreateInfoKHR = VK_STRUCTURE_TYPE_WIN32_SURFACE_CREATE_INFO_KHR,
+    eMagmaSurfaceCreateInfoKHR = VK_STRUCTURE_TYPE_MAGMA_SURFACE_CREATE_INFO_KHR,
     eDebugReportCallbackCreateInfoEXT = VK_STRUCTURE_TYPE_DEBUG_REPORT_CALLBACK_CREATE_INFO_EXT,
     ePipelineRasterizationStateRasterizationOrderAMD = VK_STRUCTURE_TYPE_PIPELINE_RASTERIZATION_STATE_RASTERIZATION_ORDER_AMD,
     eDebugMarkerObjectNameInfoEXT = VK_STRUCTURE_TYPE_DEBUG_MARKER_OBJECT_NAME_INFO_EXT,
@@ -9207,6 +9013,57 @@ namespace vk
   };
   static_assert( sizeof( Win32SurfaceCreateInfoKHR ) == sizeof( VkWin32SurfaceCreateInfoKHR ), "struct and wrapper have different size!" );
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+  struct MagmaSurfaceCreateInfoKHR
+  {
+    MagmaSurfaceCreateInfoKHR(  )
+      : sType( StructureType::eMagmaSurfaceCreateInfoKHR )
+      , pNext( nullptr )
+    {
+    }
+
+    MagmaSurfaceCreateInfoKHR( VkMagmaSurfaceCreateInfoKHR const & rhs )
+    {
+      memcpy( this, &rhs, sizeof(MagmaSurfaceCreateInfoKHR) );
+    }
+
+    MagmaSurfaceCreateInfoKHR& operator=( VkMagmaSurfaceCreateInfoKHR const & rhs )
+    {
+      memcpy( this, &rhs, sizeof(MagmaSurfaceCreateInfoKHR) );
+      return *this;
+    }
+
+    MagmaSurfaceCreateInfoKHR& setPNext( const void* pNext_ )
+    {
+      pNext = pNext_;
+      return *this;
+    }
+
+    operator const VkMagmaSurfaceCreateInfoKHR&() const
+    {
+      return *reinterpret_cast<const VkMagmaSurfaceCreateInfoKHR*>(this);
+    }
+
+    bool operator==( MagmaSurfaceCreateInfoKHR const& rhs ) const
+    {
+      return ( sType == rhs.sType )
+          && ( pNext == rhs.pNext );
+    }
+
+    bool operator!=( MagmaSurfaceCreateInfoKHR const& rhs ) const
+    {
+      return !operator==( rhs );
+    }
+
+  private:
+    StructureType sType;
+
+  public:
+    const void* pNext;
+  };
+  static_assert( sizeof( MagmaSurfaceCreateInfoKHR ) == sizeof( VkMagmaSurfaceCreateInfoKHR ), "struct and wrapper have different size!" );
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
 
 #ifdef VK_USE_PLATFORM_XLIB_KHR
   struct XlibSurfaceCreateInfoKHR
@@ -17959,7 +17816,7 @@ namespace vk
     eDisplayModeKhr = VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT,
     eObjectTableNvx = VK_DEBUG_REPORT_OBJECT_TYPE_OBJECT_TABLE_NVX_EXT,
     eIndirectCommandsLayoutNvx = VK_DEBUG_REPORT_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX_EXT,
-    eDescriptorUpdateTemplateKhrKHR = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR_EXT
+    eDescriptorUpdateTemplateKHR = VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR_EXT
   };
 
   struct DebugMarkerObjectNameInfoEXT
@@ -20389,7 +20246,7 @@ namespace vk
 
   enum class SurfaceCounterFlagBitsEXT
   {
-    eVblankExt = VK_SURFACE_COUNTER_VBLANK_EXT
+    eVblank = VK_SURFACE_COUNTER_VBLANK_EXT
   };
 
   using SurfaceCounterFlagsEXT = Flags<SurfaceCounterFlagBitsEXT, VkSurfaceCounterFlagsEXT>;
@@ -20408,7 +20265,7 @@ namespace vk
   {
     enum
     {
-      allFlags = VkFlags(SurfaceCounterFlagBitsEXT::eVblankExt)
+      allFlags = VkFlags(SurfaceCounterFlagBitsEXT::eVblank)
     };
   };
 
@@ -21750,10 +21607,10 @@ namespace vk
   };
   static_assert( sizeof( RenderPassCreateInfo ) == sizeof( VkRenderPassCreateInfo ), "struct and wrapper have different size!" );
 
-    Result enumerateInstanceLayerProperties( uint32_t* pPropertyCount, LayerProperties* pProperties );
+  Result enumerateInstanceLayerProperties( uint32_t* pPropertyCount, LayerProperties* pProperties );
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
-    template <typename Allocator = std::allocator<LayerProperties>> 
-    typename ResultValueType<std::vector<LayerProperties,Allocator>>::type enumerateInstanceLayerProperties();
+  template <typename Allocator = std::allocator<LayerProperties>> 
+  typename ResultValueType<std::vector<LayerProperties,Allocator>>::type enumerateInstanceLayerProperties();
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 
   VULKAN_HPP_INLINE Result enumerateInstanceLayerProperties( uint32_t* pPropertyCount, LayerProperties* pProperties )
@@ -21783,10 +21640,10 @@ namespace vk
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 
 
-    Result enumerateInstanceExtensionProperties( const char* pLayerName, uint32_t* pPropertyCount, ExtensionProperties* pProperties );
+  Result enumerateInstanceExtensionProperties( const char* pLayerName, uint32_t* pPropertyCount, ExtensionProperties* pProperties );
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
-    template <typename Allocator = std::allocator<ExtensionProperties>> 
-    typename ResultValueType<std::vector<ExtensionProperties,Allocator>>::type enumerateInstanceExtensionProperties( Optional<const std::string> layerName = nullptr );
+  template <typename Allocator = std::allocator<ExtensionProperties>> 
+  typename ResultValueType<std::vector<ExtensionProperties,Allocator>>::type enumerateInstanceExtensionProperties( Optional<const std::string> layerName = nullptr );
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 
   VULKAN_HPP_INLINE Result enumerateInstanceExtensionProperties( const char* pLayerName, uint32_t* pPropertyCount, ExtensionProperties* pProperties )
@@ -23416,6 +23273,20 @@ namespace vk
     ResultValueType<HANDLE>::type getMemoryWin32HandleNV( DeviceMemory memory, ExternalMemoryHandleTypeFlagsNV handleType ) const;
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    Result exportMemoryMAGMA( DeviceMemory memory, uint32_t* pHandle ) const;
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+    ResultValueType<uint32_t>::type exportMemoryMAGMA( DeviceMemory memory ) const;
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    Result importMemoryMAGMA( uint32_t handle, const AllocationCallbacks* pAllocator, DeviceMemory* pMemory ) const;
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+    ResultValueType<DeviceMemory>::type importMemoryMAGMA( uint32_t handle, Optional<const AllocationCallbacks> allocator = nullptr ) const;
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
 
     Result createIndirectCommandsLayoutNVX( const IndirectCommandsLayoutCreateInfoNVX* pCreateInfo, const AllocationCallbacks* pAllocator, IndirectCommandsLayoutNVX* pIndirectCommandsLayout ) const;
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
@@ -25303,6 +25174,36 @@ namespace vk
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+  VULKAN_HPP_INLINE Result Device::exportMemoryMAGMA( DeviceMemory memory, uint32_t* pHandle ) const
+  {
+    return static_cast<Result>( vkExportDeviceMemoryMAGMA( m_device, static_cast<VkDeviceMemory>( memory ), pHandle ) );
+  }
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+  VULKAN_HPP_INLINE ResultValueType<uint32_t>::type Device::exportMemoryMAGMA( DeviceMemory memory ) const
+  {
+    uint32_t handle;
+    Result result = static_cast<Result>( vkExportDeviceMemoryMAGMA( m_device, static_cast<VkDeviceMemory>( memory ), &handle ) );
+    return createResultValue( result, handle, "vk::Device::exportMemoryMAGMA" );
+  }
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+  VULKAN_HPP_INLINE Result Device::importMemoryMAGMA( uint32_t handle, const AllocationCallbacks* pAllocator, DeviceMemory* pMemory ) const
+  {
+    return static_cast<Result>( vkImportDeviceMemoryMAGMA( m_device, handle, reinterpret_cast<const VkAllocationCallbacks*>( pAllocator ), reinterpret_cast<VkDeviceMemory*>( pMemory ) ) );
+  }
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+  VULKAN_HPP_INLINE ResultValueType<DeviceMemory>::type Device::importMemoryMAGMA( uint32_t handle, Optional<const AllocationCallbacks> allocator ) const
+  {
+    DeviceMemory memory;
+    Result result = static_cast<Result>( vkImportDeviceMemoryMAGMA( m_device, handle, reinterpret_cast<const VkAllocationCallbacks*>( static_cast<const AllocationCallbacks*>( allocator ) ), reinterpret_cast<VkDeviceMemory*>( &memory ) ) );
+    return createResultValue( result, memory, "vk::Device::importMemoryMAGMA" );
+  }
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+
   VULKAN_HPP_INLINE Result Device::createIndirectCommandsLayoutNVX( const IndirectCommandsLayoutCreateInfoNVX* pCreateInfo, const AllocationCallbacks* pAllocator, IndirectCommandsLayoutNVX* pIndirectCommandsLayout ) const
   {
     return static_cast<Result>( vkCreateIndirectCommandsLayoutNVX( m_device, reinterpret_cast<const VkIndirectCommandsLayoutCreateInfoNVX*>( pCreateInfo ), reinterpret_cast<const VkAllocationCallbacks*>( pAllocator ), reinterpret_cast<VkIndirectCommandsLayoutNVX*>( pIndirectCommandsLayout ) ) );
@@ -25915,6 +25816,10 @@ namespace vk
     Bool32 getWin32PresentationSupportKHR( uint32_t queueFamilyIndex ) const;
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    Bool32 getMagmaPresentationSupportKHR( uint32_t queueFamilyIndex ) const;
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+
 #ifdef VK_USE_PLATFORM_XLIB_KHR
     Bool32 getXlibPresentationSupportKHR( uint32_t queueFamilyIndex, Display* dpy, VisualID visualID ) const;
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
@@ -26467,6 +26372,13 @@ namespace vk
   }
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+  VULKAN_HPP_INLINE Bool32 PhysicalDevice::getMagmaPresentationSupportKHR( uint32_t queueFamilyIndex ) const
+  {
+    return vkGetPhysicalDeviceMagmaPresentationSupportKHR( m_physicalDevice, queueFamilyIndex );
+  }
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+
 #ifdef VK_USE_PLATFORM_XLIB_KHR
   VULKAN_HPP_INLINE Bool32 PhysicalDevice::getXlibPresentationSupportKHR( uint32_t queueFamilyIndex, Display* dpy, VisualID visualID ) const
   {
@@ -26592,47 +26504,6 @@ namespace vk
   {
     vkGetPhysicalDeviceMemoryProperties2KHR( m_physicalDevice, reinterpret_cast<VkPhysicalDeviceMemoryProperties2KHR*>( pMemoryProperties ) );
   }
-
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-    Result exportDeviceMemoryMAGMA( DeviceMemory memory, uint32_t* pHandle ) const
-    {
-      return static_cast<Result>( vkExportDeviceMemoryMAGMA( m_device, static_cast<VkDeviceMemory>( memory ),  pHandle ) );
-    }
-#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
-
-#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-    ResultValueType<uint32_t>::type exportDeviceMemoryMAGMA( DeviceMemory memory ) const
-    {
-      uint32_t handle;
-      Result result = static_cast<Result>( vkExportDeviceMemoryMAGMA( m_device, static_cast<VkDeviceMemory>( memory ), &handle ) );
-      return createResultValue( result, handle, "vk::Device::exportDeviceMemoryMAGMA" );
-    }
-#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
-#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
-
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-    Result importDeviceMemoryMAGMA( uint32_t handle, const AllocationCallbacks* pAllocator, DeviceMemory* memory) const
-    {
-      return static_cast<Result>( vkImportDeviceMemoryMAGMA( m_device, handle, reinterpret_cast<const VkAllocationCallbacks*>( pAllocator ), reinterpret_cast<VkDeviceMemory*>( memory ) ) );
-    }
-#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
-
-#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-    ResultValueType<void>::type importDeviceMemoryMAGMA( uint32_t handle, DeviceMemory* memory, Optional<const AllocationCallbacks> allocator = nullptr ) const
-    {
-      Result result = static_cast<Result>( vkImportDeviceMemoryMAGMA( m_device, handle, reinterpret_cast<const VkAllocationCallbacks*>( static_cast<const AllocationCallbacks*>( allocator)), reinterpret_cast<VkDeviceMemory*>( memory ) ) );
-      return createResultValue( result, "vk::Device::importDeviceMemoryMAGMA" );
-    }
-#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
-#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
-
-    Result createIndirectCommandsLayoutNVX( const IndirectCommandsLayoutCreateInfoNVX* pCreateInfo, const AllocationCallbacks* pAllocator, IndirectCommandsLayoutNVX* pIndirectCommandsLayout ) const
-    {
-      return static_cast<Result>( vkCreateIndirectCommandsLayoutNVX( m_device, reinterpret_cast<const VkIndirectCommandsLayoutCreateInfoNVX*>( pCreateInfo ), reinterpret_cast<const VkAllocationCallbacks*>( pAllocator ), reinterpret_cast<VkIndirectCommandsLayoutNVX*>( pIndirectCommandsLayout ) ) );
-    }
-
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
   VULKAN_HPP_INLINE PhysicalDeviceMemoryProperties2KHR PhysicalDevice::getMemoryProperties2KHR() const
   {
@@ -27068,6 +26939,16 @@ namespace vk
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    Result createMagmaSurfaceKHR( const MagmaSurfaceCreateInfoKHR* pCreateInfo, const AllocationCallbacks* pAllocator, SurfaceKHR* pSurface ) const;
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+    ResultValueType<SurfaceKHR>::type createMagmaSurfaceKHR( const MagmaSurfaceCreateInfoKHR & createInfo, Optional<const AllocationCallbacks> allocator = nullptr ) const;
+#ifndef VULKAN_HPP_NO_SMART_HANDLE
+    UniqueSurfaceKHR createMagmaSurfaceKHRUnique( const MagmaSurfaceCreateInfoKHR & createInfo, Optional<const AllocationCallbacks> allocator = nullptr ) const;
+#endif /*VULKAN_HPP_NO_SMART_HANDLE*/
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+
 #ifdef VK_USE_PLATFORM_XLIB_KHR
     Result createXlibSurfaceKHR( const XlibSurfaceCreateInfoKHR* pCreateInfo, const AllocationCallbacks* pAllocator, SurfaceKHR* pSurface ) const;
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
@@ -27379,6 +27260,28 @@ namespace vk
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+  VULKAN_HPP_INLINE Result Instance::createMagmaSurfaceKHR( const MagmaSurfaceCreateInfoKHR* pCreateInfo, const AllocationCallbacks* pAllocator, SurfaceKHR* pSurface ) const
+  {
+    return static_cast<Result>( vkCreateMagmaSurfaceKHR( m_instance, reinterpret_cast<const VkMagmaSurfaceCreateInfoKHR*>( pCreateInfo ), reinterpret_cast<const VkAllocationCallbacks*>( pAllocator ), reinterpret_cast<VkSurfaceKHR*>( pSurface ) ) );
+  }
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+  VULKAN_HPP_INLINE ResultValueType<SurfaceKHR>::type Instance::createMagmaSurfaceKHR( const MagmaSurfaceCreateInfoKHR & createInfo, Optional<const AllocationCallbacks> allocator ) const
+  {
+    SurfaceKHR surface;
+    Result result = static_cast<Result>( vkCreateMagmaSurfaceKHR( m_instance, reinterpret_cast<const VkMagmaSurfaceCreateInfoKHR*>( &createInfo ), reinterpret_cast<const VkAllocationCallbacks*>( static_cast<const AllocationCallbacks*>( allocator ) ), reinterpret_cast<VkSurfaceKHR*>( &surface ) ) );
+    return createResultValue( result, surface, "vk::Instance::createMagmaSurfaceKHR" );
+  }
+#ifndef VULKAN_HPP_NO_SMART_HANDLE
+  VULKAN_HPP_INLINE UniqueSurfaceKHR Instance::createMagmaSurfaceKHRUnique( const MagmaSurfaceCreateInfoKHR & createInfo, Optional<const AllocationCallbacks> allocator ) const
+  {
+    SurfaceKHRDeleter deleter( *this, allocator );
+    return UniqueSurfaceKHR( createMagmaSurfaceKHR( createInfo, allocator ), deleter );
+  }
+#endif /*VULKAN_HPP_NO_SMART_HANDLE*/
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+
 #ifdef VK_USE_PLATFORM_XLIB_KHR
   VULKAN_HPP_INLINE Result Instance::createXlibSurfaceKHR( const XlibSurfaceCreateInfoKHR* pCreateInfo, const AllocationCallbacks* pAllocator, SurfaceKHR* pSurface ) const
   {
@@ -27615,11 +27518,11 @@ namespace vk
   using UniqueInstance = UniqueHandle<Instance, InstanceDeleter>;
 #endif /*VULKAN_HPP_NO_SMART_HANDLE*/
 
-    Result createInstance( const InstanceCreateInfo* pCreateInfo, const AllocationCallbacks* pAllocator, Instance* pInstance );
+  Result createInstance( const InstanceCreateInfo* pCreateInfo, const AllocationCallbacks* pAllocator, Instance* pInstance );
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
-    ResultValueType<Instance>::type createInstance( const InstanceCreateInfo & createInfo, Optional<const AllocationCallbacks> allocator = nullptr );
+  ResultValueType<Instance>::type createInstance( const InstanceCreateInfo & createInfo, Optional<const AllocationCallbacks> allocator = nullptr );
 #ifndef VULKAN_HPP_NO_SMART_HANDLE
-    UniqueInstance createInstanceUnique( const InstanceCreateInfo & createInfo, Optional<const AllocationCallbacks> allocator = nullptr );
+  UniqueInstance createInstanceUnique( const InstanceCreateInfo & createInfo, Optional<const AllocationCallbacks> allocator = nullptr );
 #endif /*VULKAN_HPP_NO_SMART_HANDLE*/
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 
@@ -28077,6 +27980,20 @@ namespace vk
     return "{}";
   }
 #endif /*VK_USE_PLATFORM_MACOS_MVK*/
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+  VULKAN_HPP_INLINE std::string to_string(MagmaSurfaceCreateFlagBitsKHR)
+  {
+    return "(void)";
+  }
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+  VULKAN_HPP_INLINE std::string to_string(MagmaSurfaceCreateFlagsKHR)
+  {
+    return "{}";
+  }
+#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
 
   VULKAN_HPP_INLINE std::string to_string(CommandPoolTrimFlagBitsKHR)
   {
@@ -28794,6 +28711,7 @@ namespace vk
     case StructureType::eMirSurfaceCreateInfoKHR: return "MirSurfaceCreateInfoKHR";
     case StructureType::eAndroidSurfaceCreateInfoKHR: return "AndroidSurfaceCreateInfoKHR";
     case StructureType::eWin32SurfaceCreateInfoKHR: return "Win32SurfaceCreateInfoKHR";
+    case StructureType::eMagmaSurfaceCreateInfoKHR: return "MagmaSurfaceCreateInfoKHR";
     case StructureType::eDebugReportCallbackCreateInfoEXT: return "DebugReportCallbackCreateInfoEXT";
     case StructureType::ePipelineRasterizationStateRasterizationOrderAMD: return "PipelineRasterizationStateRasterizationOrderAMD";
     case StructureType::eDebugMarkerObjectNameInfoEXT: return "DebugMarkerObjectNameInfoEXT";
@@ -29843,7 +29761,7 @@ namespace vk
     case DebugReportObjectTypeEXT::eDisplayModeKhr: return "DisplayModeKhr";
     case DebugReportObjectTypeEXT::eObjectTableNvx: return "ObjectTableNvx";
     case DebugReportObjectTypeEXT::eIndirectCommandsLayoutNvx: return "IndirectCommandsLayoutNvx";
-    case DebugReportObjectTypeEXT::eDescriptorUpdateTemplateKhrKHR: return "DescriptorUpdateTemplateKhrKHR";
+    case DebugReportObjectTypeEXT::eDescriptorUpdateTemplateKHR: return "DescriptorUpdateTemplateKHR";
     default: return "invalid";
     }
   }
@@ -30107,7 +30025,7 @@ namespace vk
   {
     switch (value)
     {
-    case SurfaceCounterFlagBitsEXT::eVblankExt: return "VblankExt";
+    case SurfaceCounterFlagBitsEXT::eVblank: return "Vblank";
     default: return "invalid";
     }
   }
@@ -30116,7 +30034,7 @@ namespace vk
   {
     if (!value) return "{}";
     std::string result;
-    if (value & SurfaceCounterFlagBitsEXT::eVblankExt) result += "VblankExt | ";
+    if (value & SurfaceCounterFlagBitsEXT::eVblank) result += "Vblank | ";
     return "{" + result.substr(0, result.size() - 3) + "}";
   }
 

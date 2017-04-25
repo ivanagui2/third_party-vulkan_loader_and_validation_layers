@@ -26,11 +26,20 @@ SOURCE_DIR=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 OUTPUT_DIR=$1
 rm -rf $OUTPUT_DIR/generated
 mkdir -p $OUTPUT_DIR/generated/include
+dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+cd $dir
 
-python $SOURCE_DIR/../scripts/vk_helper.py --gen_struct_wrappers $SOURCE_DIR/../include/vulkan/vulkan.h --abs_out_dir $OUTPUT_DIR/generated/include > /dev/null
 
-( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_enum_string_helper.h 2> /dev/null)
-( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_dispatch_table_helper.h 2> /dev/null)
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_safe_struct.h 2> /dev/null )
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_safe_struct.cpp 2> /dev/null )
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_struct_size_helper.h 2> /dev/null )
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_struct_size_helper.c 2> /dev/null )
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_enum_string_helper.h 2> /dev/null )
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_object_types.h 2> /dev/null )
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_dispatch_table_helper.h 2> /dev/null )
 ( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml thread_check.h 2> /dev/null )
-( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml parameter_validation.h 2> /dev/null)
-( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml unique_objects_wrappers.h 2> /dev/null)
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml parameter_validation.h 2> /dev/null )
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml unique_objects_wrappers.h 2> /dev/null )
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_loader_extensions.h 2> /dev/null )
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_loader_extensions.c 2> /dev/null )
+( cd $OUTPUT_DIR/generated/include; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml vk_layer_dispatch_table.h 2> /dev/null )

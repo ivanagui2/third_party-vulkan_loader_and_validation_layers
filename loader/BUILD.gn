@@ -23,9 +23,9 @@ shared_library("loader") {
   # The Vulkan loader is named libvulkan
   output_name = "vulkan"
 
-  configs += [
-    "../:vulkan_build_config",
-  ]
+  configs += [ "../:vulkan_build_config" ]
+
+  include_dirs = [ "." ]
 
   cflags_c = [
     "-Wno-missing-field-initializers",
@@ -33,12 +33,15 @@ shared_library("loader") {
     "-DDATADIR=\"/usr/share\"",
   ]
 
+  deps = [ "../:extra_vulkan_headers", "../:generate_extra_vulkan_headers" ]
+
   sources = [
     "cJSON.c",
     "debug_report.c",
     "dev_ext_trampoline.c",
-    "extensions.c",
+    "extension_manual.c",
     "loader.c",
+    "phys_dev_ext.c",
     "murmurhash.c",
     "trampoline.c",
     "wsi.c",

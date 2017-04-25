@@ -537,7 +537,7 @@ VKAPI_ATTR VkResult VKAPI_CALL CreateMagmaSurfaceKHR(VkInstance instance, const 
                                                      const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
     VkResult result = VK_SUCCESS;
     bool skip_call = false;
-    layer_data *my_data = get_my_data_ptr(get_dispatch_key(instance), layer_data_map);
+    layer_data *my_data = GetLayerDataPtr(get_dispatch_key(instance), layer_data_map);
     std::unique_lock<std::mutex> lock(global_lock);
     SwpInstance *pInstance = NULL;
     {
@@ -577,7 +577,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL GetPhysicalDeviceMagmaPresentationSupportKHR(VkPh
                                                                             uint32_t queueFamilyIndex) {
     VkBool32 result = VK_FALSE;
     bool skip_call = false;
-    layer_data *my_data = get_my_data_ptr(get_dispatch_key(physicalDevice), layer_data_map);
+    layer_data *my_data = GetLayerDataPtr(get_dispatch_key(physicalDevice), layer_data_map);
     std::unique_lock<std::mutex> lock(global_lock);
     SwpPhysicalDevice *pPhysicalDevice = NULL;
     {

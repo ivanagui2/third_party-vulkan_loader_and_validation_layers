@@ -2391,6 +2391,8 @@ static VkResult loader_get_manifest_files(const struct loader_instance *inst, co
     // Also handle getting the location(s) from registry on Windows
     if (override == NULL) {
         size_t loc_size = 0;
+#if defined(__linux__) || defined(__Fuchsia__)
+        const size_t rel_size = strlen(relative_location);
 #if defined(__linux__)
         const char *xdgconfdirs = loader_secure_getenv("XDG_CONFIG_DIRS", inst);
         const char *xdgdatadirs = loader_secure_getenv("XDG_DATA_DIRS", inst);
@@ -2405,13 +2407,16 @@ static VkResult loader_get_manifest_files(const struct loader_instance *inst, co
             if (*x == PATH_SEPARATOR) loc_size += rel_size;
         for (const char *x = xdgdatadirs; *x; ++x)
             if (*x == PATH_SEPARATOR) loc_size += rel_size;
+
+#endif  // defined(__linux__)
+
         loc_size += strlen(SYSCONFDIR) + rel_size + 1;
 #if defined(EXTRASYSCONFDIR)
         loc_size += strlen(EXTRASYSCONFDIR) + rel_size + 1;
 #endif
 #else
         loc_size += strlen(location) + 1;
-#endif
+#endif  // defined(__linux__) || defined(__Fuchsia__)
         loc = loader_stack_alloc(loc_size);
         if (loc == NULL) {
             loader_log(inst, VK_DEBUG_REPORT_ERROR_BIT_EXT, 0,
@@ -2422,6 +2427,7 @@ static VkResult loader_get_manifest_files(const struct loader_instance *inst, co
             goto out;
         }
         char *loc_write = loc;
+#if defined(__linux__) || defined(__Fuchsia__)
 #if defined(__linux__)
         const char *loc_read;
         size_t start, stop;
@@ -2446,6 +2452,7 @@ static VkResult loader_get_manifest_files(const struct loader_instance *inst, co
                 start = stop;
             }
         }
+#endif  // defined(__linux__)
 
         memcpy(loc_write, SYSCONFDIR, strlen(SYSCONFDIR));
         loc_write += strlen(SYSCONFDIR);
@@ -2461,6 +2468,7 @@ static VkResult loader_get_manifest_files(const struct loader_instance *inst, co
         *loc_write++ = PATH_SEPARATOR;
 #endif
 
+#if defined(__linux__)
         loc_read = &xdgdatadirs[0];
         start = 0;
         while (loc_read[start] != '\0') {
@@ -2481,7 +2489,9 @@ static VkResult loader_get_manifest_files(const struct loader_instance *inst, co
                 start = stop;
             }
         }
+#endif  // defined(__linux__)
 
+        // Remove the last path separator.
         --loc_write;
 #else
         memcpy(loc_write, location, strlen(location));
@@ -3896,6 +3906,7 @@ VkResult loader_create_instance_chain(const VkInstanceCreateInfo *pCreateInfo, c
                 // get everything we need from the one function call, so try
                 // that first, and see if we can get all the function pointers
                 // necessary from that one call.
+#if !defined(__Fuchsia__)
                 if (NULL != negotiate_interface) {
                     layer_prop->functions.negotiate_layer_interface = negotiate_interface;
 
@@ -3921,6 +3932,7 @@ VkResult loader_create_instance_chain(const VkInstanceCreateInfo *pCreateInfo, c
                         }
                     }
                 }
+#endif // !defined(__Fuchsia__)
 
                 if (!functions_in_interface) {
                     if ((cur_gipa = layer_prop->functions.get_instance_proc_addr) == NULL) {
@@ -4079,6 +4091,7 @@ VkResult loader_create_device_chain(const struct loader_physical_device_tramp *p
                 continue;
             }
 
+#if !defined(__Fuchsia__)
             // If we can negotiate an interface version, then we can also get everything we need from the one function
             // call, so try that first, and see if we can get all the function pointers necessary from that one call.
             if (NULL == layer_prop->functions.negotiate_layer_interface) {
@@ -4114,6 +4127,7 @@ VkResult loader_create_device_chain(const struct loader_physical_device_tramp *p
                     }
                 }
             }
+#endif // !defined(__Fuchsia__)
 
             if (!functions_in_interface) {
                 if ((fpGIPA = layer_prop->functions.get_instance_proc_addr) == NULL) {

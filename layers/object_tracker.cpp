@@ -696,6 +696,7 @@ VKAPI_ATTR VkResult VKAPI_CALL AllocateMemory(VkDevice device, const VkMemoryAll
     return result;
 }
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
 VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(VkDevice device, uint32_t handle, const VkAllocationCallbacks *pAllocator,
                                                        VkDeviceMemory *pMemory) {
     bool skip_call = false;
@@ -728,6 +729,7 @@ VKAPI_ATTR VkResult VKAPI_CALL ExportDeviceMemoryMAGMA(VkDevice device, VkDevice
 
     return get_dispatch_table(ot_device_table_map, device)->ExportDeviceMemoryMAGMA(device, memory, pHandle);
 }
+#endif
 
 VKAPI_ATTR VkResult VKAPI_CALL FlushMappedMemoryRanges(VkDevice device, uint32_t memoryRangeCount,
                                                        const VkMappedMemoryRange *pMemoryRanges) {
@@ -5369,6 +5371,11 @@ static inline PFN_vkVoidFunction InterceptDeviceExtensionCommand(const char *nam
             if (!strcmp(name, "AcquireNextImage2KHX")) return (PFN_vkVoidFunction)AcquireNextImage2KHX;
             if (!strcmp(name, "CmdDispatchBaseKHX")) return (PFN_vkVoidFunction)CmdDispatchBaseKHX;
         }
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+        // TODO(mikejurka): require that these were enabled by a device extension
+        if (!strcmp(name, "ImportDeviceMemoryMAGMA")) return (PFN_vkVoidFunction)ImportDeviceMemoryMAGMA;
+        if (!strcmp(name, "ExportDeviceMemoryMAGMA")) return (PFN_vkVoidFunction)ExportDeviceMemoryMAGMA;
+#endif  // VK_USE_PLATFORM_MAGMA_KHR
 #ifdef VK_USE_PLATFORM_WIN32_KHX
         if (device_data->enables.khx_external_memory_win32) {
             if (!strcmp(name, "GetMemoryWin32HandleKHX")) return (PFN_vkVoidFunction)GetMemoryWin32HandleKHX;

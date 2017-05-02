@@ -83,8 +83,10 @@ source_set("VkLayer_core_validation_src") {
     "//third_party/shaderc/third_party/glslang",
   ]
   sources = [
+    "buffer_validation.cpp",
     "core_validation.cpp",
     "descriptor_sets.cpp",
+    "vk_format_utils.cpp",
   ]
   deps = [
     ":layer_common",
@@ -102,6 +104,7 @@ shared_library("VkLayer_parameter_validation") {
 source_set("VkLayer_parameter_validation_src") {
   sources = [
     "parameter_validation.cpp",
+    "vk_format_utils.cpp",
   ]
   deps = [
     ":layer_common",

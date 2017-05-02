@@ -137,9 +137,6 @@ bool wsi_unsupported_instance_extension(const VkExtensionProperties *ext_prop) {
 #ifndef VK_USE_PLATFORM_XLIB_KHR
     if (!strcmp(ext_prop->extensionName, "VK_KHR_xlib_surface")) return true;
 #endif  // VK_USE_PLATFORM_XLIB_KHR
-#ifndef VK_USE_PLATFORM_MAGMA_KHR
-    if (!strcmp(ext_prop->extensionName, "VK_KHR_magma_surface")) return true;
-#endif  // VK_USE_PLATFORM_MAGMA_KHR
 
     return false;
 }

@@ -4271,6 +4271,8 @@ static bool PreCallValidateFreeMemory(layer_data *dev_data, VkDeviceMemory mem, 
 }
 
 static void PostCallRecordFreeMemory(layer_data *dev_data, VkDeviceMemory mem, DEVICE_MEM_INFO *mem_info, VK_OBJECT obj_struct) {
+    if (!mem_info) return; // TODO(mikejurka): Figure out how this should work for imported memory
+
     // Clear mem binding for any bound objects
     for (auto obj : mem_info->obj_bindings) {
         log_msg(dev_data->report_data, VK_DEBUG_REPORT_INFORMATION_BIT_EXT, get_debug_report_enum[obj.type], obj.handle, __LINE__,
@@ -9816,7 +9818,7 @@ static bool PreCallValidateBindImageMemory(layer_data *dev_data, VkImage image, 
         }
 
         // Validate memory requirements size
-        if (image_state->requirements.size > mem_info->alloc_info.allocationSize - memoryOffset) {
+        if (mem_info && image_state->requirements.size > mem_info->alloc_info.allocationSize - memoryOffset) {
             skip |= log_msg(dev_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, VK_DEBUG_REPORT_OBJECT_TYPE_IMAGE_EXT,
                             image_handle, __LINE__, VALIDATION_ERROR_02179, "DS",
                             "vkBindImageMemory(): memory size minus memoryOffset is 0x%" PRIxLEAST64
@@ -11608,7 +11610,7 @@ static PFN_vkVoidFunction intercept_khr_surface_command(const char *name, VkInst
 #endif  // VK_USE_PLATFORM_XLIB_KHR
 #ifdef VK_USE_PLATFORM_MAGMA_KHR
         {"vkCreateMagmaSurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(CreateMagmaSurfaceKHR),
-            &instance_layer_data::magmaSurfaceExtensionEnabled},
+         &E::khr_magma_surface},
 #endif // VK_USE_PLATFORM_MAGMA_KHR
         {"vkCreateDisplayPlaneSurfaceKHR", reinterpret_cast<PFN_vkVoidFunction>(CreateDisplayPlaneSurfaceKHR),
          &E::khr_display},

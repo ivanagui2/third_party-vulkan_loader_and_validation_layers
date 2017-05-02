@@ -5281,6 +5281,52 @@ VKAPI_ATTR VkBool32 VKAPI_CALL GetPhysicalDeviceWin32PresentationSupportKHR(VkPh
 }
 #endif  // VK_USE_PLATFORM_WIN32_KHR
 
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+VKAPI_ATTR VkResult VKAPI_CALL CreateMagmaSurfaceKHR(VkInstance instance, const VkMagmaSurfaceCreateInfoKHR *pCreateInfo,
+                                                     const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {
+    VkResult result = VK_ERROR_VALIDATION_FAILED_EXT;
+
+    auto my_data = GetLayerDataPtr(get_dispatch_key(instance), instance_layer_data_map);
+    assert(my_data != NULL);
+    bool skip = false;
+
+    skip |= require_instance_extension(instance, &InstanceExtensions::khr_magma_surface, "vkCreateMagmaSurfaceKHR",
+                                       VK_KHR_MAGMA_SURFACE_EXTENSION_NAME);
+
+    skip |= parameter_validation_vkCreateMagmaSurfaceKHR(my_data->report_data, pCreateInfo, pAllocator, pSurface);
+
+    if (!skip) {
+        result = my_data->dispatch_table.CreateMagmaSurfaceKHR(instance, pCreateInfo, pAllocator, pSurface);
+    }
+
+    validate_result(my_data->report_data, "vkCreateMagmaSurfaceKHR", result);
+
+    return result;
+}
+
+VKAPI_ATTR VkBool32 VKAPI_CALL GetPhysicalDeviceMagmaPresentationSupportKHR(VkPhysicalDevice physicalDevice,
+                                                                            uint32_t queueFamilyIndex) {
+    VkBool32 result = false;
+
+    auto my_data = GetLayerDataPtr(get_dispatch_key(physicalDevice), instance_layer_data_map);
+    assert(my_data != NULL);
+    bool skip = false;
+
+    skip |= require_instance_extension(physicalDevice, &InstanceExtensions::khr_magma_surface,
+                                       "vkGetPhysicalDeviceMagmaPresentationSupportKHR", VK_KHR_MAGMA_SURFACE_EXTENSION_NAME);
+
+    // TODO: codegen doesn't produce this function?
+    // skip |= parameter_validation_vkGetPhysicalDeviceMagmaPresentationSupportKHR(physicalDevice, queueFamilyIndex);
+
+    if (!skip) {
+        result = my_data->dispatch_table.GetPhysicalDeviceMagmaPresentationSupportKHR(physicalDevice, queueFamilyIndex);
+    }
+
+    return result;
+}
+#endif  // VK_USE_PLATFORM_MAGMA_KHR
+
 #ifdef VK_USE_PLATFORM_XCB_KHR
 VKAPI_ATTR VkResult VKAPI_CALL CreateXcbSurfaceKHR(VkInstance instance, const VkXcbSurfaceCreateInfoKHR *pCreateInfo,
                                                    const VkAllocationCallbacks *pAllocator, VkSurfaceKHR *pSurface) {

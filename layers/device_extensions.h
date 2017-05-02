@@ -108,6 +108,7 @@ struct InstanceExtensions {
     bool khr_xcb_surface;
     bool khr_xlib_surface;
     bool khr_win32_surface;
+    bool khr_magma_surface;
     bool khr_wayland_surface;
     bool khr_mir_surface;
     bool khr_get_physical_device_properties2;
@@ -142,6 +143,9 @@ struct InstanceExtensions {
 #endif
 #ifdef VK_USE_PLATFORM_MIR_KHR
             {VK_KHR_MIR_SURFACE_EXTENSION_NAME, &E::khr_mir_surface},
+#endif
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+            {VK_KHR_MAGMA_SURFACE_EXTENSION_NAME, &E::khr_magma_surface},
 #endif
             {VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME, &E::khr_get_physical_device_properties2},
             {VK_KHX_DEVICE_GROUP_CREATION_EXTENSION_NAME, &E::khx_device_group_creation},

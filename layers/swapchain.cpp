@@ -561,8 +561,6 @@ VKAPI_ATTR VkResult VKAPI_CALL CreateMagmaSurfaceKHR(VkInstance instance, const 
             // Record the VkSurfaceKHR returned by the ICD:
             my_data->surfaceMap[*pSurface].surface = *pSurface;
             my_data->surfaceMap[*pSurface].pInstance = pInstance;
-            my_data->surfaceMap[*pSurface].numQueueFamilyIndexSupport = 0;
-            my_data->surfaceMap[*pSurface].pQueueFamilyIndexSupport = NULL;
             // Point to the associated SwpInstance:
             pInstance->surfaces[*pSurface] = &my_data->surfaceMap[*pSurface];
         }

@@ -408,8 +408,6 @@ VKAPI_ATTR void *VKAPI_CALL ReallocCallbackFunc(void *pUserData, void *pOriginal
 // LVLGH = loader and validation github
 // LVLGL = lodaer and validation gitlab
 
-#ifdef IGNORE
-
 TEST(LX435, InstanceCreateInfoConst) {
     VkInstanceCreateInfo const info = {VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO, nullptr, 0, nullptr, 0, nullptr, 0, nullptr};
 
@@ -1428,7 +1426,6 @@ TEST(Allocation, CreateInstanceDeviceItentionalAllocFail) {
         FreeAllocTracker();
     }
 }
-#endif
 
 // Used by run_loader_tests.sh to test that calling vkEnumeratePhysicalDeviceGroupsKHX without first querying
 // the count, works.  And, that it also returns only physical devices made available by the standard

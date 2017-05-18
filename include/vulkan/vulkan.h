@@ -3845,6 +3845,35 @@ VKAPI_ATTR VkBool32 VKAPI_CALL vkGetPhysicalDeviceWin32PresentationSupportKHR(
 #endif
 #endif /* VK_USE_PLATFORM_WIN32_KHR */
 
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+#define VK_KHR_magma_surface 1
+#define VK_KHR_MAGMA_SURFACE_SPEC_VERSION 1
+#define VK_KHR_MAGMA_SURFACE_EXTENSION_NAME "VK_KHR_magma_surface"
+
+typedef VkFlags VkMagmaSurfaceCreateFlagsKHR;
+
+typedef struct VkMagmaSurfaceCreateInfoKHR {
+    VkStructureType    sType;
+    const void*        pNext;
+} VkMagmaSurfaceCreateInfoKHR;
+
+
+typedef VkResult (VKAPI_PTR *PFN_vkCreateMagmaSurfaceKHR)(VkInstance instance, const VkMagmaSurfaceCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface);
+typedef VkBool32 (VKAPI_PTR *PFN_vkGetPhysicalDeviceMagmaPresentationSupportKHR)(VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex);
+
+#ifndef VK_NO_PROTOTYPES
+VKAPI_ATTR VkResult VKAPI_CALL vkCreateMagmaSurfaceKHR(
+    VkInstance                                  instance,
+    const VkMagmaSurfaceCreateInfoKHR*          pCreateInfo,
+    const VkAllocationCallbacks*                pAllocator,
+    VkSurfaceKHR*                               pSurface);
+
+VKAPI_ATTR VkBool32 VKAPI_CALL vkGetPhysicalDeviceMagmaPresentationSupportKHR(
+    VkPhysicalDevice                            physicalDevice,
+    uint32_t                                    queueFamilyIndex);
+#endif
+#endif /* VK_USE_PLATFORM_MAGMA_KHR */
+
 #define VK_KHR_sampler_mirror_clamp_to_edge 1
 #define VK_KHR_SAMPLER_MIRROR_CLAMP_TO_EDGE_SPEC_VERSION 1
 #define VK_KHR_SAMPLER_MIRROR_CLAMP_TO_EDGE_EXTENSION_NAME "VK_KHR_sampler_mirror_clamp_to_edge"
@@ -4098,35 +4127,6 @@ VKAPI_ATTR void VKAPI_CALL vkCmdPushDescriptorSetWithTemplateKHR(
     uint32_t                                    set,
     const void*                                 pData);
 #endif
-
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-#define VK_KHR_magma_surface 1
-#define VK_KHR_MAGMA_SURFACE_SPEC_VERSION 1
-#define VK_KHR_MAGMA_SURFACE_EXTENSION_NAME "VK_KHR_magma_surface"
-
-typedef VkFlags VkMagmaSurfaceCreateFlagsKHR;
-
-typedef struct VkMagmaSurfaceCreateInfoKHR {
-    VkStructureType    sType;
-    const void*        pNext;
-} VkMagmaSurfaceCreateInfoKHR;
-
-
-typedef VkResult (VKAPI_PTR *PFN_vkCreateMagmaSurfaceKHR)(VkInstance instance, const VkMagmaSurfaceCreateInfoKHR* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkSurfaceKHR* pSurface);
-typedef VkBool32 (VKAPI_PTR *PFN_vkGetPhysicalDeviceMagmaPresentationSupportKHR)(VkPhysicalDevice physicalDevice, uint32_t queueFamilyIndex);
-
-#ifndef VK_NO_PROTOTYPES
-VKAPI_ATTR VkResult VKAPI_CALL vkCreateMagmaSurfaceKHR(
-    VkInstance                                  instance,
-    const VkMagmaSurfaceCreateInfoKHR*          pCreateInfo,
-    const VkAllocationCallbacks*                pAllocator,
-    VkSurfaceKHR*                               pSurface);
-
-VKAPI_ATTR VkBool32 VKAPI_CALL vkGetPhysicalDeviceMagmaPresentationSupportKHR(
-    VkPhysicalDevice                            physicalDevice,
-    uint32_t                                    queueFamilyIndex);
-#endif
-#endif /* VK_USE_PLATFORM_MAGMA_KHR */
 
 #define VK_EXT_debug_report 1
 VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDebugReportCallbackEXT)

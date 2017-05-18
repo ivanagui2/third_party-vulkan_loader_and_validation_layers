@@ -5190,7 +5190,7 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
                 <command name="vkGetPhysicalDeviceWin32PresentationSupportKHR"/>
             </require>
         </extension>
-        <extension name="VK_KHR_magma_surface" number="210" type="instance" requires="VK_KHR_surface" protect="VK_USE_PLATFORM_MAGMA_KHR" supported="vulkan">
+        <extension name="VK_KHR_magma_surface" number="11" type="instance" requires="VK_KHR_surface" protect="VK_USE_PLATFORM_MAGMA_KHR" supported="vulkan">
             <require>
                 <enum value="1"                                         name="VK_KHR_MAGMA_SURFACE_SPEC_VERSION"/>
                 <enum value="&quot;VK_KHR_magma_surface&quot;"          name="VK_KHR_MAGMA_SURFACE_EXTENSION_NAME"/>

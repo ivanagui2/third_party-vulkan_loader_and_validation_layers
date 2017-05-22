@@ -31,9 +31,7 @@ group("tests") {
 
 config("validation_tests_include_config") {
   defines = [ "GTEST_HAS_PTHREAD=1" ]
-  cflags_cc = [
-    "-Wno-missing-field-initializers"
-  ]
+  cflags_cc = [ "-Wno-missing-field-initializers" ]
   include_dirs = [
     "../common",
     "../layers",
@@ -46,30 +44,28 @@ config("validation_tests_include_config") {
 
 source_set("validation_tests_common") {
   testonly = true
-  public_configs = [ ":validation_tests_include_config", ]
+  public_configs = [ ":validation_tests_include_config" ]
   defines = [ "VK_USE_PLATFORM_MAGMA_KHR" ]
   sources = [
     "../layers/vk_format_utils.cpp",
+    "gtest-1.7.0/src/gtest-all.cc",
+    "test_environment.cpp",
     "vkrenderframework.cpp",
     "vktestbinding.cpp",
     "vktestframework.cpp",
-    "test_environment.cpp",
-    "gtest-1.7.0/src/gtest-all.cc",
   ]
   public_deps = [
-    "//third_party/shaderc/third_party/glslang",
-    "//third_party/shaderc/third_party/glslang:SPVRemapper",
-    "//third_party/shaderc/third_party/glslang:SPIRV",
-    "../:vulkan",
     "../:extra_vulkan_headers",
+    "../:vulkan",
+    "//third_party/shaderc/third_party/glslang",
+    "//third_party/shaderc/third_party/glslang:SPIRV",
+    "//third_party/shaderc/third_party/glslang:SPVRemapper",
   ]
 }
 
 executable("loader_validation_tests") {
   testonly = true
-  cflags_cc = [
-    "-Wno-missing-field-initializers",
-  ]
+  cflags_cc = [ "-Wno-missing-field-initializers" ]
   sources = [
     "loader_validation_tests.cpp",
   ]
@@ -80,10 +76,11 @@ executable("loader_validation_tests") {
 
 executable("layer_validation_tests") {
   testonly = true
-  defines = [ "SKIP_TESTS_CRASHING_ON_MAGMA" ]
-  cflags_cc = [
-    "-Wno-missing-field-initializers",
+  defines = [
+    "SKIP_TESTS_CRASHING_ON_MAGMA",
+    "SKIP_TESTS_FAILING_ON_MAGMA",
   ]
+  cflags_cc = [ "-Wno-missing-field-initializers" ]
   sources = [
     "layer_validation_tests.cpp",
   ]

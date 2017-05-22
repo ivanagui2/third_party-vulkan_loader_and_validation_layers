@@ -34,13 +34,13 @@
 
 #include "icd-spv.h"
 #include "test_common.h"
-#include "vk_layer_config.h"
 #include "vk_format_utils.h"
+#include "vk_layer_config.h"
 #include "vk_validation_error_messages.h"
 #include "vkrenderframework.h"
 
-#include <algorithm>
 #include <limits.h>
+#include <algorithm>
 #include <unordered_set>
 
 #define GLM_FORCE_RADIANS
@@ -10066,6 +10066,7 @@ TEST_F(VkLayerTest, DSBufferInfoErrors) {
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
 
+#ifndef SKIP_TESTS_CRASHING_ON_MAGMA
 TEST_F(VkLayerTest, DSBufferLimitErrors) {
     TEST_DESCRIPTION(
         "Attempt to update buffer descriptor set that has VkDescriptorBufferInfo values that violate device limits.\n"
@@ -10234,6 +10235,7 @@ TEST_F(VkLayerTest, DSBufferLimitErrors) {
     vkDestroyBuffer(m_device->device(), storage_buffer, NULL);
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
+#endif  // SKIP_TESTS_CRASHING_ON_MAGMA
 
 TEST_F(VkLayerTest, DSAspectBitsErrors) {
     // TODO : Initially only catching case where DEPTH & STENCIL aspect bits
@@ -10715,7 +10717,7 @@ TEST_F(VkLayerTest, DSUpdateEmptyBinding) {
     vkDestroyDescriptorSetLayout(m_device->device(), ds_layout, NULL);
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
-#endif // SKIP_TESTS_CRASHING_ON_MAGMA
+#endif  // SKIP_TESTS_CRASHING_ON_MAGMA
 
 TEST_F(VkLayerTest, InvalidDSUpdateStruct) {
     // Call UpdateDS w/ struct type other than valid VK_STRUCTUR_TYPE_UPDATE_*
@@ -12452,7 +12454,7 @@ TEST_F(VkLayerTest, SimultaneousUse) {
 
     m_errorMonitor->SetUnexpectedError("All elements of pCommandBuffers must not be in the pending state");
 }
-#endif // SKIP_TESTS_CRASHING_ON_MAGMA
+#endif  // SKIP_TESTS_CRASHING_ON_MAGMA
 
 TEST_F(VkLayerTest, SimultaneousUseOneShot) {
     TEST_DESCRIPTION(
@@ -14209,6 +14211,7 @@ TEST_F(VkLayerTest, CreatePipelineCheckShaderNotEnabled) {
     vkDestroyPipelineLayout(test_device.device(), pipeline_layout, nullptr);
 }
 
+#ifndef SKIP_TESTS_FAILING_ON_MAGMA
 TEST_F(VkLayerTest, CreateShaderModuleCheckBadCapability) {
     TEST_DESCRIPTION("Create a shader in which a capability declared by the shader is not supported.");
     // Note that this failure message comes from spirv-tools, specifically the validator.
@@ -14243,6 +14246,7 @@ TEST_F(VkLayerTest, CreateShaderModuleCheckBadCapability) {
 
     m_errorMonitor->VerifyFound();
 }
+#endif  // SKIP_TESTS_FAILING_ON_MAGMA
 
 TEST_F(VkLayerTest, CreatePipelineFragmentInputNotProvided) {
     TEST_DESCRIPTION(
@@ -19433,7 +19437,7 @@ TEST_F(VkPositiveLayerTest, EmptyDescriptorUpdateTest) {
     vkDestroyBuffer(m_device->device(), buffer, NULL);
     vkDestroyDescriptorPool(m_device->device(), ds_pool, NULL);
 }
-#endif // SKIP_TESTS_CRASHING_ON_MAGMA
+#endif  // SKIP_TESTS_CRASHING_ON_MAGMA
 
 // This is a positive test. No failures are expected.
 TEST_F(VkPositiveLayerTest, TestAliasedMemoryTracking) {
@@ -20201,7 +20205,7 @@ TEST_F(VkPositiveLayerTest, ValidUsage) {
     m_errorMonitor->VerifyNotFound();
     vkDestroyImageView(m_device->device(), imageView, NULL);
 }
-#endif // SKIP_TESTS_CRASHING_ON_MAGMA
+#endif  // SKIP_TESTS_CRASHING_ON_MAGMA
 
 // This is a positive test. No failures are expected.
 TEST_F(VkPositiveLayerTest, BindSparse) {
@@ -20703,7 +20707,7 @@ TEST_F(VkPositiveLayerTest, RenderPassTransitionsAttachmentUnused) {
     vkDestroyFramebuffer(m_device->device(), fb, nullptr);
     vkDestroyRenderPass(m_device->device(), rp, nullptr);
 }
-#endif // SKIP_TESTS_CRASHING_ON_MAGMA
+#endif  // SKIP_TESTS_CRASHING_ON_MAGMA
 
 // This is a positive test. No errors are expected.
 TEST_F(VkPositiveLayerTest, StencilLoadOp) {
@@ -22958,7 +22962,7 @@ TEST_F(VkPositiveLayerTest, CreatePipelineInputAttachmentPositive) {
     vkDestroyPipelineLayout(m_device->device(), pl, nullptr);
     vkDestroyDescriptorSetLayout(m_device->device(), dsl, nullptr);
 }
-#endif // SKIP_TESTS_CRASHING_ON_MAGMA
+#endif  // SKIP_TESTS_CRASHING_ON_MAGMA
 
 TEST_F(VkPositiveLayerTest, CreateComputePipelineMissingDescriptorUnusedPositive) {
     TEST_DESCRIPTION(

@@ -23,7 +23,7 @@ import("//magma/gnbuild/magma.gni")
 
 group("tests") {
   testonly = true
-  deps = [
+  public_deps = [
     ":layer_validation_tests",
     ":loader_validation_tests",
   ]

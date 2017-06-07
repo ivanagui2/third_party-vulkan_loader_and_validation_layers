@@ -29,7 +29,7 @@ shared_library("loader") {
 
   cflags_c = [
     "-Wno-missing-field-initializers",
-    "-DSYSCONFDIR=\"/system/lib\"",
+    "-DSYSCONFDIR=\"/system/data\"",
     "-DDATADIR=\"/usr/share\"",
   ]
 

@@ -5556,7 +5556,7 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
                 <command name="vkGetMemoryWin32HandleNV"/>
             </require>
         </extension>
-        <extension name="VK_GOOGLE_external_memory_magma" number="258" type="device" protect="VK_USE_PLATFORM_MAGMA_KHR" supported="vulkan">
+        <extension name="VK_GOOGLE_external_memory_magma" number="258" type="device" supported="vulkan">
             <require>
                 <enum value="1"                                         name="VK_GOOGLE_EXTERNAL_MEMORY_MAGMA_SPEC_VERSION"/>
                 <enum value="&quot;VK_GOOGLE_external_memory_magma&quot;" name="VK_GOOGLE_EXTERNAL_MEMORY_MAGMA_EXTENSION_NAME"/>

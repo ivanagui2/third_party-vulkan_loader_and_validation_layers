@@ -5843,7 +5843,6 @@ VKAPI_ATTR VkResult VKAPI_CALL vkCreateMacOSSurfaceMVK(
 #endif
 #endif /* VK_USE_PLATFORM_MACOS_MVK */
 
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
 #define VK_GOOGLE_external_memory_magma 1
 #define VK_GOOGLE_EXTERNAL_MEMORY_MAGMA_SPEC_VERSION 1
 #define VK_GOOGLE_EXTERNAL_MEMORY_MAGMA_EXTENSION_NAME "VK_GOOGLE_external_memory_magma"
@@ -5863,7 +5862,6 @@ VKAPI_ATTR VkResult VKAPI_CALL vkImportDeviceMemoryMAGMA(
     const VkAllocationCallbacks*                pAllocator,
     VkDeviceMemory*                             pMemory);
 #endif
-#endif /* VK_USE_PLATFORM_MAGMA_KHR */
 
 #ifdef __cplusplus
 }

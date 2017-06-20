@@ -5134,7 +5134,8 @@ namespace vk
   enum class ImageTiling
   {
     eOptimal = VK_IMAGE_TILING_OPTIMAL,
-    eLinear = VK_IMAGE_TILING_LINEAR
+    eLinear = VK_IMAGE_TILING_LINEAR,
+    eScanoutGOOGLE = VK_IMAGE_TILING_SCANOUT_GOOGLE
   };
 
   enum class ImageViewType
@@ -28073,6 +28074,7 @@ namespace vk
     {
     case ImageTiling::eOptimal: return "Optimal";
     case ImageTiling::eLinear: return "Linear";
+    case ImageTiling::eScanoutGOOGLE: return "ScanoutGOOGLE";
     default: return "invalid";
     }
   }

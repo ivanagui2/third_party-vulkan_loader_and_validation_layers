@@ -12,6 +12,11 @@ the necessary header files. They are used in the root `BUILD.gn` file.
 export VULKAN_LOADER_SOURCE=$FUCHSIA_ROOT/third_party/vulkan_loader_and_validation_layers
 
 # Check out Vulkan-Hpp repository
+#
+# NOTE: using commit bea247fd4e645579cda228d672ba815292015c75 is known to work;
+# a following change breaks escher because of disabled exceptions: see
+# https://github.com/KhronosGroup/Vulkan-Hpp/issues/113
+#
 git clone --recursive https://github.com/KhronosGroup/Vulkan-Hpp.git
 cd Vulkan-Hpp
 

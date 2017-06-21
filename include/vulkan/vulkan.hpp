@@ -9018,9 +9018,12 @@ namespace vk
 #ifdef VK_USE_PLATFORM_MAGMA_KHR
   struct MagmaSurfaceCreateInfoKHR
   {
-    MagmaSurfaceCreateInfoKHR(  )
+    MagmaSurfaceCreateInfoKHR( uint32_t imagePipeHandle_ = 0, uint32_t width_ = 0, uint32_t height_ = 0 )
       : sType( StructureType::eMagmaSurfaceCreateInfoKHR )
       , pNext( nullptr )
+      , imagePipeHandle( imagePipeHandle_ )
+      , width( width_ )
+      , height( height_ )
     {
     }
 
@@ -9041,6 +9044,24 @@ namespace vk
       return *this;
     }
 
+    MagmaSurfaceCreateInfoKHR& setImagePipeHandle( uint32_t imagePipeHandle_ )
+    {
+      imagePipeHandle = imagePipeHandle_;
+      return *this;
+    }
+
+    MagmaSurfaceCreateInfoKHR& setWidth( uint32_t width_ )
+    {
+      width = width_;
+      return *this;
+    }
+
+    MagmaSurfaceCreateInfoKHR& setHeight( uint32_t height_ )
+    {
+      height = height_;
+      return *this;
+    }
+
     operator const VkMagmaSurfaceCreateInfoKHR&() const
     {
       return *reinterpret_cast<const VkMagmaSurfaceCreateInfoKHR*>(this);
@@ -9049,7 +9070,10 @@ namespace vk
     bool operator==( MagmaSurfaceCreateInfoKHR const& rhs ) const
     {
       return ( sType == rhs.sType )
-          && ( pNext == rhs.pNext );
+          && ( pNext == rhs.pNext )
+          && ( imagePipeHandle == rhs.imagePipeHandle )
+          && ( width == rhs.width )
+          && ( height == rhs.height );
     }
 
     bool operator!=( MagmaSurfaceCreateInfoKHR const& rhs ) const
@@ -9062,6 +9086,9 @@ namespace vk
 
   public:
     const void* pNext;
+    uint32_t imagePipeHandle;
+    uint32_t width;
+    uint32_t height;
   };
   static_assert( sizeof( MagmaSurfaceCreateInfoKHR ) == sizeof( VkMagmaSurfaceCreateInfoKHR ), "struct and wrapper have different size!" );
 #endif /*VK_USE_PLATFORM_MAGMA_KHR*/

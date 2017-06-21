@@ -3856,6 +3856,9 @@ typedef VkFlags VkMagmaSurfaceCreateFlagsKHR;
 typedef struct VkMagmaSurfaceCreateInfoKHR {
     VkStructureType    sType;
     const void*        pNext;
+    uint32_t           imagePipeHandle;
+    uint32_t           width;
+    uint32_t           height;
 } VkMagmaSurfaceCreateInfoKHR;
 
 

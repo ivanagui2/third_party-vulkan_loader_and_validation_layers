@@ -1528,6 +1528,9 @@ maintained in the master branch of the Khronos Vulkan GitHub project.
         <type category="struct" name="VkMagmaSurfaceCreateInfoKHR">
             <member values="VK_STRUCTURE_TYPE_MAGMA_SURFACE_CREATE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
             <member>const <type>void</type>*                      <name>pNext</name></member>                    <!-- Pointer to next structure -->
+            <member><type>uint32_t</type>                         <name>imagePipeHandle</name></member>
+            <member><type>uint32_t</type>                         <name>width</name></member>  
+            <member><type>uint32_t</type>                         <name>height</name></member>  
         </type>
         <type category="struct" name="VkXlibSurfaceCreateInfoKHR">
             <member values="VK_STRUCTURE_TYPE_XLIB_SURFACE_CREATE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>

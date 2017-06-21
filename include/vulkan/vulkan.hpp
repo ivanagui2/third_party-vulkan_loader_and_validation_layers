@@ -23274,19 +23274,15 @@ namespace vk
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
     Result exportMemoryMAGMA( DeviceMemory memory, uint32_t* pHandle ) const;
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
     ResultValueType<uint32_t>::type exportMemoryMAGMA( DeviceMemory memory ) const;
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
-#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
 
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
     Result importMemoryMAGMA( uint32_t handle, const AllocationCallbacks* pAllocator, DeviceMemory* pMemory ) const;
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
     ResultValueType<DeviceMemory>::type importMemoryMAGMA( uint32_t handle, Optional<const AllocationCallbacks> allocator = nullptr ) const;
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
-#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
 
     Result createIndirectCommandsLayoutNVX( const IndirectCommandsLayoutCreateInfoNVX* pCreateInfo, const AllocationCallbacks* pAllocator, IndirectCommandsLayoutNVX* pIndirectCommandsLayout ) const;
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
@@ -25174,7 +25170,6 @@ namespace vk
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 #endif /*VK_USE_PLATFORM_WIN32_KHR*/
 
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
   VULKAN_HPP_INLINE Result Device::exportMemoryMAGMA( DeviceMemory memory, uint32_t* pHandle ) const
   {
     return static_cast<Result>( vkExportDeviceMemoryMAGMA( m_device, static_cast<VkDeviceMemory>( memory ), pHandle ) );
@@ -25187,9 +25182,7 @@ namespace vk
     return createResultValue( result, handle, "vk::Device::exportMemoryMAGMA" );
   }
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
-#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
 
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
   VULKAN_HPP_INLINE Result Device::importMemoryMAGMA( uint32_t handle, const AllocationCallbacks* pAllocator, DeviceMemory* pMemory ) const
   {
     return static_cast<Result>( vkImportDeviceMemoryMAGMA( m_device, handle, reinterpret_cast<const VkAllocationCallbacks*>( pAllocator ), reinterpret_cast<VkDeviceMemory*>( pMemory ) ) );
@@ -25202,7 +25195,6 @@ namespace vk
     return createResultValue( result, memory, "vk::Device::importMemoryMAGMA" );
   }
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
-#endif /*VK_USE_PLATFORM_MAGMA_KHR*/
 
   VULKAN_HPP_INLINE Result Device::createIndirectCommandsLayoutNVX( const IndirectCommandsLayoutCreateInfoNVX* pCreateInfo, const AllocationCallbacks* pAllocator, IndirectCommandsLayoutNVX* pIndirectCommandsLayout ) const
   {

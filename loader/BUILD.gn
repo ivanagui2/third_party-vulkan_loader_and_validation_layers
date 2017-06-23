@@ -19,11 +19,13 @@
 # FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS
 # IN THE SOFTWARE.
 
-shared_library("loader") {
+import("//build/toolchain/shared.gni")
+
+fuchsia_shared_library("loader") {
   # The Vulkan loader is named libvulkan
   output_name = "vulkan"
 
-  configs += [ "../:vulkan_build_config" ]
+  configs = [ "../:vulkan_build_config" ]
 
   include_dirs = [ "." ]
 

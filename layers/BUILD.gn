@@ -143,13 +143,7 @@ source_set("layer_common") {
   ]
 }
 
-shared_library("VkLayer_object_tracker") {
-  deps = [
-    ":VkLayer_object_tracker_src($magma_shared_toolchain)",
-  ]
-}
-
-source_set("VkLayer_object_tracker_src") {
+fuchsia_shared_library("VkLayer_object_tracker") {
   sources = [
     "object_tracker.cpp",
   ]
@@ -158,13 +152,7 @@ source_set("VkLayer_object_tracker_src") {
   ]
 }
 
-shared_library("VkLayer_core_validation") {
-  deps = [
-    ":VkLayer_core_validation_src($magma_shared_toolchain)",
-  ]
-}
-
-source_set("VkLayer_core_validation_src") {
+fuchsia_shared_library("VkLayer_core_validation") {
   cflags_cc = [ "-Wno-missing-field-initializers" ]
   include_dirs = [
     "//third_party/shaderc/third_party/spirv-tools/include",
@@ -183,13 +171,7 @@ source_set("VkLayer_core_validation_src") {
   ]
 }
 
-shared_library("VkLayer_parameter_validation") {
-  deps = [
-    ":VkLayer_parameter_validation_src($magma_shared_toolchain)",
-  ]
-}
-
-source_set("VkLayer_parameter_validation_src") {
+fuchsia_shared_library("VkLayer_parameter_validation") {
   sources = [
     "parameter_validation.cpp",
     "vk_format_utils.cpp",
@@ -199,13 +181,7 @@ source_set("VkLayer_parameter_validation_src") {
   ]
 }
 
-shared_library("VkLayer_swapchain") {
-  deps = [
-    ":VkLayer_swapchain_src($magma_shared_toolchain)",
-  ]
-}
-
-source_set("VkLayer_swapchain_src") {
+fuchsia_shared_library("VkLayer_swapchain") {
   sources = [
     "swapchain.cpp",
   ]
@@ -214,14 +190,7 @@ source_set("VkLayer_swapchain_src") {
   ]
 }
 
-shared_library("VkLayer_threading") {
-  cflags_cc = [ "-Wno-unused-function" ]
-  deps = [
-    ":VkLayer_threading_src($magma_shared_toolchain)",
-  ]
-}
-
-source_set("VkLayer_threading_src") {
+fuchsia_shared_library("VkLayer_threading") {
   sources = [
     "threading.cpp",
   ]
@@ -230,13 +199,7 @@ source_set("VkLayer_threading_src") {
   ]
 }
 
-shared_library("VkLayer_unique_objects") {
-  deps = [
-    ":VkLayer_unique_objects_src($magma_shared_toolchain)",
-  ]
-}
-
-source_set("VkLayer_unique_objects_src") {
+fuchsia_shared_library("VkLayer_unique_objects") {
   sources = [
     "unique_objects.cpp",
   ]

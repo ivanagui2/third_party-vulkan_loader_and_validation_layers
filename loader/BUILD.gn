@@ -25,7 +25,7 @@ fuchsia_shared_library("loader") {
   # The Vulkan loader is named libvulkan
   output_name = "vulkan"
 
-  configs = [ "../:vulkan_build_config" ]
+  configs += [ "../:vulkan_build_config" ]
 
   include_dirs = [ "." ]
 

@@ -6320,7 +6320,7 @@ VKAPI_ATTR void VKAPI_CALL GetPhysicalDeviceExternalSemaphorePropertiesKHX(
     auto my_data = GetLayerDataPtr(get_dispatch_key(physicalDevice), instance_layer_data_map);
     assert(my_data != NULL);
     bool skip = false;
-    skip |= require_instance_extension(physicalDevice, &InstanceExtensions::khx_external_memory_capabilities,
+    skip |= require_instance_extension(physicalDevice, &InstanceExtensions::khx_external_semaphore_capabilities,
                                        "vkGetPhysicalDeviceExternalSemaphorePropertiesKHX",
                                        VK_KHX_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME);
     skip |= parameter_validation_vkGetPhysicalDeviceExternalSemaphorePropertiesKHX(my_data->report_data, pExternalSemaphoreInfo,

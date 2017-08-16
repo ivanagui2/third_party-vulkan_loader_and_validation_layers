@@ -143,7 +143,7 @@ source_set("layer_common") {
   ]
 }
 
-fuchsia_shared_library("VkLayer_object_tracker") {
+shared_library("VkLayer_object_tracker") {
   sources = [
     "object_tracker.cpp",
   ]
@@ -152,7 +152,7 @@ fuchsia_shared_library("VkLayer_object_tracker") {
   ]
 }
 
-fuchsia_shared_library("VkLayer_core_validation") {
+shared_library("VkLayer_core_validation") {
   cflags_cc = [ "-Wno-missing-field-initializers" ]
   include_dirs = [
     "//third_party/shaderc/third_party/spirv-tools/include",
@@ -171,7 +171,7 @@ fuchsia_shared_library("VkLayer_core_validation") {
   ]
 }
 
-fuchsia_shared_library("VkLayer_parameter_validation") {
+shared_library("VkLayer_parameter_validation") {
   sources = [
     "parameter_validation.cpp",
     "vk_format_utils.cpp",
@@ -181,7 +181,7 @@ fuchsia_shared_library("VkLayer_parameter_validation") {
   ]
 }
 
-fuchsia_shared_library("VkLayer_swapchain") {
+shared_library("VkLayer_swapchain") {
   sources = [
     "swapchain.cpp",
   ]
@@ -190,7 +190,7 @@ fuchsia_shared_library("VkLayer_swapchain") {
   ]
 }
 
-fuchsia_shared_library("VkLayer_threading") {
+shared_library("VkLayer_threading") {
   sources = [
     "threading.cpp",
   ]
@@ -199,7 +199,7 @@ fuchsia_shared_library("VkLayer_threading") {
   ]
 }
 
-fuchsia_shared_library("VkLayer_unique_objects") {
+shared_library("VkLayer_unique_objects") {
   sources = [
     "unique_objects.cpp",
   ]

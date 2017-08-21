@@ -41,9 +41,10 @@ shared_library("loader") {
     "dev_ext_trampoline.c",
     "extension_manual.c",
     "loader.c",
-    "phys_dev_ext.c",
     "murmurhash.c",
+    "phys_dev_ext.c",
     "trampoline.c",
+    "unknown_ext_chain.c",
     "wsi.c",
   ]
 }

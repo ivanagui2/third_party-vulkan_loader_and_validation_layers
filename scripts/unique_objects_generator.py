@@ -147,6 +147,9 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
             'vkCmdPushDescriptorSetWithTemplateKHR',
             'vkDebugMarkerSetObjectTagEXT',
             'vkDebugMarkerSetObjectNameEXT',
+            'vkGetPhysicalDeviceDisplayProperties2KHR',
+            'vkGetPhysicalDeviceDisplayPlaneProperties2KHR',
+            'vkGetDisplayModeProperties2KHR',
             ]
         # Commands shadowed by interface functions and are not implemented
         self.interface_functions = [
@@ -169,7 +172,7 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
         self.cmd_info_data = []        # Save the cmdinfo data for wrapping the handles when processing is complete
         self.structMembers = []        # List of StructMemberData records for all Vulkan structs
         self.extension_structs = []    # List of all structs or sister-structs containing handles
-                                       # A sister-struct may contain no handles but shares <validextensionstructs> with one that does
+                                       # A sister-struct may contain no handles but shares a structextends attribute with one that does
         self.structTypes = dict()      # Map of Vulkan struct typename to required VkStructureType
         self.struct_member_dict = dict()
         # Named tuples to store struct and command data
@@ -258,8 +261,8 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
         self.newline()
 
         # Record intercepted procedures
-        write('// intercepts', file=self.outFile)
-        write('struct { const char* name; PFN_vkVoidFunction pFunc;} procmap[] = {', file=self.outFile)
+        write('// Map of all APIs to be intercepted by this layer', file=self.outFile)
+        write('static const std::unordered_map<std::string, void*> name_to_funcptr_map = {', file=self.outFile)
         write('\n'.join(self.intercepts), file=self.outFile)
         write('};\n', file=self.outFile)
         self.newline()
@@ -397,7 +400,7 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
                 # Store the required type value
                 self.structTypes[typeName] = self.StructType(name=name, value=value)
             # Store pointer/array/string info
-            extstructs = member.attrib.get('validextensionstructs') if name == 'pNext' else None
+            extstructs = self.registry.validextensionstructs[typeName] if name == 'pNext' else None
             membersInfo.append(self.CommandParam(type=type,
                                                  name=name,
                                                  ispointer=self.paramIsPointer(member),
@@ -454,18 +457,18 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
                 ndo_list.add(item)
         return ndo_list
     #
-    # Construct list of extension structs containing handles, or extension structs that share a <validextensionstructs>
-    # tag WITH an extension struct containing handles. All extension structs in any pNext chain will have to be copied.
+    # Construct list of extension structs containing handles, or extension structs that share a structextends attribute
+    # WITH an extension struct containing handles. All extension structs in any pNext chain will have to be copied.
     # TODO: make this recursive -- structs buried three or more levels deep are not searched for extensions
     def GenerateCommandWrapExtensionList(self):
         for struct in self.structMembers:
             if (len(struct.members) > 1) and struct.members[1].extstructs is not None:
                 found = False;
-                for item in struct.members[1].extstructs.split(','):
+                for item in struct.members[1].extstructs:
                     if item != '' and self.struct_contains_ndo(item) == True:
                         found = True
                 if found == True:
-                    for item in struct.members[1].extstructs.split(','):
+                    for item in struct.members[1].extstructs:
                         if item != '' and item not in self.extension_structs:
                             self.extension_structs.append(item)
     #
@@ -474,7 +477,7 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
         if struct_type in self.struct_member_dict:
             param_info = self.struct_member_dict[struct_type]
             if (len(param_info) > 1) and param_info[1].extstructs is not None:
-                for item in param_info[1].extstructs.split(','):
+                for item in param_info[1].extstructs:
                     if item in self.extension_structs:
                         return True
         return False
@@ -599,7 +602,7 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
     #
     # Clean up local declarations
     def cleanUpLocalDeclarations(self, indent, prefix, name, len, index, process_pnext):
-        cleanup = '%sif (local_%s%s)\n' % (indent, prefix, name)
+        cleanup = '%sif (local_%s%s) {\n' % (indent, prefix, name)
         if len is not None:
             if process_pnext:
                 cleanup += '%s    for (uint32_t %s = 0; %s < %s%s; ++%s) {\n' % (indent, index, index, prefix, len, index)
@@ -610,6 +613,7 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
             if process_pnext:
                 cleanup += '%s    FreeUnwrappedExtensionStructs(const_cast<void *>(local_%s%s->pNext));\n' % (indent, prefix, name)
             cleanup += '%s    delete local_%s%s;\n' % (indent, prefix, name)
+        cleanup += "%s}\n" % (indent)
         return cleanup
     #
     # Output UO code for a single NDO (ndo_count is NULL) or a counted list of NDOs
@@ -816,8 +820,7 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
                     islocal = True
             isdestroy = True if True in [destroy_txt in cmdname for destroy_txt in ['Destroy', 'Free']] else False
             iscreate = True if True in [create_txt in cmdname for create_txt in ['Create', 'Allocate', 'Import', 'GetRandROutputDisplayEXT', 'RegisterDeviceEvent', 'RegisterDisplayEvent']] else False
-            extstructs = member.attrib.get('validextensionstructs') if name == 'pNext' else None
-
+            extstructs = self.registry.validextensionstructs[type] if name == 'pNext' else None
             membersInfo.append(self.CommandParam(type=type,
                                                  name=name,
                                                  ispointer=ispointer,
@@ -850,7 +853,7 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
                 self.appendSection('command', '')
                 self.appendSection('command', '// Declare only')
                 self.appendSection('command', decls[0])
-                self.intercepts += [ '    {"%s", reinterpret_cast<PFN_vkVoidFunction>(%s)},' % (cmdname,cmdname[2:]) ]
+                self.intercepts += [ '    {"%s", (void *)%s},' % (cmdname,cmdname[2:]) ]
                 continue
             # Generate NDO wrapping/unwrapping code for all parameters
             (api_decls, api_pre, api_post) = self.generate_wrapping_code(cmdinfo.elem)
@@ -863,7 +866,7 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
                 self.appendSection('command', '#ifdef '+ feature_extra_protect)
                 self.intercepts += [ '#ifdef %s' % feature_extra_protect ]
             # Add intercept to procmap
-            self.intercepts += [ '    {"%s", reinterpret_cast<PFN_vkVoidFunction>(%s)},' % (cmdname,cmdname[2:]) ]
+            self.intercepts += [ '    {"%s", (void*)%s},' % (cmdname,cmdname[2:]) ]
             decls = self.makeCDecls(cmdinfo.elem)
             self.appendSection('command', '')
             self.appendSection('command', decls[0][:-1])

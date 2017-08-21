@@ -35,6 +35,8 @@
 #include <signal.h>
 #if defined(VK_USE_PLATFORM_XLIB_KHR) || defined(VK_USE_PLATFORM_XCB_KHR)
 #include <X11/Xutil.h>
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+#include <linux/input.h>
 #endif
 
 #ifdef _WIN32
@@ -335,6 +337,9 @@ struct demo {
     struct wl_surface *window;
     struct wl_shell *shell;
     struct wl_shell_surface *shell_surface;
+    struct wl_seat *seat;
+    struct wl_pointer *pointer;
+    struct wl_keyboard *keyboard;
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
 #elif defined(VK_USE_PLATFORM_ANDROID_KHR)
     ANativeWindow *window;
@@ -510,7 +515,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL dbgFunc(VkFlags msgFlags, VkDebugReportObjectType
 
     free(message);
 
-    //clang-format on
+    // clang-format on
 
     /*
     * false indicates that layer should not bail-out of an
@@ -957,28 +962,27 @@ static void demo_draw(struct demo *demo) {
     vkWaitForFences(demo->device, 1, &demo->fences[demo->frame_index], VK_TRUE, UINT64_MAX);
     vkResetFences(demo->device, 1, &demo->fences[demo->frame_index]);
 
-    // Get the index of the next available swapchain image:
-    err = demo->fpAcquireNextImageKHR(demo->device, demo->swapchain, UINT64_MAX,
-                                      demo->image_acquired_semaphores[demo->frame_index],
-                                      VK_NULL_HANDLE, &demo->current_buffer);
+    do {
+        // Get the index of the next available swapchain image:
+        err = demo->fpAcquireNextImageKHR(demo->device, demo->swapchain, UINT64_MAX,
+                                          demo->image_acquired_semaphores[demo->frame_index],
+                                          VK_NULL_HANDLE, &demo->current_buffer);
+
+        if (err == VK_ERROR_OUT_OF_DATE_KHR) {
+            // demo->swapchain is out of date (e.g. the window was resized) and
+            // must be recreated:
+            demo_resize(demo);
+        } else if (err == VK_SUBOPTIMAL_KHR) {
+            // demo->swapchain is not as optimal as it could be, but the platform's
+            // presentation engine will still present the image correctly.
+            break;
+        } else {
+            assert(!err);
+        }
+    } while (err != VK_SUCCESS);
 
     demo_update_data_buffer(demo);
 
-    if (err == VK_ERROR_OUT_OF_DATE_KHR) {
-        // demo->swapchain is out of date (e.g. the window was resized) and
-        // must be recreated:
-        demo->frame_index += 1;
-        demo->frame_index %= FRAME_LAG;
-
-        demo_resize(demo);
-        demo_draw(demo);
-        return;
-    } else if (err == VK_SUBOPTIMAL_KHR) {
-        // demo->swapchain is not as optimal as it could be, but the platform's
-        // presentation engine will still present the image correctly.
-    } else {
-        assert(!err);
-    }
     if (demo->VK_GOOGLE_display_timing_enabled) {
         // Look at what happened to previous presents, and make appropriate
         // adjustments in timing:
@@ -1285,9 +1289,6 @@ static void demo_prepare_buffers(struct demo *demo) {
     // Note: destroying the swapchain also cleans up all its associated
     // presentable images once the platform is done with them.
     if (oldSwapchain != VK_NULL_HANDLE) {
-        // AMD driver times out waiting on fences used in AcquireNextImage on
-        // a swapchain that is subsequently destroyed before the wait.
-        vkWaitForFences(demo->device, FRAME_LAG, demo->fences, VK_TRUE, UINT64_MAX);
         demo->fpDestroySwapchainKHR(demo->device, oldSwapchain, NULL);
     }
 
@@ -1629,7 +1630,7 @@ static void demo_prepare_textures(struct demo *demo) {
             // shader to run until layout transition completes
             demo_set_image_layout(demo, demo->textures[i].image, VK_IMAGE_ASPECT_COLOR_BIT,
                                   VK_IMAGE_LAYOUT_PREINITIALIZED, demo->textures[i].imageLayout,
-                                  VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                                  VK_ACCESS_HOST_WRITE_BIT, VK_PIPELINE_STAGE_HOST_BIT,
                                   VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT);
             demo->staging_texture.image = 0;
         } else if (props.optimalTilingFeatures &
@@ -1653,14 +1654,14 @@ static void demo_prepare_textures(struct demo *demo) {
                                   VK_IMAGE_LAYOUT_PREINITIALIZED,
                                   VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                   VK_ACCESS_HOST_WRITE_BIT,
-                                  VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
+                                  VK_PIPELINE_STAGE_HOST_BIT,
                                   VK_PIPELINE_STAGE_TRANSFER_BIT);
 
             demo_set_image_layout(demo, demo->textures[i].image,
                                   VK_IMAGE_ASPECT_COLOR_BIT,
                                   VK_IMAGE_LAYOUT_PREINITIALIZED,
                                   VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                                  VK_ACCESS_HOST_WRITE_BIT,
+                                  0,
                                   VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT,
                                   VK_PIPELINE_STAGE_TRANSFER_BIT);
 
@@ -2398,7 +2399,6 @@ static void demo_cleanup(struct demo *demo) {
         demo->DestroyDebugReportCallback(demo->inst, demo->msg_callback, NULL);
     }
     vkDestroySurfaceKHR(demo->inst, demo->surface, NULL);
-    vkDestroyInstance(demo->inst, NULL);
 
 #if defined(VK_USE_PLATFORM_XLIB_KHR)
     XDestroyWindow(demo->display, demo->xlib_window);
@@ -2408,6 +2408,9 @@ static void demo_cleanup(struct demo *demo) {
     xcb_disconnect(demo->connection);
     free(demo->atom_wm_delete_window);
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+    wl_keyboard_destroy(demo->keyboard);
+    wl_pointer_destroy(demo->pointer);
+    wl_seat_destroy(demo->seat);
     wl_shell_surface_destroy(demo->shell_surface);
     wl_surface_destroy(demo->window);
     wl_shell_destroy(demo->shell);
@@ -2416,6 +2419,8 @@ static void demo_cleanup(struct demo *demo) {
     wl_display_disconnect(demo->display);
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
 #endif
+
+    vkDestroyInstance(demo->inst, NULL);
 }
 
 static void demo_resize(struct demo *demo) {
@@ -2774,10 +2779,14 @@ static void demo_create_xcb_window(struct demo *demo) {
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
 static void demo_run(struct demo *demo) {
     while (!demo->quit) {
-        demo_draw(demo);
-        demo->curFrame++;
-        if (demo->frameCount != INT32_MAX && demo->curFrame == demo->frameCount)
-            demo->quit = true;
+        if (demo->pause) {
+            wl_display_dispatch(demo->display);  // block and wait for input
+        } else {
+            wl_display_dispatch_pending(demo->display);  // don't block
+            demo_draw(demo);
+            demo->curFrame++;
+            if (demo->frameCount != INT32_MAX && demo->curFrame == demo->frameCount) demo->quit = true;
+        }
     }
 }
 
@@ -3018,7 +3027,7 @@ static void demo_init_vk(struct demo *demo) {
     char *instance_validation_layers_alt2[] = {
         "VK_LAYER_GOOGLE_threading",      "VK_LAYER_LUNARG_parameter_validation",
         "VK_LAYER_LUNARG_object_tracker", "VK_LAYER_LUNARG_core_validation",
-        "VK_LAYER_LUNARG_swapchain",      "VK_LAYER_GOOGLE_unique_objects"
+        "VK_LAYER_GOOGLE_unique_objects"
     };
 
     /* Look for validation layers */
@@ -3718,17 +3727,96 @@ static void demo_init_vk_swapchain(struct demo *demo) {
 }
 
 #if defined(VK_USE_PLATFORM_WAYLAND_KHR)
-static void registry_handle_global(void *data, struct wl_registry *registry,
-                                   uint32_t name, const char *interface,
+static void pointer_handle_enter(void *data, struct wl_pointer *pointer, uint32_t serial, struct wl_surface *surface, wl_fixed_t sx,
+                                 wl_fixed_t sy) {}
+
+static void pointer_handle_leave(void *data, struct wl_pointer *pointer, uint32_t serial, struct wl_surface *surface) {}
+
+static void pointer_handle_motion(void *data, struct wl_pointer *pointer, uint32_t time, wl_fixed_t sx, wl_fixed_t sy) {}
+
+static void pointer_handle_button(void *data, struct wl_pointer *wl_pointer, uint32_t serial, uint32_t time, uint32_t button,
+                                  uint32_t state) {
+    struct demo *demo = data;
+    if (button == BTN_LEFT && state == WL_POINTER_BUTTON_STATE_PRESSED) {
+        wl_shell_surface_move(demo->shell_surface, demo->seat, serial);
+    }
+}
+
+static void pointer_handle_axis(void *data, struct wl_pointer *wl_pointer, uint32_t time, uint32_t axis, wl_fixed_t value) {}
+
+static const struct wl_pointer_listener pointer_listener = {
+    pointer_handle_enter, pointer_handle_leave, pointer_handle_motion, pointer_handle_button, pointer_handle_axis,
+};
+
+static void keyboard_handle_keymap(void *data, struct wl_keyboard *keyboard, uint32_t format, int fd, uint32_t size) {}
+
+static void keyboard_handle_enter(void *data, struct wl_keyboard *keyboard, uint32_t serial, struct wl_surface *surface,
+                                  struct wl_array *keys) {}
+
+static void keyboard_handle_leave(void *data, struct wl_keyboard *keyboard, uint32_t serial, struct wl_surface *surface) {}
+
+static void keyboard_handle_key(void *data, struct wl_keyboard *keyboard, uint32_t serial, uint32_t time, uint32_t key,
+                                uint32_t state) {
+    if (state != WL_KEYBOARD_KEY_STATE_RELEASED) return;
+    struct demo *demo = data;
+    switch (key) {
+        case KEY_ESC:  // Escape
+            demo->quit = true;
+            break;
+        case KEY_LEFT:  // left arrow key
+            demo->spin_angle -= demo->spin_increment;
+            break;
+        case KEY_RIGHT:  // right arrow key
+            demo->spin_angle += demo->spin_increment;
+            break;
+        case KEY_SPACE:  // space bar
+            demo->pause = !demo->pause;
+            break;
+    }
+}
+
+static void keyboard_handle_modifiers(void *data, struct wl_keyboard *keyboard, uint32_t serial, uint32_t mods_depressed,
+                                      uint32_t mods_latched, uint32_t mods_locked, uint32_t group) {}
+
+static const struct wl_keyboard_listener keyboard_listener = {
+    keyboard_handle_keymap, keyboard_handle_enter, keyboard_handle_leave, keyboard_handle_key, keyboard_handle_modifiers,
+};
+
+static void seat_handle_capabilities(void *data, struct wl_seat *seat, enum wl_seat_capability caps) {
+    // Subscribe to pointer events
+    struct demo *demo = data;
+    if ((caps & WL_SEAT_CAPABILITY_POINTER) && !demo->pointer) {
+        demo->pointer = wl_seat_get_pointer(seat);
+        wl_pointer_add_listener(demo->pointer, &pointer_listener, demo);
+    } else if (!(caps & WL_SEAT_CAPABILITY_POINTER) && demo->pointer) {
+        wl_pointer_destroy(demo->pointer);
+        demo->pointer = NULL;
+    }
+    // Subscribe to keyboard events
+    if (caps & WL_SEAT_CAPABILITY_KEYBOARD) {
+        demo->keyboard = wl_seat_get_keyboard(seat);
+        wl_keyboard_add_listener(demo->keyboard, &keyboard_listener, demo);
+    } else if (!(caps & WL_SEAT_CAPABILITY_KEYBOARD)) {
+        wl_keyboard_destroy(demo->keyboard);
+        demo->keyboard = NULL;
+    }
+}
+
+static const struct wl_seat_listener seat_listener = {
+    seat_handle_capabilities,
+};
+
+static void registry_handle_global(void *data, struct wl_registry *registry, uint32_t id, const char *interface,
                                    uint32_t version UNUSED) {
     struct demo *demo = data;
+    // pickup wayland objects when they appear
     if (strcmp(interface, "wl_compositor") == 0) {
-        demo->compositor =
-            wl_registry_bind(registry, name, &wl_compositor_interface, 3);
-        /* Todo: When xdg_shell protocol has stablized, we should move wl_shell
-         * tp xdg_shell */
+        demo->compositor = wl_registry_bind(registry, id, &wl_compositor_interface, 1);
     } else if (strcmp(interface, "wl_shell") == 0) {
-        demo->shell = wl_registry_bind(registry, name, &wl_shell_interface, 1);
+        demo->shell = wl_registry_bind(registry, id, &wl_shell_interface, 1);
+    } else if (strcmp(interface, "wl_seat") == 0) {
+        demo->seat = wl_registry_bind(registry, id, &wl_seat_interface, 1);
+        wl_seat_add_listener(demo->seat, &seat_listener, demo);
     }
 }
 

@@ -43,6 +43,12 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     if (BUILD_WSI_MIR_SUPPORT)
         find_package(Mir REQUIRED)
     endif()
+
+    # This option can be used to suppress the installation of artifacts from the
+    # Vulkan-LoaderAndValidationLayers repo while running "make install" for the
+    # VulkanTools and VulkanSamples repos.  This can be used to prevent the
+    # overwriting of LVL artifacts when installing these downstream repos.
+    option(INSTALL_LVL_FILES "Install content from LoaderAndValidationLayers repo" ON)
 endif()
 
 set(SCRIPTS_DIR "${CMAKE_CURRENT_SOURCE_DIR}/scripts")
@@ -53,6 +59,13 @@ include_directories("${PROJECT_SOURCE_DIR}/include")
 if (CMAKE_COMPILER_IS_GNUCC OR CMAKE_C_COMPILER_ID MATCHES "Clang")
     set(COMMON_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers")
     set(COMMON_COMPILE_FLAGS "${COMMON_COMPILE_FLAGS} -fno-strict-aliasing -fno-builtin-memcmp")
+
+    # For GCC version 7.1 or greater, we need to disable the implicit fallthrough warning since
+    # there's no consistent way to satisfy all compilers until they all accept the C++17 standard
+    if (CMAKE_COMPILER_IS_GNUCC AND NOT (CMAKE_CXX_COMPILER_VERSION LESS 7.1))
+        set(COMMON_COMPILE_FLAGS "${COMMON_COMPILE_FLAGS} -Wimplicit-fallthrough=0")
+    endif()
+
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -std=c99 ${COMMON_COMPILE_FLAGS}")
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${COMMON_COMPILE_FLAGS} -std=c++11 -fno-rtti")
     if (UNIX)
@@ -71,6 +84,14 @@ if(WIN32)
     # Warn about potentially uninitialized variables
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/w34701>")
     add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/w34703>")
+
+    if (NOT MSVC_VERSION LESS 1900)
+        # Enable control flow guard
+        message(STATUS "Building with control flow guard")
+        add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/guard:cf>")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /guard:cf")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /guard:cf")
+    endif()
 endif()
 
 if(NOT WIN32)
@@ -282,6 +303,7 @@ add_custom_target(generate_helper_files DEPENDS
     vk_object_types.h
     vk_layer_dispatch_table.h
     vk_dispatch_table_helper.h
+    vk_extension_helper.h
     )
 
 # Rules to build generated helper files
@@ -293,6 +315,7 @@ run_vk_xml_generate(helper_file_generator.py vk_struct_size_helper.h)
 run_vk_xml_generate(helper_file_generator.py vk_struct_size_helper.c)
 run_vk_xml_generate(helper_file_generator.py vk_enum_string_helper.h)
 run_vk_xml_generate(helper_file_generator.py vk_object_types.h)
+run_vk_xml_generate(helper_file_generator.py vk_extension_helper.h)
 
 if(NOT WIN32)
     include(GNUInstallDirs)
@@ -308,7 +331,9 @@ if(NOT WIN32)
 endif()
 
 if(UNIX)
-    install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/vulkan" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    if(INSTALL_LVL_FILES)
+        install(DIRECTORY "${PROJECT_SOURCE_DIR}/include/vulkan" DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
+    endif()
 
 # uninstall target
 configure_file(

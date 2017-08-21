@@ -34,10 +34,6 @@ package("vulkan_loader_and_layers") {
     },
 
     {
-      name = "libVkLayer_object_tracker.so"
-    },
-
-    {
       name = "libVkLayer_core_validation.so"
     },
 
@@ -52,10 +48,6 @@ package("vulkan_loader_and_layers") {
     {
       name = "libVkLayer_parameter_validation.so"
     },
-
-    {
-      name = "libVkLayer_swapchain.so"
-    },
   ]
 
   resources = [
@@ -65,18 +57,8 @@ package("vulkan_loader_and_layers") {
     },
 
     {
-      path = rebase_path("fuchsia/VkLayer_object_tracker.json")
-      dest = "vulkan/explicit_layer.d/VkLayer_object_tracker.json"
-    },
-
-    {
       path = rebase_path("fuchsia/VkLayer_parameter_validation.json")
       dest = "vulkan/explicit_layer.d/VkLayer_parameter_validation.json"
-    },
-
-    {
-      path = rebase_path("fuchsia/VkLayer_swapchain.json")
-      dest = "vulkan/explicit_layer.d/VkLayer_swapchain.json"
     },
 
     {
@@ -112,9 +94,7 @@ package("vulkan_loader_and_layers_tests") {
 group("layers") {
   public_deps = [
     ":VkLayer_core_validation",
-    ":VkLayer_object_tracker",
     ":VkLayer_parameter_validation",
-    ":VkLayer_swapchain",
     ":VkLayer_threading",
     ":VkLayer_unique_objects",
   ]
@@ -143,15 +123,6 @@ source_set("layer_common") {
   ]
 }
 
-shared_library("VkLayer_object_tracker") {
-  sources = [
-    "object_tracker.cpp",
-  ]
-  deps = [
-    ":layer_common",
-  ]
-}
-
 shared_library("VkLayer_core_validation") {
   cflags_cc = [ "-Wno-missing-field-initializers" ]
   include_dirs = [
@@ -162,6 +133,7 @@ shared_library("VkLayer_core_validation") {
     "buffer_validation.cpp",
     "core_validation.cpp",
     "descriptor_sets.cpp",
+    "shader_validation.cpp",
     "vk_format_utils.cpp",
   ]
   deps = [
@@ -175,15 +147,6 @@ shared_library("VkLayer_parameter_validation") {
   sources = [
     "parameter_validation.cpp",
     "vk_format_utils.cpp",
-  ]
-  deps = [
-    ":layer_common",
-  ]
-}
-
-shared_library("VkLayer_swapchain") {
-  sources = [
-    "swapchain.cpp",
   ]
   deps = [
     ":layer_common",

@@ -20,6 +20,8 @@
 
 #if defined(VK_USE_PLATFORM_XLIB_KHR) || defined(VK_USE_PLATFORM_XCB_KHR)
 #include <X11/Xutil.h>
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+#include <linux/input.h>
 #endif
 
 #include <cassert>
@@ -200,7 +202,188 @@ typedef struct {
     vk::CommandBuffer cmd;
     vk::CommandBuffer graphics_to_present_cmd;
     vk::ImageView view;
-} SwapchainBuffers;
+    vk::Buffer uniform_buffer;
+    vk::DeviceMemory uniform_memory;
+    vk::Framebuffer framebuffer;
+    vk::DescriptorSet descriptor_set;
+} SwapchainImageResources;
+
+struct Demo {
+    Demo();
+    void build_image_ownership_cmd(uint32_t const &);
+    vk::Bool32 check_layers(uint32_t, const char *const *, uint32_t, vk::LayerProperties *);
+    void cleanup();
+    void create_device();
+    void destroy_texture_image(texture_object *);
+    void draw();
+    void draw_build_cmd(vk::CommandBuffer);
+    void flush_init_cmd();
+    void init(int, char **);
+    void init_connection();
+    void init_vk();
+    void init_vk_swapchain();
+    void prepare();
+    void prepare_buffers();
+    void prepare_cube_data_buffers();
+    void prepare_depth();
+    void prepare_descriptor_layout();
+    void prepare_descriptor_pool();
+    void prepare_descriptor_set();
+    void prepare_framebuffers();
+    vk::ShaderModule prepare_fs();
+    void prepare_pipeline();
+    void prepare_render_pass();
+    vk::ShaderModule prepare_shader_module(const void *, size_t);
+    void prepare_texture_image(const char *, texture_object *, vk::ImageTiling, vk::ImageUsageFlags, vk::MemoryPropertyFlags);
+    void prepare_textures();
+    vk::ShaderModule prepare_vs();
+    char *read_spv(const char *, size_t *);
+    void resize();
+    void set_image_layout(vk::Image, vk::ImageAspectFlags, vk::ImageLayout, vk::ImageLayout, vk::AccessFlags,
+                          vk::PipelineStageFlags, vk::PipelineStageFlags);
+    void update_data_buffer();
+    bool loadTexture(const char *, uint8_t *, vk::SubresourceLayout *, int32_t *, int32_t *);
+    bool memory_type_from_properties(uint32_t, vk::MemoryPropertyFlags, uint32_t *);
+
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
+    void run();
+    void create_window();
+#elif defined(VK_USE_PLATFORM_XLIB_KHR)
+    void create_xlib_window();
+    void handle_xlib_event(const XEvent *);
+    void run_xlib();
+#elif defined(VK_USE_PLATFORM_XCB_KHR)
+    void handle_xcb_event(const xcb_generic_event_t *);
+    void run_xcb();
+    void create_xcb_window();
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+    void run();
+    void create_window();
+#elif defined(VK_USE_PLATFORM_MIR_KHR)
+#elif defined(VK_USE_PLATFORM_DISPLAY_KHR)
+    vk::Result create_display_surface();
+    void run_display();
+#endif
+
+#if defined(VK_USE_PLATFORM_WIN32_KHR)
+    HINSTANCE connection;         // hInstance - Windows Instance
+    HWND window;                  // hWnd - window handle
+    POINT minsize;                // minimum window size
+    char name[APP_NAME_STR_LEN];  // Name to put on the window/icon
+#elif defined(VK_USE_PLATFORM_XLIB_KHR)
+    Window xlib_window;
+    Atom xlib_wm_delete_window;
+    Display *display;
+#elif defined(VK_USE_PLATFORM_XCB_KHR)
+    xcb_window_t xcb_window;
+    xcb_screen_t *screen;
+    xcb_connection_t *connection;
+    xcb_intern_atom_reply_t *atom_wm_delete_window;
+#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+    wl_display *display;
+    wl_registry *registry;
+    wl_compositor *compositor;
+    wl_surface *window;
+    wl_shell *shell;
+    wl_shell_surface *shell_surface;
+    wl_seat *seat;
+    wl_pointer *pointer;
+    wl_keyboard *keyboard;
+#elif defined(VK_USE_PLATFORM_MIR_KHR)
+#endif
+
+    vk::SurfaceKHR surface;
+    bool prepared;
+    bool use_staging_buffer;
+    bool use_xlib;
+    bool separate_present_queue;
+
+    vk::Instance inst;
+    vk::PhysicalDevice gpu;
+    vk::Device device;
+    vk::Queue graphics_queue;
+    vk::Queue present_queue;
+    uint32_t graphics_queue_family_index;
+    uint32_t present_queue_family_index;
+    vk::Semaphore image_acquired_semaphores[FRAME_LAG];
+    vk::Semaphore draw_complete_semaphores[FRAME_LAG];
+    vk::Semaphore image_ownership_semaphores[FRAME_LAG];
+    vk::PhysicalDeviceProperties gpu_props;
+    std::unique_ptr<vk::QueueFamilyProperties[]> queue_props;
+    vk::PhysicalDeviceMemoryProperties memory_properties;
+
+    uint32_t enabled_extension_count;
+    uint32_t enabled_layer_count;
+    char const *extension_names[64];
+    char const *enabled_layers[64];
+
+    uint32_t width;
+    uint32_t height;
+    vk::Format format;
+    vk::ColorSpaceKHR color_space;
+
+    uint32_t swapchainImageCount;
+    vk::SwapchainKHR swapchain;
+    std::unique_ptr<SwapchainImageResources[]> swapchain_image_resources;
+    vk::PresentModeKHR presentMode;
+    vk::Fence fences[FRAME_LAG];
+    uint32_t frame_index;
+
+    vk::CommandPool cmd_pool;
+    vk::CommandPool present_cmd_pool;
+
+    struct {
+        vk::Format format;
+        vk::Image image;
+        vk::MemoryAllocateInfo mem_alloc;
+        vk::DeviceMemory mem;
+        vk::ImageView view;
+    } depth;
+
+    static int32_t const texture_count = 1;
+    texture_object textures[texture_count];
+    texture_object staging_texture;
+
+    struct {
+        vk::Buffer buf;
+        vk::MemoryAllocateInfo mem_alloc;
+        vk::DeviceMemory mem;
+        vk::DescriptorBufferInfo buffer_info;
+    } uniform_data;
+
+    vk::CommandBuffer cmd;  // Buffer for initialization commands
+    vk::PipelineLayout pipeline_layout;
+    vk::DescriptorSetLayout desc_layout;
+    vk::PipelineCache pipelineCache;
+    vk::RenderPass render_pass;
+    vk::Pipeline pipeline;
+
+    mat4x4 projection_matrix;
+    mat4x4 view_matrix;
+    mat4x4 model_matrix;
+
+    float spin_angle;
+    float spin_increment;
+    bool pause;
+
+    vk::ShaderModule vert_shader_module;
+    vk::ShaderModule frag_shader_module;
+
+    vk::DescriptorPool desc_pool;
+    vk::DescriptorSet desc_set;
+
+    std::unique_ptr<vk::Framebuffer[]> framebuffers;
+
+    bool quit;
+    uint32_t curFrame;
+    uint32_t frameCount;
+    bool validate;
+    bool use_break;
+    bool suppress_popups;
+
+    uint32_t current_buffer;
+    uint32_t queue_family_count;
+};
 
 #ifdef _WIN32
 // MS-Windows event handling function:
@@ -218,63 +401,154 @@ static void handle_popup_done(void *data, wl_shell_surface *shell_surface) {}
 
 static const wl_shell_surface_listener shell_surface_listener = {handle_ping, handle_configure, handle_popup_done};
 
-static void handle_announce_global_object(void *data, struct wl_registry *wl_registry, uint32_t name, const char *interface,
-                                          uint32_t version) {}
+static void pointer_handle_enter(void *data, struct wl_pointer *pointer, uint32_t serial, struct wl_surface *surface, wl_fixed_t sx,
+                                 wl_fixed_t sy) {}
 
-static void handle_announce_global_object_remove(void *data, struct wl_registry *wl_registry, uint32_t name) {}
+static void pointer_handle_leave(void *data, struct wl_pointer *pointer, uint32_t serial, struct wl_surface *surface) {}
 
-static const wl_registry_listener registry_listener = {handle_announce_global_object, handle_announce_global_object_remove};
+static void pointer_handle_motion(void *data, struct wl_pointer *pointer, uint32_t time, wl_fixed_t sx, wl_fixed_t sy) {}
+
+static void pointer_handle_button(void *data, struct wl_pointer *wl_pointer, uint32_t serial, uint32_t time, uint32_t button,
+                                  uint32_t state) {
+    Demo *demo = (Demo *)data;
+    if (button == BTN_LEFT && state == WL_POINTER_BUTTON_STATE_PRESSED) {
+        wl_shell_surface_move(demo->shell_surface, demo->seat, serial);
+    }
+}
+
+static void pointer_handle_axis(void *data, struct wl_pointer *wl_pointer, uint32_t time, uint32_t axis, wl_fixed_t value) {}
+
+static const struct wl_pointer_listener pointer_listener = {
+    pointer_handle_enter, pointer_handle_leave, pointer_handle_motion, pointer_handle_button, pointer_handle_axis,
+};
+
+static void keyboard_handle_keymap(void *data, struct wl_keyboard *keyboard, uint32_t format, int fd, uint32_t size) {}
+
+static void keyboard_handle_enter(void *data, struct wl_keyboard *keyboard, uint32_t serial, struct wl_surface *surface,
+                                  struct wl_array *keys) {}
+
+static void keyboard_handle_leave(void *data, struct wl_keyboard *keyboard, uint32_t serial, struct wl_surface *surface) {}
+
+static void keyboard_handle_key(void *data, struct wl_keyboard *keyboard, uint32_t serial, uint32_t time, uint32_t key,
+                                uint32_t state) {
+    if (state != WL_KEYBOARD_KEY_STATE_RELEASED) return;
+    Demo *demo = (Demo *)data;
+    switch (key) {
+        case KEY_ESC:  // Escape
+            demo->quit = true;
+            break;
+        case KEY_LEFT:  // left arrow key
+            demo->spin_angle -= demo->spin_increment;
+            break;
+        case KEY_RIGHT:  // right arrow key
+            demo->spin_angle += demo->spin_increment;
+            break;
+        case KEY_SPACE:  // space bar
+            demo->pause = !demo->pause;
+            break;
+    }
+}
+
+static void keyboard_handle_modifiers(void *data, wl_keyboard *keyboard, uint32_t serial, uint32_t mods_depressed,
+                                      uint32_t mods_latched, uint32_t mods_locked, uint32_t group) {}
+
+static const struct wl_keyboard_listener keyboard_listener = {
+    keyboard_handle_keymap, keyboard_handle_enter, keyboard_handle_leave, keyboard_handle_key, keyboard_handle_modifiers,
+};
+
+static void seat_handle_capabilities(void *data, wl_seat *seat, uint32_t caps) {
+    // Subscribe to pointer events
+    Demo *demo = (Demo *)data;
+    if ((caps & WL_SEAT_CAPABILITY_POINTER) && !demo->pointer) {
+        demo->pointer = wl_seat_get_pointer(seat);
+        wl_pointer_add_listener(demo->pointer, &pointer_listener, demo);
+    } else if (!(caps & WL_SEAT_CAPABILITY_POINTER) && demo->pointer) {
+        wl_pointer_destroy(demo->pointer);
+        demo->pointer = NULL;
+    }
+    // Subscribe to keyboard events
+    if (caps & WL_SEAT_CAPABILITY_KEYBOARD) {
+        demo->keyboard = wl_seat_get_keyboard(seat);
+        wl_keyboard_add_listener(demo->keyboard, &keyboard_listener, demo);
+    } else if (!(caps & WL_SEAT_CAPABILITY_KEYBOARD)) {
+        wl_keyboard_destroy(demo->keyboard);
+        demo->keyboard = NULL;
+    }
+}
+
+static const wl_seat_listener seat_listener = {
+    seat_handle_capabilities,
+};
+
+static void registry_handle_global(void *data, wl_registry *registry, uint32_t id, const char *interface, uint32_t version) {
+    Demo *demo = (Demo *)data;
+    // pickup wayland objects when they appear
+    if (strcmp(interface, "wl_compositor") == 0) {
+        demo->compositor = (wl_compositor *)wl_registry_bind(registry, id, &wl_compositor_interface, 1);
+    } else if (strcmp(interface, "wl_shell") == 0) {
+        demo->shell = (wl_shell *)wl_registry_bind(registry, id, &wl_shell_interface, 1);
+    } else if (strcmp(interface, "wl_seat") == 0) {
+        demo->seat = (wl_seat *)wl_registry_bind(registry, id, &wl_seat_interface, 1);
+        wl_seat_add_listener(demo->seat, &seat_listener, demo);
+    }
+}
+
+static void registry_handle_global_remove(void *data, wl_registry *registry, uint32_t name) {}
+
+static const wl_registry_listener registry_listener = {registry_handle_global, registry_handle_global_remove};
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
 #endif
 
-struct Demo {
-    Demo()
-        :
+Demo::Demo()
+    :
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
-          connection{nullptr},
-          window{nullptr},
-          minsize(POINT{0, 0}),  // Use explicit construction to avoid MSVC error C2797.
+      connection{nullptr},
+      window{nullptr},
+      minsize(POINT{0, 0}),  // Use explicit construction to avoid MSVC error C2797.
 #endif
 
 #if defined(VK_USE_PLATFORM_XLIB_KHR)
-          xlib_window{0},
-          xlib_wm_delete_window{0},
-          display{nullptr},
+      xlib_window{0},
+      xlib_wm_delete_window{0},
+      display{nullptr},
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
-          xcb_window{0},
-          screen{nullptr},
-          connection{nullptr},
+      xcb_window{0},
+      screen{nullptr},
+      connection{nullptr},
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
-          display{nullptr},
-          registry{nullptr},
-          compositor{nullptr},
-          window{nullptr},
-          shell{nullptr},
-          shell_surface{nullptr},
+      display{nullptr},
+      registry{nullptr},
+      compositor{nullptr},
+      window{nullptr},
+      shell{nullptr},
+      shell_surface{nullptr},
+      seat{nullptr},
+      pointer{nullptr},
+      keyboard{nullptr},
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
 #endif
-          prepared{false},
-          use_staging_buffer{false},
-          use_xlib{false},
-          graphics_queue_family_index{0},
-          present_queue_family_index{0},
-          enabled_extension_count{0},
-          enabled_layer_count{0},
-          width{0},
-          height{0},
-          swapchainImageCount{0},
-          frame_index{0},
-          spin_angle{0.0f},
-          spin_increment{0.0f},
-          pause{false},
-          quit{false},
-          curFrame{0},
-          frameCount{0},
-          validate{false},
-          use_break{false},
-          suppress_popups{false},
-          current_buffer{0},
-          queue_family_count{0} {
+      prepared{false},
+      use_staging_buffer{false},
+      use_xlib{false},
+      graphics_queue_family_index{0},
+      present_queue_family_index{0},
+      enabled_extension_count{0},
+      enabled_layer_count{0},
+      width{0},
+      height{0},
+      swapchainImageCount{0},
+      frame_index{0},
+      spin_angle{0.0f},
+      spin_increment{0.0f},
+      pause{false},
+      quit{false},
+      curFrame{0},
+      frameCount{0},
+      validate{false},
+      use_break{false},
+      suppress_popups{false},
+      current_buffer{0},
+      queue_family_count{0} {
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
         memset(name, '\0', APP_NAME_STR_LEN);
 #endif
@@ -283,9 +557,9 @@ struct Demo {
         memset(model_matrix, 0, sizeof(model_matrix));
     }
 
-    void build_image_ownership_cmd(uint32_t const &i) {
+    void Demo::build_image_ownership_cmd(uint32_t const &i) {
         auto const cmd_buf_info = vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eSimultaneousUse);
-        auto result = buffers[i].graphics_to_present_cmd.begin(&cmd_buf_info);
+        auto result = swapchain_image_resources[i].graphics_to_present_cmd.begin(&cmd_buf_info);
         VERIFY(result == vk::Result::eSuccess);
 
         auto const image_ownership_barrier =
@@ -296,19 +570,19 @@ struct Demo {
                 .setNewLayout(vk::ImageLayout::ePresentSrcKHR)
                 .setSrcQueueFamilyIndex(graphics_queue_family_index)
                 .setDstQueueFamilyIndex(present_queue_family_index)
-                .setImage(buffers[i].image)
+                .setImage(swapchain_image_resources[i].image)
                 .setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
 
-        buffers[i].graphics_to_present_cmd.pipelineBarrier(
+        swapchain_image_resources[i].graphics_to_present_cmd.pipelineBarrier(
             vk::PipelineStageFlagBits::eColorAttachmentOutput, vk::PipelineStageFlagBits::eColorAttachmentOutput,
             vk::DependencyFlagBits(), 0, nullptr, 0, nullptr, 1, &image_ownership_barrier);
 
-        result = buffers[i].graphics_to_present_cmd.end();
+        result = swapchain_image_resources[i].graphics_to_present_cmd.end();
         VERIFY(result == vk::Result::eSuccess);
     }
 
-    vk::Bool32 check_layers(uint32_t check_count, char const *const *const check_names, uint32_t layer_count,
-                            vk::LayerProperties *layers) {
+    vk::Bool32 Demo::check_layers(uint32_t check_count, char const *const *const check_names, uint32_t layer_count,
+                                  vk::LayerProperties *layers) {
         for (uint32_t i = 0; i < check_count; i++) {
             vk::Bool32 found = VK_FALSE;
             for (uint32_t j = 0; j < layer_count; j++) {
@@ -325,7 +599,7 @@ struct Demo {
         return VK_TRUE;
     }
 
-    void cleanup() {
+    void Demo::cleanup() {
         prepared = false;
         device.waitIdle();
 
@@ -341,7 +615,7 @@ struct Demo {
         }
 
         for (uint32_t i = 0; i < swapchainImageCount; i++) {
-            device.destroyFramebuffer(framebuffers[i], nullptr);
+            device.destroyFramebuffer(swapchain_image_resources[i].framebuffer, nullptr);
         }
         device.destroyDescriptorPool(desc_pool, nullptr);
 
@@ -363,12 +637,11 @@ struct Demo {
         device.destroyImage(depth.image, nullptr);
         device.freeMemory(depth.mem, nullptr);
 
-        device.destroyBuffer(uniform_data.buf, nullptr);
-        device.freeMemory(uniform_data.mem, nullptr);
-
         for (uint32_t i = 0; i < swapchainImageCount; i++) {
-            device.destroyImageView(buffers[i].view, nullptr);
-            device.freeCommandBuffers(cmd_pool, 1, &buffers[i].cmd);
+            device.destroyImageView(swapchain_image_resources[i].view, nullptr);
+            device.freeCommandBuffers(cmd_pool, 1, &swapchain_image_resources[i].cmd);
+            device.destroyBuffer(swapchain_image_resources[i].uniform_buffer, nullptr);
+            device.freeMemory(swapchain_image_resources[i].uniform_memory, nullptr);
         }
 
         device.destroyCommandPool(cmd_pool, nullptr);
@@ -379,7 +652,6 @@ struct Demo {
         device.waitIdle();
         device.destroy(nullptr);
         inst.destroySurfaceKHR(surface, nullptr);
-        inst.destroy(nullptr);
 
 #if defined(VK_USE_PLATFORM_XLIB_KHR)
         XDestroyWindow(display, xlib_window);
@@ -389,6 +661,9 @@ struct Demo {
         xcb_disconnect(connection);
         free(atom_wm_delete_window);
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
+        wl_keyboard_destroy(keyboard);
+        wl_pointer_destroy(pointer);
+        wl_seat_destroy(seat);
         wl_shell_surface_destroy(shell_surface);
         wl_surface_destroy(window);
         wl_shell_destroy(shell);
@@ -397,9 +672,11 @@ struct Demo {
         wl_display_disconnect(display);
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
 #endif
+
+        inst.destroy(nullptr);
     }
 
-    void create_device() {
+    void Demo::create_device() {
         float const priorities[1] = {0.0};
 
         vk::DeviceQueueCreateInfo queues[2];
@@ -427,35 +704,35 @@ struct Demo {
         VERIFY(result == vk::Result::eSuccess);
     }
 
-    void destroy_texture_image(texture_object *tex_objs) {
+    void Demo::destroy_texture_image(texture_object *tex_objs) {
         // clean up staging resources
         device.freeMemory(tex_objs->mem, nullptr);
         device.destroyImage(tex_objs->image, nullptr);
     }
 
-    void draw() {
+    void Demo::draw() {
         // Ensure no more than FRAME_LAG renderings are outstanding
         device.waitForFences(1, &fences[frame_index], VK_TRUE, UINT64_MAX);
         device.resetFences(1, &fences[frame_index]);
 
-        // Get the index of the next available swapchain image:
-        auto result = device.acquireNextImageKHR(swapchain, UINT64_MAX, image_acquired_semaphores[frame_index],
-                                                 vk::Fence(), &current_buffer);
-        if (result == vk::Result::eErrorOutOfDateKHR) {
-            // swapchain is out of date (e.g. the window was resized) and
-            // must be recreated:
-            frame_index += 1;
-            frame_index %= FRAME_LAG;
+        vk::Result result;
+        do {
+            result = device.acquireNextImageKHR(swapchain, UINT64_MAX, image_acquired_semaphores[frame_index],
+                    vk::Fence(), &current_buffer);
+            if (result == vk::Result::eErrorOutOfDateKHR) {
+                // demo->swapchain is out of date (e.g. the window was resized) and
+                // must be recreated:
+                resize();
+            } else if (result == vk::Result::eSuboptimalKHR) {
+                // swapchain is not as optimal as it could be, but the platform's
+                // presentation engine will still present the image correctly.
+                break;
+            } else {
+                VERIFY(result == vk::Result::eSuccess);
+            }
+        } while (result != vk::Result::eSuccess);
 
-            resize();
-            draw();
-            return;
-        } else if (result == vk::Result::eSuboptimalKHR) {
-            // swapchain is not as optimal as it could be, but the platform's
-            // presentation engine will still present the image correctly.
-        } else {
-            VERIFY(result == vk::Result::eSuccess);
-        }
+        update_data_buffer();
 
         // Wait for the image acquired semaphore to be signaled to ensure
         // that the image won't be rendered to until the presentation
@@ -467,7 +744,7 @@ struct Demo {
                                      .setWaitSemaphoreCount(1)
                                      .setPWaitSemaphores(&image_acquired_semaphores[frame_index])
                                      .setCommandBufferCount(1)
-                                     .setPCommandBuffers(&buffers[current_buffer].cmd)
+                                     .setPCommandBuffers(&swapchain_image_resources[current_buffer].cmd)
                                      .setSignalSemaphoreCount(1)
                                      .setPSignalSemaphores(&draw_complete_semaphores[frame_index]);
 
@@ -484,7 +761,7 @@ struct Demo {
                                                  .setWaitSemaphoreCount(1)
                                                  .setPWaitSemaphores(&draw_complete_semaphores[frame_index])
                                                  .setCommandBufferCount(1)
-                                                 .setPCommandBuffers(&buffers[current_buffer].graphics_to_present_cmd)
+                                                 .setPCommandBuffers(&swapchain_image_resources[current_buffer].graphics_to_present_cmd)
                                                  .setSignalSemaphoreCount(1)
                                                  .setPSignalSemaphores(&image_ownership_semaphores[frame_index]);
 
@@ -517,7 +794,7 @@ struct Demo {
         }
     }
 
-    void draw_build_cmd(vk::CommandBuffer commandBuffer) {
+    void Demo::draw_build_cmd(vk::CommandBuffer commandBuffer) {
         auto const commandInfo = vk::CommandBufferBeginInfo().setFlags(vk::CommandBufferUsageFlagBits::eSimultaneousUse);
 
         vk::ClearValue const clearValues[2] = {vk::ClearColorValue(std::array<float, 4>({{0.2f, 0.2f, 0.2f, 0.2f}})),
@@ -525,7 +802,7 @@ struct Demo {
 
         auto const passInfo = vk::RenderPassBeginInfo()
                                   .setRenderPass(render_pass)
-                                  .setFramebuffer(framebuffers[current_buffer])
+                                  .setFramebuffer(swapchain_image_resources[current_buffer].framebuffer)
                                   .setRenderArea(vk::Rect2D(vk::Offset2D(0, 0), vk::Extent2D((uint32_t)width, (uint32_t)height)))
                                   .setClearValueCount(2)
                                   .setPClearValues(clearValues);
@@ -535,7 +812,7 @@ struct Demo {
 
         commandBuffer.beginRenderPass(&passInfo, vk::SubpassContents::eInline);
         commandBuffer.bindPipeline(vk::PipelineBindPoint::eGraphics, pipeline);
-        commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipeline_layout, 0, 1, &desc_set, 0, nullptr);
+        commandBuffer.bindDescriptorSets(vk::PipelineBindPoint::eGraphics, pipeline_layout, 0, 1, &swapchain_image_resources[current_buffer].descriptor_set, 0, nullptr);
 
         auto const viewport =
             vk::Viewport().setWidth((float)width).setHeight((float)height).setMinDepth((float)0.0f).setMaxDepth((float)1.0f);
@@ -566,7 +843,7 @@ struct Demo {
                     .setNewLayout(vk::ImageLayout::ePresentSrcKHR)
                     .setSrcQueueFamilyIndex(graphics_queue_family_index)
                     .setDstQueueFamilyIndex(present_queue_family_index)
-                    .setImage(buffers[current_buffer].image)
+                    .setImage(swapchain_image_resources[current_buffer].image)
                     .setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
 
             commandBuffer.pipelineBarrier(vk::PipelineStageFlagBits::eColorAttachmentOutput,
@@ -578,7 +855,7 @@ struct Demo {
         VERIFY(result == vk::Result::eSuccess);
     }
 
-    void flush_init_cmd() {
+    void Demo::flush_init_cmd() {
         // TODO: hmm.
         // This function could get called twice if the texture uses a staging
         // buffer
@@ -592,7 +869,8 @@ struct Demo {
 
         auto const fenceInfo = vk::FenceCreateInfo();
         vk::Fence fence;
-        device.createFence(&fenceInfo, nullptr, &fence);
+        result = device.createFence(&fenceInfo, nullptr, &fence);
+        VERIFY(result == vk::Result::eSuccess);
 
         vk::CommandBuffer const commandBuffers[] = {cmd};
         auto const submitInfo = vk::SubmitInfo().setCommandBufferCount(1).setPCommandBuffers(commandBuffers);
@@ -609,7 +887,7 @@ struct Demo {
         cmd = vk::CommandBuffer();
     }
 
-    void init(int argc, char **argv) {
+    void Demo::init(int argc, char **argv) {
         vec3 eye = {0.0f, 3.0f, 5.0f};
         vec3 origin = {0, 0, 0};
         vec3 up = {0.0f, 1.0f, 0.0};
@@ -683,7 +961,7 @@ struct Demo {
         projection_matrix[1][1] *= -1;  // Flip projection matrix from GL to Vulkan orientation.
     }
 
-    void init_connection() {
+    void Demo::init_connection() {
 #if defined(VK_USE_PLATFORM_XCB_KHR)
         const xcb_setup_t *setup;
         xcb_screen_iterator_t iter;
@@ -721,7 +999,7 @@ struct Demo {
 #endif
     }
 
-    void init_vk() {
+    void Demo::init_vk() {
         uint32_t instance_extension_count = 0;
         uint32_t instance_layer_count = 0;
         uint32_t validation_layer_count = 0;
@@ -732,8 +1010,8 @@ struct Demo {
         char const *const instance_validation_layers_alt1[] = {"VK_LAYER_LUNARG_standard_validation"};
 
         char const *const instance_validation_layers_alt2[] = {
-            "VK_LAYER_GOOGLE_threading",     "VK_LAYER_LUNARG_parameter_validation", "VK_LAYER_LUNARG_object_tracker",
-            "VK_LAYER_LUNARG_core_validation",      "VK_LAYER_LUNARG_swapchain", "VK_LAYER_GOOGLE_unique_objects"};
+            "VK_LAYER_GOOGLE_threading", "VK_LAYER_LUNARG_parameter_validation", "VK_LAYER_LUNARG_object_tracker",
+            "VK_LAYER_LUNARG_core_validation", "VK_LAYER_GOOGLE_unique_objects"};
 
         // Look for validation layers
         vk::Bool32 validation_found = VK_FALSE;
@@ -816,11 +1094,9 @@ struct Demo {
                 }
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
 #elif defined(VK_USE_PLATFORM_DISPLAY_KHR)
-                if (!strcmp(VK_KHR_DISPLAY_EXTENSION_NAME,
-                            instance_extensions[i].extensionName)) {
+                if (!strcmp(VK_KHR_DISPLAY_EXTENSION_NAME, instance_extensions[i].extensionName)) {
                     platformSurfaceExtFound = 1;
-                    extension_names[enabled_extension_count++] =
-                        VK_KHR_DISPLAY_EXTENSION_NAME;
+                    extension_names[enabled_extension_count++] = VK_KHR_DISPLAY_EXTENSION_NAME;
                 }
 
 #endif
@@ -883,13 +1159,15 @@ struct Demo {
                 "information.\n",
                 "vkCreateInstance Failure");
 #elif defined(VK_USE_PLATFORM_DISPLAY_KHR)
-            ERR_EXIT("vkEnumerateInstanceExtensionProperties failed to find "
-                     "the " VK_KHR_DISPLAY_EXTENSION_NAME " extension.\n\n"
-                     "Do you have a compatible Vulkan installable client "
-                     "driver (ICD) installed?\n"
-                     "Please look at the Getting Started guide for additional "
-                     "information.\n",
-                     "vkCreateInstance Failure");
+            ERR_EXIT(
+                "vkEnumerateInstanceExtensionProperties failed to find "
+                "the " VK_KHR_DISPLAY_EXTENSION_NAME
+                " extension.\n\n"
+                "Do you have a compatible Vulkan installable client "
+                "driver (ICD) installed?\n"
+                "Please look at the Getting Started guide for additional "
+                "information.\n",
+                "vkCreateInstance Failure");
 #endif
         }
         auto const app = vk::ApplicationInfo()
@@ -1002,8 +1280,8 @@ struct Demo {
         gpu.getFeatures(&physDevFeatures);
     }
 
-    void init_vk_swapchain() {
-// Create a WSI surface for the window:
+    void Demo::init_vk_swapchain() {
+    // Create a WSI surface for the window:
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
         {
             auto const createInfo = vk::Win32SurfaceCreateInfoKHR().setHinstance(connection).setHwnd(window);
@@ -1122,7 +1400,9 @@ struct Demo {
         // ahead of the image presents
         auto const fence_ci = vk::FenceCreateInfo().setFlags(vk::FenceCreateFlagBits::eSignaled);
         for (uint32_t i = 0; i < FRAME_LAG; i++) {
-            device.createFence(&fence_ci, nullptr, &fences[i]);
+            result = device.createFence(&fence_ci, nullptr, &fences[i]);
+            VERIFY(result == vk::Result::eSuccess);
+
             result = device.createSemaphore(&semaphoreCreateInfo, nullptr, &image_acquired_semaphores[i]);
             VERIFY(result == vk::Result::eSuccess);
 
@@ -1140,7 +1420,7 @@ struct Demo {
         gpu.getMemoryProperties(&memory_properties);
     }
 
-    void prepare() {
+    void Demo::prepare() {
         auto const cmd_pool_info = vk::CommandPoolCreateInfo().setQueueFamilyIndex(graphics_queue_family_index);
         auto result = device.createCommandPool(&cmd_pool_info, nullptr, &cmd_pool);
         VERIFY(result == vk::Result::eSuccess);
@@ -1161,14 +1441,14 @@ struct Demo {
         prepare_buffers();
         prepare_depth();
         prepare_textures();
-        prepare_cube_data_buffer();
+        prepare_cube_data_buffers();
 
         prepare_descriptor_layout();
         prepare_render_pass();
         prepare_pipeline();
 
         for (uint32_t i = 0; i < swapchainImageCount; ++i) {
-            result = device.allocateCommandBuffers(&cmd, &buffers[i].cmd);
+            result = device.allocateCommandBuffers(&cmd, &swapchain_image_resources[i].cmd);
             VERIFY(result == vk::Result::eSuccess);
         }
 
@@ -1184,7 +1464,7 @@ struct Demo {
                                          .setCommandBufferCount(1);
 
             for (uint32_t i = 0; i < swapchainImageCount; i++) {
-                result = device.allocateCommandBuffers(&present_cmd, &buffers[i].graphics_to_present_cmd);
+                result = device.allocateCommandBuffers(&present_cmd, &swapchain_image_resources[i].graphics_to_present_cmd);
                 VERIFY(result == vk::Result::eSuccess);
 
                 build_image_ownership_cmd(i);
@@ -1198,7 +1478,7 @@ struct Demo {
 
         for (uint32_t i = 0; i < swapchainImageCount; ++i) {
             current_buffer = i;
-            draw_build_cmd(buffers[i].cmd);
+            draw_build_cmd(swapchain_image_resources[i].cmd);
         }
 
         /*
@@ -1214,7 +1494,7 @@ struct Demo {
         prepared = true;
     }
 
-    void prepare_buffers() {
+    void Demo::prepare_buffers() {
         vk::SwapchainKHR oldSwapchain = swapchain;
 
         // Check the surface capabilities and formats
@@ -1293,17 +1573,20 @@ struct Demo {
             ERR_EXIT("Present mode specified is not supported\n", "Present mode unsupported");
         }
 
-        // Determine the number of VkImage's to use in the swap chain (we desire
-        // to
-        // own only 1 image at a time, besides the images being displayed and
-        // queued for display):
-        uint32_t desiredNumberOfSwapchainImages = surfCapabilities.minImageCount + 1;
+        // Determine the number of VkImages to use in the swap chain.
+        // Application desires to acquire 3 images at a time for triple
+        // buffering
+        uint32_t desiredNumOfSwapchainImages = 3;
+        if (desiredNumOfSwapchainImages < surfCapabilities.minImageCount) {
+            desiredNumOfSwapchainImages = surfCapabilities.minImageCount;
+        }
+
         // If maxImageCount is 0, we can ask for as many images as we want,
         // otherwise
         // we're limited to maxImageCount
-        if ((surfCapabilities.maxImageCount > 0) && (desiredNumberOfSwapchainImages > surfCapabilities.maxImageCount)) {
+        if ((surfCapabilities.maxImageCount > 0) && (desiredNumOfSwapchainImages > surfCapabilities.maxImageCount)) {
             // Application must settle for fewer images than desired:
-            desiredNumberOfSwapchainImages = surfCapabilities.maxImageCount;
+            desiredNumOfSwapchainImages = surfCapabilities.maxImageCount;
         }
 
         vk::SurfaceTransformFlagBitsKHR preTransform;
@@ -1313,9 +1596,24 @@ struct Demo {
             preTransform = surfCapabilities.currentTransform;
         }
 
+        // Find a supported composite alpha mode - one of these is guaranteed to be set
+        vk::CompositeAlphaFlagBitsKHR compositeAlpha = vk::CompositeAlphaFlagBitsKHR::eOpaque;
+        vk::CompositeAlphaFlagBitsKHR compositeAlphaFlags[4] = {
+            vk::CompositeAlphaFlagBitsKHR::eOpaque,
+            vk::CompositeAlphaFlagBitsKHR::ePreMultiplied,
+            vk::CompositeAlphaFlagBitsKHR::ePostMultiplied,
+            vk::CompositeAlphaFlagBitsKHR::eInherit,
+        };
+        for (uint32_t i = 0; i < sizeof(compositeAlphaFlags); i++) {
+            if (surfCapabilities.supportedCompositeAlpha & compositeAlphaFlags[i]) {
+                compositeAlpha = compositeAlphaFlags[i];
+                break;
+            }
+        }
+
         auto const swapchain_ci = vk::SwapchainCreateInfoKHR()
                                       .setSurface(surface)
-                                      .setMinImageCount(desiredNumberOfSwapchainImages)
+                                      .setMinImageCount(desiredNumOfSwapchainImages)
                                       .setImageFormat(format)
                                       .setImageColorSpace(color_space)
                                       .setImageExtent({swapchainExtent.width, swapchainExtent.height})
@@ -1325,7 +1623,7 @@ struct Demo {
                                       .setQueueFamilyIndexCount(0)
                                       .setPQueueFamilyIndices(nullptr)
                                       .setPreTransform(preTransform)
-                                      .setCompositeAlpha(vk::CompositeAlphaFlagBitsKHR::eOpaque)
+                                      .setCompositeAlpha(compositeAlpha)
                                       .setPresentMode(swapchainPresentMode)
                                       .setClipped(true)
                                       .setOldSwapchain(oldSwapchain);
@@ -1339,9 +1637,6 @@ struct Demo {
         // Note: destroying the swapchain also cleans up all its associated
         // presentable images once the platform is done with them.
         if (oldSwapchain) {
-            // AMD driver times out waiting on fences used in AcquireNextImage on
-            // a swapchain that is subsequently destroyed before the wait.
-            device.waitForFences(FRAME_LAG, fences, VK_TRUE, UINT64_MAX);
             device.destroySwapchainKHR(oldSwapchain, nullptr);
         }
 
@@ -1352,24 +1647,25 @@ struct Demo {
         result = device.getSwapchainImagesKHR(swapchain, &swapchainImageCount, swapchainImages.get());
         VERIFY(result == vk::Result::eSuccess);
 
-        buffers.reset(new SwapchainBuffers[swapchainImageCount]);
+        swapchain_image_resources.reset(new SwapchainImageResources[swapchainImageCount]);
 
         for (uint32_t i = 0; i < swapchainImageCount; ++i) {
-            auto const color_image_view =
+            auto color_image_view =
                 vk::ImageViewCreateInfo()
-                    .setImage(swapchainImages[i])
                     .setViewType(vk::ImageViewType::e2D)
                     .setFormat(format)
                     .setSubresourceRange(vk::ImageSubresourceRange(vk::ImageAspectFlagBits::eColor, 0, 1, 0, 1));
 
-            buffers[i].image = swapchainImages[i];
+            swapchain_image_resources[i].image = swapchainImages[i];
 
-            result = device.createImageView(&color_image_view, nullptr, &buffers[i].view);
+            color_image_view.image = swapchain_image_resources[i].image;
+
+            result = device.createImageView(&color_image_view, nullptr, &swapchain_image_resources[i].view);
             VERIFY(result == vk::Result::eSuccess);
         }
     }
 
-    void prepare_cube_data_buffer() {
+    void Demo::prepare_cube_data_buffers() {
         mat4x4 VP;
         mat4x4_mul(VP, projection_matrix, view_matrix);
 
@@ -1379,6 +1675,7 @@ struct Demo {
         vktexcube_vs_uniform data;
         memcpy(data.mvp, MVP, sizeof(MVP));
         //    dumpMatrix("MVP", MVP)
+
         for (int32_t i = 0; i < 12 * 3; i++) {
             data.position[i][0] = g_vertex_buffer_data[i * 3];
             data.position[i][1] = g_vertex_buffer_data[i * 3 + 1];
@@ -1391,39 +1688,37 @@ struct Demo {
         }
 
         auto const buf_info = vk::BufferCreateInfo().setSize(sizeof(data)).setUsage(vk::BufferUsageFlagBits::eUniformBuffer);
-        auto result = device.createBuffer(&buf_info, nullptr, &uniform_data.buf);
-        VERIFY(result == vk::Result::eSuccess);
 
-        vk::MemoryRequirements mem_reqs;
-        device.getBufferMemoryRequirements(uniform_data.buf, &mem_reqs);
+        for (unsigned int i = 0; i < swapchainImageCount; i++) {
+            auto result = device.createBuffer(&buf_info, nullptr, &swapchain_image_resources[i].uniform_buffer);
+            VERIFY(result == vk::Result::eSuccess);
 
-        uniform_data.mem_alloc.setAllocationSize(mem_reqs.size);
-        uniform_data.mem_alloc.setMemoryTypeIndex(0);
+            vk::MemoryRequirements mem_reqs;
+            device.getBufferMemoryRequirements(swapchain_image_resources[i].uniform_buffer, &mem_reqs);
 
-        bool const pass = memory_type_from_properties(
-            mem_reqs.memoryTypeBits, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
-            &uniform_data.mem_alloc.memoryTypeIndex);
-        VERIFY(pass);
+            auto mem_alloc = vk::MemoryAllocateInfo().setAllocationSize(mem_reqs.size).setMemoryTypeIndex(0);
 
-        result = device.allocateMemory(&uniform_data.mem_alloc, nullptr, &(uniform_data.mem));
-        VERIFY(result == vk::Result::eSuccess);
+            bool const pass = memory_type_from_properties(
+                mem_reqs.memoryTypeBits, vk::MemoryPropertyFlagBits::eHostVisible | vk::MemoryPropertyFlagBits::eHostCoherent,
+                &mem_alloc.memoryTypeIndex);
+            VERIFY(pass);
 
-        auto pData = device.mapMemory(uniform_data.mem, 0, uniform_data.mem_alloc.allocationSize, vk::MemoryMapFlags());
-        VERIFY(pData.result == vk::Result::eSuccess);
+            result = device.allocateMemory(&mem_alloc, nullptr, &swapchain_image_resources[i].uniform_memory);
+            VERIFY(result == vk::Result::eSuccess);
 
-        memcpy(pData.value, &data, sizeof data);
+            auto pData = device.mapMemory(swapchain_image_resources[i].uniform_memory, 0, VK_WHOLE_SIZE, vk::MemoryMapFlags());
+            VERIFY(pData.result == vk::Result::eSuccess);
 
-        device.unmapMemory(uniform_data.mem);
+            memcpy(pData.value, &data, sizeof data);
 
-        result = device.bindBufferMemory(uniform_data.buf, uniform_data.mem, 0);
-        VERIFY(result == vk::Result::eSuccess);
+            device.unmapMemory(swapchain_image_resources[i].uniform_memory);
 
-        uniform_data.buffer_info.buffer = uniform_data.buf;
-        uniform_data.buffer_info.offset = 0;
-        uniform_data.buffer_info.range = sizeof(data);
+            result = device.bindBufferMemory(swapchain_image_resources[i].uniform_buffer, swapchain_image_resources[i].uniform_memory, 0);
+            VERIFY(result == vk::Result::eSuccess);
+        }
     }
 
-    void prepare_depth() {
+    void Demo::prepare_depth() {
         depth.format = vk::Format::eD16Unorm;
 
         auto const image = vk::ImageCreateInfo()
@@ -1468,7 +1763,7 @@ struct Demo {
         VERIFY(result == vk::Result::eSuccess);
     }
 
-    void prepare_descriptor_layout() {
+    void Demo::prepare_descriptor_layout() {
         vk::DescriptorSetLayoutBinding const layout_bindings[2] = {vk::DescriptorSetLayoutBinding()
                                                                        .setBinding(0)
                                                                        .setDescriptorType(vk::DescriptorType::eUniformBuffer)
@@ -1493,22 +1788,22 @@ struct Demo {
         VERIFY(result == vk::Result::eSuccess);
     }
 
-    void prepare_descriptor_pool() {
+    void Demo::prepare_descriptor_pool() {
         vk::DescriptorPoolSize const poolSizes[2] = {
-            vk::DescriptorPoolSize().setType(vk::DescriptorType::eUniformBuffer).setDescriptorCount(1),
-            vk::DescriptorPoolSize().setType(vk::DescriptorType::eCombinedImageSampler).setDescriptorCount(texture_count)};
+            vk::DescriptorPoolSize().setType(vk::DescriptorType::eUniformBuffer).setDescriptorCount(swapchainImageCount),
+            vk::DescriptorPoolSize().setType(vk::DescriptorType::eCombinedImageSampler).setDescriptorCount(swapchainImageCount * texture_count)};
 
-        auto const descriptor_pool = vk::DescriptorPoolCreateInfo().setMaxSets(1).setPoolSizeCount(2).setPPoolSizes(poolSizes);
+        auto const descriptor_pool = vk::DescriptorPoolCreateInfo().setMaxSets(swapchainImageCount).setPoolSizeCount(2).setPPoolSizes(poolSizes);
 
         auto result = device.createDescriptorPool(&descriptor_pool, nullptr, &desc_pool);
         VERIFY(result == vk::Result::eSuccess);
     }
 
-    void prepare_descriptor_set() {
+    void Demo::prepare_descriptor_set() {
         auto const alloc_info =
             vk::DescriptorSetAllocateInfo().setDescriptorPool(desc_pool).setDescriptorSetCount(1).setPSetLayouts(&desc_layout);
-        auto result = device.allocateDescriptorSets(&alloc_info, &desc_set);
-        VERIFY(result == vk::Result::eSuccess);
+
+        auto buffer_info = vk::DescriptorBufferInfo().setOffset(0).setRange(sizeof(struct vktexcube_vs_uniform));
 
         vk::DescriptorImageInfo tex_descs[texture_count];
         for (uint32_t i = 0; i < texture_count; i++) {
@@ -1519,21 +1814,27 @@ struct Demo {
 
         vk::WriteDescriptorSet writes[2];
 
-        writes[0].setDstSet(desc_set);
         writes[0].setDescriptorCount(1);
         writes[0].setDescriptorType(vk::DescriptorType::eUniformBuffer);
-        writes[0].setPBufferInfo(&uniform_data.buffer_info);
+        writes[0].setPBufferInfo(&buffer_info);
 
-        writes[1].setDstSet(desc_set);
         writes[1].setDstBinding(1);
         writes[1].setDescriptorCount(texture_count);
         writes[1].setDescriptorType(vk::DescriptorType::eCombinedImageSampler);
         writes[1].setPImageInfo(tex_descs);
 
-        device.updateDescriptorSets(2, writes, 0, nullptr);
+        for (unsigned int i = 0; i < swapchainImageCount; i++) {
+            auto result = device.allocateDescriptorSets(&alloc_info, &swapchain_image_resources[i].descriptor_set);
+            VERIFY(result == vk::Result::eSuccess);
+
+            buffer_info.setBuffer(swapchain_image_resources[i].uniform_buffer);
+            writes[0].setDstSet(swapchain_image_resources[i].descriptor_set);
+            writes[1].setDstSet(swapchain_image_resources[i].descriptor_set);
+            device.updateDescriptorSets(2, writes, 0, nullptr);
+        }
     }
 
-    void prepare_framebuffers() {
+    void Demo::prepare_framebuffers() {
         vk::ImageView attachments[2];
         attachments[1] = depth.view;
 
@@ -1545,16 +1846,14 @@ struct Demo {
                                  .setHeight((uint32_t)height)
                                  .setLayers(1);
 
-        framebuffers.reset(new vk::Framebuffer[swapchainImageCount]);
-
         for (uint32_t i = 0; i < swapchainImageCount; i++) {
-            attachments[0] = buffers[i].view;
-            auto const result = device.createFramebuffer(&fb_info, nullptr, &framebuffers[i]);
+            attachments[0] = swapchain_image_resources[i].view;
+            auto const result = device.createFramebuffer(&fb_info, nullptr, &swapchain_image_resources[i].framebuffer);
             VERIFY(result == vk::Result::eSuccess);
         }
     }
 
-    vk::ShaderModule prepare_fs() {
+    vk::ShaderModule Demo::prepare_fs() {
         size_t size = 0;
         void *fragShaderCode = read_spv("cube-frag.spv", &size);
         if (!fragShaderCode) {
@@ -1568,7 +1867,7 @@ struct Demo {
         return frag_shader_module;
     }
 
-    void prepare_pipeline() {
+    void Demo::prepare_pipeline() {
         vk::PipelineCacheCreateInfo const pipelineCacheInfo;
         auto result = device.createPipelineCache(&pipelineCacheInfo, nullptr, &pipelineCache);
         VERIFY(result == vk::Result::eSuccess);
@@ -1645,7 +1944,7 @@ struct Demo {
         device.destroyShaderModule(vert_shader_module, nullptr);
     }
 
-    void prepare_render_pass() {
+    void Demo::prepare_render_pass() {
         // The initial layout for the color and depth attachments will be LAYOUT_UNDEFINED
         // because at the start of the renderpass, we don't care about their contents.
         // At the start of the subpass, the color attachment's layout will be transitioned
@@ -1701,7 +2000,7 @@ struct Demo {
         VERIFY(result == vk::Result::eSuccess);
     }
 
-    vk::ShaderModule prepare_shader_module(const void *code, size_t size) {
+    vk::ShaderModule Demo::prepare_shader_module(const void *code, size_t size) {
         auto const moduleCreateInfo = vk::ShaderModuleCreateInfo().setCodeSize(size).setPCode((uint32_t const *)code);
 
         vk::ShaderModule module;
@@ -1711,8 +2010,8 @@ struct Demo {
         return module;
     }
 
-    void prepare_texture_image(const char *filename, texture_object *tex_obj, vk::ImageTiling tiling, vk::ImageUsageFlags usage,
-                               vk::MemoryPropertyFlags required_props) {
+    void Demo::prepare_texture_image(const char *filename, texture_object *tex_obj, vk::ImageTiling tiling,
+                                     vk::ImageUsageFlags usage, vk::MemoryPropertyFlags required_props) {
         int32_t tex_width;
         int32_t tex_height;
         if (!loadTexture(filename, nullptr, nullptr, &tex_width, &tex_height)) {
@@ -1773,7 +2072,7 @@ struct Demo {
         tex_obj->imageLayout = vk::ImageLayout::eShaderReadOnlyOptimal;
     }
 
-    void prepare_textures() {
+    void Demo::prepare_textures() {
         vk::Format const tex_format = vk::Format::eR8G8B8A8Unorm;
         vk::FormatProperties props;
         gpu.getFormatProperties(tex_format, &props);
@@ -1863,7 +2162,7 @@ struct Demo {
         }
     }
 
-    vk::ShaderModule prepare_vs() {
+    vk::ShaderModule Demo::prepare_vs() {
         size_t size = 0;
         void *vertShaderCode = read_spv("cube-vert.spv", &size);
         if (!vertShaderCode) {
@@ -1877,7 +2176,7 @@ struct Demo {
         return vert_shader_module;
     }
 
-    char *read_spv(const char *filename, size_t *psize) {
+    char *Demo::read_spv(const char *filename, size_t *psize) {
         FILE *fp = fopen(filename, "rb");
         if (!fp) {
             return nullptr;
@@ -1899,7 +2198,7 @@ struct Demo {
         return (char *)shader_code;
     }
 
-    void resize() {
+    void Demo::resize() {
         uint32_t i;
 
         // Don't react to resize until after first initialization.
@@ -1917,7 +2216,7 @@ struct Demo {
         VERIFY(result == vk::Result::eSuccess);
 
         for (i = 0; i < swapchainImageCount; i++) {
-            device.destroyFramebuffer(framebuffers[i], nullptr);
+            device.destroyFramebuffer(swapchain_image_resources[i].framebuffer, nullptr);
         }
 
         device.destroyDescriptorPool(desc_pool, nullptr);
@@ -1939,12 +2238,11 @@ struct Demo {
         device.destroyImage(depth.image, nullptr);
         device.freeMemory(depth.mem, nullptr);
 
-        device.destroyBuffer(uniform_data.buf, nullptr);
-        device.freeMemory(uniform_data.mem, nullptr);
-
         for (i = 0; i < swapchainImageCount; i++) {
-            device.destroyImageView(buffers[i].view, nullptr);
-            device.freeCommandBuffers(cmd_pool, 1, &buffers[i].cmd);
+            device.destroyImageView(swapchain_image_resources[i].view, nullptr);
+            device.freeCommandBuffers(cmd_pool, 1, &swapchain_image_resources[i].cmd);
+            device.destroyBuffer(swapchain_image_resources[i].uniform_buffer, nullptr);
+            device.freeMemory(swapchain_image_resources[i].uniform_memory, nullptr);
         }
 
         device.destroyCommandPool(cmd_pool, nullptr);
@@ -1957,8 +2255,9 @@ struct Demo {
         prepare();
     }
 
-    void set_image_layout(vk::Image image, vk::ImageAspectFlags aspectMask, vk::ImageLayout oldLayout, vk::ImageLayout newLayout,
-                          vk::AccessFlags srcAccessMask, vk::PipelineStageFlags src_stages, vk::PipelineStageFlags dest_stages) {
+    void Demo::set_image_layout(vk::Image image, vk::ImageAspectFlags aspectMask, vk::ImageLayout oldLayout,
+                                vk::ImageLayout newLayout, vk::AccessFlags srcAccessMask, vk::PipelineStageFlags src_stages,
+                                vk::PipelineStageFlags dest_stages) {
         assert(cmd);
 
         auto DstAccessMask = [](vk::ImageLayout const &layout) {
@@ -2006,7 +2305,7 @@ struct Demo {
         cmd.pipelineBarrier(src_stages, dest_stages, vk::DependencyFlagBits(), 0, nullptr, 0, nullptr, 1, &barrier);
     }
 
-    void update_data_buffer() {
+    void Demo::update_data_buffer() {
         mat4x4 VP;
         mat4x4_mul(VP, projection_matrix, view_matrix);
 
@@ -2018,15 +2317,16 @@ struct Demo {
         mat4x4 MVP;
         mat4x4_mul(MVP, VP, model_matrix);
 
-        auto data = device.mapMemory(uniform_data.mem, 0, uniform_data.mem_alloc.allocationSize, vk::MemoryMapFlags());
+        auto data = device.mapMemory(swapchain_image_resources[current_buffer].uniform_memory, 0, VK_WHOLE_SIZE, vk::MemoryMapFlags());
         VERIFY(data.result == vk::Result::eSuccess);
 
         memcpy(data.value, (const void *)&MVP[0][0], sizeof(MVP));
 
-        device.unmapMemory(uniform_data.mem);
+        device.unmapMemory(swapchain_image_resources[current_buffer].uniform_memory);
     }
 
-    bool loadTexture(const char *filename, uint8_t *rgba_data, vk::SubresourceLayout *layout, int32_t *width, int32_t *height) {
+    bool Demo::loadTexture(const char *filename, uint8_t *rgba_data, vk::SubresourceLayout *layout, int32_t *width,
+                           int32_t *height) {
         FILE *fPtr = fopen(filename, "rb");
         if (!fPtr) {
             return false;
@@ -2077,7 +2377,7 @@ struct Demo {
         return true;
     }
 
-    bool memory_type_from_properties(uint32_t typeBits, vk::MemoryPropertyFlags requirements_mask, uint32_t *typeIndex) {
+    bool Demo::memory_type_from_properties(uint32_t typeBits, vk::MemoryPropertyFlags requirements_mask, uint32_t *typeIndex) {
         // Search memtypes to find first index with those properties
         for (uint32_t i = 0; i < VK_MAX_MEMORY_TYPES; i++) {
             if ((typeBits & 1) == 1) {
@@ -2095,12 +2395,11 @@ struct Demo {
     }
 
 #if defined(VK_USE_PLATFORM_WIN32_KHR)
-    void run() {
+    void Demo::run() {
         if (!prepared) {
             return;
         }
 
-        update_data_buffer();
         draw();
         curFrame++;
 
@@ -2109,7 +2408,7 @@ struct Demo {
         }
     }
 
-    void create_window() {
+    void Demo::create_window() {
         WNDCLASSEX win_class;
 
         // Initialize the window class structure:
@@ -2164,7 +2463,7 @@ struct Demo {
     }
 #elif defined(VK_USE_PLATFORM_XLIB_KHR)
 
-    void create_xlib_window() {
+    void Demo::create_xlib_window() {
         XInitThreads();
         display = XOpenDisplay(nullptr);
         long visualMask = VisualScreenMask;
@@ -2191,7 +2490,7 @@ struct Demo {
         xlib_wm_delete_window = XInternAtom(display, "WM_DELETE_WINDOW", False);
     }
 
-    void handle_xlib_event(const XEvent *event) {
+    void Demo::handle_xlib_event(const XEvent *event) {
         switch (event->type) {
             case ClientMessage:
                 if ((Atom)event->xclient.data.l[0] == xlib_wm_delete_window) {
@@ -2226,7 +2525,7 @@ struct Demo {
         }
     }
 
-    void run_xlib() {
+    void Demo::run_xlib() {
         while (!quit) {
             XEvent event;
 
@@ -2239,7 +2538,6 @@ struct Demo {
                 handle_xlib_event(&event);
             }
 
-            update_data_buffer();
             draw();
             curFrame++;
 
@@ -2250,7 +2548,7 @@ struct Demo {
     }
 #elif defined(VK_USE_PLATFORM_XCB_KHR)
 
-    void handle_xcb_event(const xcb_generic_event_t *event) {
+    void Demo::handle_xcb_event(const xcb_generic_event_t *event) {
         uint8_t event_code = event->response_type & 0x7f;
         switch (event_code) {
             case XCB_EXPOSE:
@@ -2292,7 +2590,7 @@ struct Demo {
         }
     }
 
-    void run_xcb() {
+    void Demo::run_xcb() {
         xcb_flush(connection);
 
         while (!quit) {
@@ -2309,7 +2607,6 @@ struct Demo {
                 event = xcb_poll_for_event(connection);
             }
 
-            update_data_buffer();
             draw();
             curFrame++;
             if (frameCount != UINT32_MAX && curFrame == frameCount) {
@@ -2318,7 +2615,7 @@ struct Demo {
         }
     }
 
-    void create_xcb_window() {
+    void Demo::create_xcb_window() {
         uint32_t value_mask, value_list[32];
 
         xcb_window = xcb_generate_id(connection);
@@ -2351,18 +2648,23 @@ struct Demo {
     }
 #elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
 
-    void run() {
+    void Demo::run() {
         while (!quit) {
-            update_data_buffer();
-            draw();
-            curFrame++;
-            if (frameCount != UINT32_MAX && curFrame == frameCount) {
-                quit = true;
+            if (pause) {
+                wl_display_dispatch(display);
+            } else {
+                wl_display_dispatch_pending(display);
+                update_data_buffer();
+                draw();
+                curFrame++;
+                if (frameCount != UINT32_MAX && curFrame == frameCount) {
+                    quit = true;
+                }
             }
         }
     }
 
-    void create_window() {
+    void Demo::create_window() {
         window = wl_compositor_create_surface(compositor);
         if (!window) {
             printf("Can not create wayland_surface from compositor!\n");
@@ -2384,7 +2686,7 @@ struct Demo {
 #elif defined(VK_USE_PLATFORM_MIR_KHR)
 #elif defined(VK_USE_PLATFORM_DISPLAY_KHR)
 
-    vk::Result create_display_surface() {
+    vk::Result Demo::create_display_surface() {
         vk::Result result;
         uint32_t display_count;
         uint32_t mode_count;
@@ -2409,8 +2711,7 @@ struct Demo {
 
         display_count = 1;
         result = gpu.getDisplayPropertiesKHR(&display_count, &display_props);
-        VERIFY((result == vk::Result::eSuccess) ||
-               (result == vk::Result::eIncomplete));
+        VERIFY((result == vk::Result::eSuccess) || (result == vk::Result::eIncomplete));
 
         display = display_props.display;
 
@@ -2426,8 +2727,7 @@ struct Demo {
 
         mode_count = 1;
         result = gpu.getDisplayModePropertiesKHR(display, &mode_count, &mode_props);
-        VERIFY((result == vk::Result::eSuccess) ||
-               (result == vk::Result::eIncomplete));
+        VERIFY((result == vk::Result::eSuccess) || (result == vk::Result::eIncomplete));
 
         // Get the list of planes
         result = gpu.getDisplayPlanePropertiesKHR(&plane_count, nullptr);
@@ -2439,8 +2739,7 @@ struct Demo {
             exit(1);
         }
 
-        plane_props = (vk::DisplayPlanePropertiesKHR *)
-            malloc(sizeof(vk::DisplayPlanePropertiesKHR) * plane_count);
+        plane_props = (vk::DisplayPlanePropertiesKHR *)malloc(sizeof(vk::DisplayPlanePropertiesKHR) * plane_count);
         VERIFY(plane_props != nullptr);
 
         result = gpu.getDisplayPlanePropertiesKHR(&plane_count, plane_props);
@@ -2452,27 +2751,21 @@ struct Demo {
             vk::DisplayKHR *supported_displays;
 
             // Disqualify planes that are bound to a different display
-            if (plane_props[plane_index].currentDisplay &&
-                (plane_props[plane_index].currentDisplay != display)) {
+            if (plane_props[plane_index].currentDisplay && (plane_props[plane_index].currentDisplay != display)) {
                 continue;
             }
 
-            result = gpu.getDisplayPlaneSupportedDisplaysKHR(plane_index,
-                                                             &supported_count,
-                                                             nullptr);
+            result = gpu.getDisplayPlaneSupportedDisplaysKHR(plane_index, &supported_count, nullptr);
             VERIFY(result == vk::Result::eSuccess);
 
             if (supported_count == 0) {
                 continue;
             }
 
-            supported_displays = (vk::DisplayKHR *)
-                malloc(sizeof(vk::DisplayKHR) * supported_count);
+            supported_displays = (vk::DisplayKHR *)malloc(sizeof(vk::DisplayKHR) * supported_count);
             VERIFY(supported_displays != nullptr);
 
-            result = gpu.getDisplayPlaneSupportedDisplaysKHR(plane_index,
-                                                             &supported_count,
-                                                             supported_displays);
+            result = gpu.getDisplayPlaneSupportedDisplaysKHR(plane_index, &supported_count, supported_displays);
             VERIFY(result == vk::Result::eSuccess);
 
             for (uint32_t i = 0; i < supported_count; i++) {
@@ -2497,6 +2790,23 @@ struct Demo {
 
         free(plane_props);
 
+        vk::DisplayPlaneCapabilitiesKHR planeCaps;
+        vk::getDisplayPlaneCapabilitiesKHR(gpu, mode_props.displayMode, plane_index, &planeCaps);
+        // Find a supported alpha mode
+        vk::CompositeAlphaFlagBitsKHR alphaMode = vk::CompositeAlphaFlagBitsKHR::eOpaque;
+        vk::CompositeAlphaFlagBitsKHR alphaModes[4] = {
+            vk::CompositeAlphaFlagBitsKHR::eOpaque,
+            vk::CompositeAlphaFlagBitsKHR::eGlobal,
+            vk::CompositeAlphaFlagBitsKHR::ePerPixel,
+            vk::CompositeAlphaFlagBitsKHR::ePerPixelPremultiplied,
+        };
+        for (uint32_t i = 0; i < sizeof(alphaModes); i++) {
+            if (planeCaps.supportedAlpha & alphaModes[i]) {
+                alphaMode = alphaModes[i];
+                break;
+            }
+        }
+
         image_extent.setWidth(mode_props.parameters.visibleRegion.width);
         image_extent.setHeight(mode_props.parameters.visibleRegion.height);
 
@@ -2504,14 +2814,15 @@ struct Demo {
                                     .setDisplayMode(mode_props.displayMode)
                                     .setPlaneIndex(plane_index)
                                     .setPlaneStackIndex(plane_props[plane_index].currentStackIndex)
+                                    .setGlobalAlpha(1.0f)
+                                    .setAlphaMode(alphaMode)
                                     .setImageExtent(image_extent);
 
         return inst.createDisplayPlaneSurfaceKHR(&createInfo, nullptr, &surface);
     }
 
-    void run_display() {
+    void Demo::run_display() {
         while (!quit) {
-            update_data_buffer();
             draw();
             curFrame++;
 
@@ -2521,123 +2832,6 @@ struct Demo {
         }
     }
 #endif
-
-#if defined(VK_USE_PLATFORM_WIN32_KHR)
-    HINSTANCE connection;         // hInstance - Windows Instance
-    HWND window;                  // hWnd - window handle
-    POINT minsize;                // minimum window size
-    char name[APP_NAME_STR_LEN];  // Name to put on the window/icon
-#elif defined(VK_USE_PLATFORM_XLIB_KHR)
-    Window xlib_window;
-    Atom xlib_wm_delete_window;
-    Display *display;
-#elif defined(VK_USE_PLATFORM_XCB_KHR)
-    xcb_window_t xcb_window;
-    xcb_screen_t *screen;
-    xcb_connection_t *connection;
-    xcb_intern_atom_reply_t *atom_wm_delete_window;
-#elif defined(VK_USE_PLATFORM_WAYLAND_KHR)
-    wl_display *display;
-    wl_registry *registry;
-    wl_compositor *compositor;
-    wl_surface *window;
-    wl_shell *shell;
-    wl_shell_surface *shell_surface;
-#elif defined(VK_USE_PLATFORM_MIR_KHR)
-#endif
-
-    vk::SurfaceKHR surface;
-    bool prepared;
-    bool use_staging_buffer;
-    bool use_xlib;
-    bool separate_present_queue;
-
-    vk::Instance inst;
-    vk::PhysicalDevice gpu;
-    vk::Device device;
-    vk::Queue graphics_queue;
-    vk::Queue present_queue;
-    uint32_t graphics_queue_family_index;
-    uint32_t present_queue_family_index;
-    vk::Semaphore image_acquired_semaphores[FRAME_LAG];
-    vk::Semaphore draw_complete_semaphores[FRAME_LAG];
-    vk::Semaphore image_ownership_semaphores[FRAME_LAG];
-    vk::PhysicalDeviceProperties gpu_props;
-    std::unique_ptr<vk::QueueFamilyProperties[]> queue_props;
-    vk::PhysicalDeviceMemoryProperties memory_properties;
-
-    uint32_t enabled_extension_count;
-    uint32_t enabled_layer_count;
-    char const *extension_names[64];
-    char const *enabled_layers[64];
-
-    uint32_t width;
-    uint32_t height;
-    vk::Format format;
-    vk::ColorSpaceKHR color_space;
-
-    uint32_t swapchainImageCount;
-    vk::SwapchainKHR swapchain;
-    std::unique_ptr<SwapchainBuffers[]> buffers;
-    vk::PresentModeKHR presentMode;
-    vk::Fence fences[FRAME_LAG];
-    uint32_t frame_index;
-
-    vk::CommandPool cmd_pool;
-    vk::CommandPool present_cmd_pool;
-
-    struct {
-        vk::Format format;
-        vk::Image image;
-        vk::MemoryAllocateInfo mem_alloc;
-        vk::DeviceMemory mem;
-        vk::ImageView view;
-    } depth;
-
-    static int32_t const texture_count = 1;
-    texture_object textures[texture_count];
-    texture_object staging_texture;
-
-    struct {
-        vk::Buffer buf;
-        vk::MemoryAllocateInfo mem_alloc;
-        vk::DeviceMemory mem;
-        vk::DescriptorBufferInfo buffer_info;
-    } uniform_data;
-
-    vk::CommandBuffer cmd;  // Buffer for initialization commands
-    vk::PipelineLayout pipeline_layout;
-    vk::DescriptorSetLayout desc_layout;
-    vk::PipelineCache pipelineCache;
-    vk::RenderPass render_pass;
-    vk::Pipeline pipeline;
-
-    mat4x4 projection_matrix;
-    mat4x4 view_matrix;
-    mat4x4 model_matrix;
-
-    float spin_angle;
-    float spin_increment;
-    bool pause;
-
-    vk::ShaderModule vert_shader_module;
-    vk::ShaderModule frag_shader_module;
-
-    vk::DescriptorPool desc_pool;
-    vk::DescriptorSet desc_set;
-
-    std::unique_ptr<vk::Framebuffer[]> framebuffers;
-
-    bool quit;
-    uint32_t curFrame;
-    uint32_t frameCount;
-    bool validate;
-    bool use_break;
-    bool suppress_popups;
-
-    uint32_t current_buffer;
-    uint32_t queue_family_count;
-};
 
 #if _WIN32
 // Include header required for parsing the command line options.

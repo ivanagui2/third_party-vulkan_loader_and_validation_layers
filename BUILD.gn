@@ -45,7 +45,14 @@ action("generate_extra_vulkan_headers") {
   script = "build-fuchsia/fuchsia-generate.sh"
   args = [ rebase_path(target_gen_dir, "build-fuchsia" ) ]
   inputs = [
+    "scripts/dispatch_table_helper_generator.py",
+    "scripts/helper_file_generator.py",
+    "scripts/loader_extension_generator.py",
     "scripts/lvl_genvk.py",
+    "scripts/object_tracker_generator.py",
+    "scripts/parameter_validation_generator.py",
+    "scripts/threading_generator.py",
+    "scripts/unique_objects_generator.py",
   ]
   sources = [
     "include/vulkan/vulkan.h",
@@ -57,6 +64,7 @@ action("generate_extra_vulkan_headers") {
     "$target_gen_dir/generated/include/vk_struct_size_helper.h",
     "$target_gen_dir/generated/include/vk_struct_size_helper.c",
     "$target_gen_dir/generated/include/vk_enum_string_helper.h",
+    "$target_gen_dir/generated/include/vk_extension_helper.h",
     "$target_gen_dir/generated/include/vk_object_types.h",
     "$target_gen_dir/generated/include/vk_dispatch_table_helper.h",
     "$target_gen_dir/generated/include/thread_check.h",

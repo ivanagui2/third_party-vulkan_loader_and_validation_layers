@@ -544,6 +544,11 @@ func_struct_id_map = {
 'vkCreateMagmaSurfaceKHR' : 488,
 'vkExportDeviceMemoryMAGMA' : 489,
 'vkImportDeviceMemoryMAGMA' : 490,
+'VkImportMemoryFuchsiaHandleInfoKHR' : 491,
+'VkMemoryFuchsiaHandlePropertiesKHR' : 492,
+'VkMemoryGetFuchsiaHandleInfoKHR' : 493,
+'vkGetMemoryFuchsiaHandleKHR' : 494,
+'vkGetMemoryFuchsiaHandlePropertiesKHR': 495,
 ### ADD New func/struct mappings above this line
 }
 # Mapping of params to unique IDs
@@ -1021,6 +1026,7 @@ implicit_param_map = {
 'basePipelineHandle' : 470,
 'pImmutableSamplers' : 471,
 'pTexelBufferView' : 472,
+'pFuchsiaHandle' : 473,
 ### ADD New implicit param mappings above this line
 }
 

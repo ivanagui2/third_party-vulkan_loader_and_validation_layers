@@ -1932,6 +1932,12 @@ private version is maintained in the 1.0 branch of the member gitlab server.
             <member><type>DWORD</type>                            <name>dwAccess</name></member>
             <member><type>LPCWSTR</type>                          <name>name</name></member>
         </type>
+        <type category="struct" name="VkImportMemoryFuchsiaHandleInfoKHR" structextends="VkMemoryAllocateInfo">
+            <member values="VK_STRUCTURE_TYPE_IMPORT_MEMORY_FUCHSIA_HANDLE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
+            <member>const <type>void</type>*                      <name>pNext</name></member>
+            <member optional="true"><type>VkExternalMemoryHandleTypeFlagBitsKHR</type> <name>handleType</name></member>
+            <member optional="true"><type>uint32_t</type>           <name>handle</name></member>
+        </type>
         <type category="struct" name="VkMemoryWin32HandlePropertiesKHR" returnedonly="true">
             <member values="VK_STRUCTURE_TYPE_MEMORY_WIN32_HANDLE_PROPERTIES_KHR"><type>VkStructureType</type> <name>sType</name></member>
             <member><type>void</type>*                            <name>pNext</name></member>
@@ -1956,6 +1962,17 @@ private version is maintained in the 1.0 branch of the member gitlab server.
         </type>
         <type category="struct" name="VkMemoryGetFdInfoKHR">
             <member values="VK_STRUCTURE_TYPE_MEMORY_GET_FD_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
+            <member>const <type>void</type>*                      <name>pNext</name></member>
+            <member><type>VkDeviceMemory</type>                   <name>memory</name></member>
+            <member><type>VkExternalMemoryHandleTypeFlagBitsKHR</type> <name>handleType</name></member>
+        </type>
+        <type category="struct" name="VkMemoryFuchsiaHandlePropertiesKHR" returnedonly="true">
+            <member values="VK_STRUCTURE_TYPE_MEMORY_FUCHSIA_HANDLE_PROPERTIES_KHR"><type>VkStructureType</type> <name>sType</name></member>
+            <member><type>void</type>*                            <name>pNext</name></member>
+            <member><type>uint32_t</type>                         <name>memoryTypeBits</name></member>
+        </type>
+        <type category="struct" name="VkMemoryGetFuchsiaHandleInfoKHR">
+            <member values="VK_STRUCTURE_TYPE_MEMORY_GET_FUCHSIA_HANDLE_INFO_KHR"><type>VkStructureType</type> <name>sType</name></member>
             <member>const <type>void</type>*                      <name>pNext</name></member>
             <member><type>VkDeviceMemory</type>                   <name>memory</name></member>
             <member><type>VkExternalMemoryHandleTypeFlagBitsKHR</type> <name>handleType</name></member>
@@ -3383,6 +3400,7 @@ private version is maintained in the 1.0 branch of the member gitlab server.
         <enum bitpos="4" name="VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_TEXTURE_KMT_BIT_KHR"/>
         <enum bitpos="5" name="VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_HEAP_BIT_KHR"/>
         <enum bitpos="6" name="VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_RESOURCE_BIT_KHR"/>
+        <enum bitpos="7" name="VK_EXTERNAL_MEMORY_HANDLE_TYPE_FUCHSIA_VMO_BIT_KHR"/>
     </enums>
     <enums name="VkExternalMemoryFeatureFlagBitsKHR" type="bitmask">
         <enum bitpos="0" name="VK_EXTERNAL_MEMORY_FEATURE_DEDICATED_ONLY_BIT_KHR"/>
@@ -4885,6 +4903,19 @@ private version is maintained in the 1.0 branch of the member gitlab server.
             <param><type>VkExternalMemoryHandleTypeFlagBitsKHR</type> <name>handleType</name></param>
             <param><type>int</type> <name>fd</name></param>
             <param><type>VkMemoryFdPropertiesKHR</type>* <name>pMemoryFdProperties</name></param>
+        </command>
+        <command successcodes="VK_SUCCESS" errorcodes="VK_ERROR_TOO_MANY_OBJECTS,VK_ERROR_OUT_OF_HOST_MEMORY">
+            <proto><type>VkResult</type> <name>vkGetMemoryFuchsiaHandleKHR</name></proto>
+            <param><type>VkDevice</type> <name>device</name></param>
+            <param>const <type>VkMemoryGetFuchsiaHandleInfoKHR</type>* <name>pGetFuchsiaHandleInfo</name></param>
+            <param><type>uint32_t</type>* <name>pFuchsiaHandle</name></param>
+        </command>
+        <command successcodes="VK_SUCCESS" errorcodes="VK_ERROR_INVALID_EXTERNAL_HANDLE_KHR">
+            <proto><type>VkResult</type> <name>vkGetMemoryFuchsiaHandlePropertiesKHR</name></proto>
+            <param><type>VkDevice</type> <name>device</name></param>
+            <param><type>VkExternalMemoryHandleTypeFlagBitsKHR</type> <name>handleType</name></param>
+            <param><type>uint32_t</type> <name>fuchsiaHandle</name></param>
+            <param><type>VkMemoryFuchsiaHandlePropertiesKHR</type>* <name>pMemoryFuchsiaHandleProperties</name></param>
         </command>
         <command>
             <proto><type>void</type> <name>vkGetPhysicalDeviceExternalSemaphorePropertiesKHR</name></proto>
@@ -6979,6 +7010,20 @@ private version is maintained in the 1.0 branch of the member gitlab server.
                 <enum value="1"                                          name="VK_GOOGLE_IMAGE_TILING_SCANOUT_SPEC_VERSION"/>
                 <enum value="&quot;VK_GOOGLE_image_tiling_scanout&quot;" name="VK_GOOGLE_IMAGE_TILING_SCANOUT_EXTENSION_NAME"/>
                 <enum offset="0" extends="VkImageTiling"                 name="VK_IMAGE_TILING_SCANOUT_GOOGLE"/>
+            </require>
+        </extension>
+        <extension name="VK_KHR_external_memory_fuchsia" number="1001" type="device" requires="VK_KHR_external_memory_capabilities,VK_KHR_external_memory" author="KHR" supported="vulkan">
+            <require>
+                <enum value="1"                                           name="VK_KHR_EXTERNAL_MEMORY_FUCHSIA_SPEC_VERSION"/>
+                <enum value="&quot;VK_KHR_external_memory_fuchsia&quot;"  name="VK_KHR_EXTERNAL_MEMORY_FUCHSIA_EXTENSION_NAME"/>
+                <enum offset="0" extends="VkStructureType"                name="VK_STRUCTURE_TYPE_IMPORT_MEMORY_FUCHSIA_HANDLE_INFO_KHR"/>
+                <enum offset="1" extends="VkStructureType"                name="VK_STRUCTURE_TYPE_MEMORY_FUCHSIA_HANDLE_PROPERTIES_KHR"/>
+                <enum offset="2" extends="VkStructureType"                name="VK_STRUCTURE_TYPE_MEMORY_GET_FUCHSIA_HANDLE_INFO_KHR"/>
+                <type name="VkImportMemoryFuchsiaHandleInfoKHR"/>
+                <type name="VkMemoryFuchsiaHandlePropertiesKHR"/>
+                <type name="VkMemoryGetFuchsiaHandleInfoKHR"/>
+                <command name="vkGetMemoryFuchsiaHandleKHR"/>
+                <command name="vkGetMemoryFuchsiaHandlePropertiesKHR"/>
             </require>
         </extension>
     </extensions>

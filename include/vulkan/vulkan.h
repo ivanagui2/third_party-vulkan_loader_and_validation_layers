@@ -334,6 +334,9 @@ typedef enum VkStructureType {
     VK_STRUCTURE_TYPE_PIPELINE_COLOR_BLEND_ADVANCED_STATE_CREATE_INFO_EXT = 1000148002,
     VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_TO_COLOR_STATE_CREATE_INFO_NV = 1000149000,
     VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_MODULATION_STATE_CREATE_INFO_NV = 1000152000,
+    VK_STRUCTURE_TYPE_IMPORT_MEMORY_FUCHSIA_HANDLE_INFO_KHR = 1001000000,
+    VK_STRUCTURE_TYPE_MEMORY_FUCHSIA_HANDLE_PROPERTIES_KHR = 1001000001,
+    VK_STRUCTURE_TYPE_MEMORY_GET_FUCHSIA_HANDLE_INFO_KHR = 1001000002,
     VK_STRUCTURE_TYPE_BEGIN_RANGE = VK_STRUCTURE_TYPE_APPLICATION_INFO,
     VK_STRUCTURE_TYPE_END_RANGE = VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO,
     VK_STRUCTURE_TYPE_RANGE_SIZE = (VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO - VK_STRUCTURE_TYPE_APPLICATION_INFO + 1),
@@ -1368,6 +1371,27 @@ typedef enum VkStencilFaceFlagBits {
 } VkStencilFaceFlagBits;
 typedef VkFlags VkStencilFaceFlags;
 
+typedef struct VkApplicationInfo {
+    VkStructureType    sType;
+    const void*        pNext;
+    const char*        pApplicationName;
+    uint32_t           applicationVersion;
+    const char*        pEngineName;
+    uint32_t           engineVersion;
+    uint32_t           apiVersion;
+} VkApplicationInfo;
+
+typedef struct VkInstanceCreateInfo {
+    VkStructureType             sType;
+    const void*                 pNext;
+    VkInstanceCreateFlags       flags;
+    const VkApplicationInfo*    pApplicationInfo;
+    uint32_t                    enabledLayerCount;
+    const char* const*          ppEnabledLayerNames;
+    uint32_t                    enabledExtensionCount;
+    const char* const*          ppEnabledExtensionNames;
+} VkInstanceCreateInfo;
+
 typedef void* (VKAPI_PTR *PFN_vkAllocationFunction)(
     void*                                       pUserData,
     size_t                                      size,
@@ -1396,29 +1420,6 @@ typedef void (VKAPI_PTR *PFN_vkInternalFreeNotification)(
     size_t                                      size,
     VkInternalAllocationType                    allocationType,
     VkSystemAllocationScope                     allocationScope);
-
-typedef void (VKAPI_PTR *PFN_vkVoidFunction)(void);
-
-typedef struct VkApplicationInfo {
-    VkStructureType    sType;
-    const void*        pNext;
-    const char*        pApplicationName;
-    uint32_t           applicationVersion;
-    const char*        pEngineName;
-    uint32_t           engineVersion;
-    uint32_t           apiVersion;
-} VkApplicationInfo;
-
-typedef struct VkInstanceCreateInfo {
-    VkStructureType             sType;
-    const void*                 pNext;
-    VkInstanceCreateFlags       flags;
-    const VkApplicationInfo*    pApplicationInfo;
-    uint32_t                    enabledLayerCount;
-    const char* const*          ppEnabledLayerNames;
-    uint32_t                    enabledExtensionCount;
-    const char* const*          ppEnabledExtensionNames;
-} VkInstanceCreateInfo;
 
 typedef struct VkAllocationCallbacks {
     void*                                   pUserData;
@@ -1660,6 +1661,7 @@ typedef struct VkPhysicalDeviceMemoryProperties {
     VkMemoryHeap    memoryHeaps[VK_MAX_MEMORY_HEAPS];
 } VkPhysicalDeviceMemoryProperties;
 
+typedef void (VKAPI_PTR *PFN_vkVoidFunction)(void);
 typedef struct VkDeviceQueueCreateInfo {
     VkStructureType             sType;
     const void*                 pNext;
@@ -4154,6 +4156,7 @@ typedef enum VkExternalMemoryHandleTypeFlagBitsKHR {
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D11_TEXTURE_KMT_BIT_KHR = 0x00000010,
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_HEAP_BIT_KHR = 0x00000020,
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_RESOURCE_BIT_KHR = 0x00000040,
+    VK_EXTERNAL_MEMORY_HANDLE_TYPE_FUCHSIA_VMO_BIT_KHR = 0x00000080,
     VK_EXTERNAL_MEMORY_HANDLE_TYPE_FLAG_BITS_MAX_ENUM_KHR = 0x7FFFFFFF
 } VkExternalMemoryHandleTypeFlagBitsKHR;
 typedef VkFlags VkExternalMemoryHandleTypeFlagsKHR;
@@ -4948,6 +4951,47 @@ VKAPI_ATTR void VKAPI_CALL vkGetImageSparseMemoryRequirements2KHR(
     VkSparseImageMemoryRequirements2KHR*        pSparseMemoryRequirements);
 #endif
 
+#define VK_KHR_external_memory_fuchsia 1
+#define VK_KHR_EXTERNAL_MEMORY_FUCHSIA_SPEC_VERSION 1
+#define VK_KHR_EXTERNAL_MEMORY_FUCHSIA_EXTENSION_NAME "VK_KHR_external_memory_fuchsia"
+
+typedef struct VkImportMemoryFuchsiaHandleInfoKHR {
+    VkStructureType                          sType;
+    const void*                              pNext;
+    VkExternalMemoryHandleTypeFlagBitsKHR    handleType;
+    uint32_t                                 handle;
+} VkImportMemoryFuchsiaHandleInfoKHR;
+
+typedef struct VkMemoryFuchsiaHandlePropertiesKHR {
+    VkStructureType    sType;
+    void*              pNext;
+    uint32_t           memoryTypeBits;
+} VkMemoryFuchsiaHandlePropertiesKHR;
+
+typedef struct VkMemoryGetFuchsiaHandleInfoKHR {
+    VkStructureType                          sType;
+    const void*                              pNext;
+    VkDeviceMemory                           memory;
+    VkExternalMemoryHandleTypeFlagBitsKHR    handleType;
+} VkMemoryGetFuchsiaHandleInfoKHR;
+
+
+typedef VkResult (VKAPI_PTR *PFN_vkGetMemoryFuchsiaHandleKHR)(VkDevice device, const VkMemoryGetFuchsiaHandleInfoKHR* pGetFuchsiaHandleInfo, uint32_t* pFuchsiaHandle);
+typedef VkResult (VKAPI_PTR *PFN_vkGetMemoryFuchsiaHandlePropertiesKHR)(VkDevice device, VkExternalMemoryHandleTypeFlagBitsKHR handleType, uint32_t fuchsiaHandle, VkMemoryFuchsiaHandlePropertiesKHR* pMemoryFuchsiaHandleProperties);
+
+#ifndef VK_NO_PROTOTYPES
+VKAPI_ATTR VkResult VKAPI_CALL vkGetMemoryFuchsiaHandleKHR(
+    VkDevice                                    device,
+    const VkMemoryGetFuchsiaHandleInfoKHR*      pGetFuchsiaHandleInfo,
+    uint32_t*                                   pFuchsiaHandle);
+
+VKAPI_ATTR VkResult VKAPI_CALL vkGetMemoryFuchsiaHandlePropertiesKHR(
+    VkDevice                                    device,
+    VkExternalMemoryHandleTypeFlagBitsKHR       handleType,
+    uint32_t                                    fuchsiaHandle,
+    VkMemoryFuchsiaHandlePropertiesKHR*         pMemoryFuchsiaHandleProperties);
+#endif
+
 #define VK_EXT_debug_report 1
 VK_DEFINE_NON_DISPATCHABLE_HANDLE(VkDebugReportCallbackEXT)
 
@@ -5018,7 +5062,6 @@ typedef VkBool32 (VKAPI_PTR *PFN_vkDebugReportCallbackEXT)(
     const char*                                 pLayerPrefix,
     const char*                                 pMessage,
     void*                                       pUserData);
-
 
 typedef struct VkDebugReportCallbackCreateInfoEXT {
     VkStructureType                 sType;

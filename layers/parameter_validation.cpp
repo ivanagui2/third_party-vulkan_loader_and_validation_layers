@@ -5171,6 +5171,42 @@ VKAPI_ATTR VkResult VKAPI_CALL GetMemoryWin32HandlePropertiesKHR(VkDevice device
 }
 #endif  // VK_USE_PLATFORM_WIN32_KHR
 
+// Definitions for the VK_KHR_external_memory_fuchsia extension
+
+VKAPI_ATTR VkResult VKAPI_CALL GetMemoryFuchsiaHandleKHR(VkDevice device, const VkMemoryGetFuchsiaHandleInfoKHR* pGetFuchsiaHandleInfo, uint32_t *pFuchsiaHandle) {
+    VkResult result = VK_ERROR_VALIDATION_FAILED_EXT;
+    bool skip = false;
+    auto my_data = GetLayerDataPtr(get_dispatch_key(device), layer_data_map);
+    assert(my_data != NULL);
+
+    skip |= parameter_validation_vkGetMemoryFuchsiaHandleKHR(my_data, pGetFuchsiaHandleInfo, pFuchsiaHandle);
+
+    if (!skip) {
+        result = my_data->dispatch_table.GetMemoryFuchsiaHandleKHR(device, pGetFuchsiaHandleInfo, pFuchsiaHandle);
+        validate_result(my_data->report_data, "vkGetMemoryFuchsiaHandleKHR", {}, result);
+    }
+
+    return result;
+}
+
+VKAPI_ATTR VkResult VKAPI_CALL GetMemoryFuchsiaHandlePropertiesKHR(VkDevice device, VkExternalMemoryHandleTypeFlagBitsKHR handleType, uint32_t handle,
+                                                        VkMemoryFuchsiaHandlePropertiesKHR *pMemoryFuchsiaHandleProperties) {
+    VkResult result = VK_ERROR_VALIDATION_FAILED_EXT;
+    bool skip = false;
+    auto my_data = GetLayerDataPtr(get_dispatch_key(device), layer_data_map);
+    assert(my_data != NULL);
+
+    skip |= parameter_validation_vkGetMemoryFuchsiaHandlePropertiesKHR(my_data, handleType, handle, pMemoryFuchsiaHandleProperties);
+
+    if (!skip) {
+        result = my_data->dispatch_table.GetMemoryFuchsiaHandlePropertiesKHR(device, handleType, handle, pMemoryFuchsiaHandleProperties);
+        validate_result(my_data->report_data, "vkGetMemoryFuchsiaHandlePropertiesKHR", {}, result);
+    }
+
+    return result;
+}
+
+
 // Definitions for the VK_KHR_external_semaphore_capabilities extension
 
 VKAPI_ATTR void VKAPI_CALL GetPhysicalDeviceExternalSemaphorePropertiesKHR(

@@ -5257,6 +5257,40 @@ VKAPI_ATTR VkResult VKAPI_CALL GetSemaphoreFdKHR(VkDevice device, const VkSemaph
     return result;
 }
 
+// Definitions for the VK_KHR_external_semaphore_fuchsia extension
+
+VKAPI_ATTR VkResult VKAPI_CALL ImportSemaphoreFuchsiaHandleKHR(VkDevice device, const VkImportSemaphoreFuchsiaHandleInfoKHR *pImportSemaphoreFuchsiaHandleInfo) {
+    VkResult result = VK_ERROR_VALIDATION_FAILED_EXT;
+    bool skip = false;
+    auto my_data = GetLayerDataPtr(get_dispatch_key(device), layer_data_map);
+    assert(my_data != NULL);
+
+    skip |= parameter_validation_vkImportSemaphoreFuchsiaHandleKHR(my_data, pImportSemaphoreFuchsiaHandleInfo);
+
+    if (!skip) {
+        result = my_data->dispatch_table.ImportSemaphoreFuchsiaHandleKHR(device, pImportSemaphoreFuchsiaHandleInfo);
+        validate_result(my_data->report_data, "vkImportSemaphoreFuchsiaHandleKHR", {}, result);
+    }
+
+    return result;
+}
+
+VKAPI_ATTR VkResult VKAPI_CALL GetSemaphoreFuchsiaHandleKHR(VkDevice device, const VkSemaphoreGetFuchsiaHandleInfoKHR* pGetFuchsiaHandleInfo, uint32_t *pFuchsiaHandle) {
+    VkResult result = VK_ERROR_VALIDATION_FAILED_EXT;
+    bool skip = false;
+    auto my_data = GetLayerDataPtr(get_dispatch_key(device), layer_data_map);
+    assert(my_data != NULL);
+
+    skip |= parameter_validation_vkGetSemaphoreFuchsiaHandleKHR(my_data, pGetFuchsiaHandleInfo, pFuchsiaHandle);
+
+    if (!skip) {
+        result = my_data->dispatch_table.GetSemaphoreFuchsiaHandleKHR(device, pGetFuchsiaHandleInfo, pFuchsiaHandle);
+        validate_result(my_data->report_data, "vkGetSemaphoreFuchsiaHandleKHR", {}, result);
+    }
+
+    return result;
+}
+
 // Definitions for the VK_KHR_external_semaphore_win32 extension
 
 #ifdef VK_USE_PLATFORM_WIN32_KHR

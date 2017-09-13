@@ -549,6 +549,10 @@ func_struct_id_map = {
 'VkMemoryGetFuchsiaHandleInfoKHR' : 493,
 'vkGetMemoryFuchsiaHandleKHR' : 494,
 'vkGetMemoryFuchsiaHandlePropertiesKHR': 495,
+'VkImportSemaphoreFuchsiaHandleInfoKHR' : 496,
+'vkImportSemaphoreFuchsiaHandleKHR' : 497,
+'VkSemaphoreGetFuchsiaHandleInfoKHR' : 498,
+'vkGetSemaphoreFuchsiaHandleKHR' : 499,
 ### ADD New func/struct mappings above this line
 }
 # Mapping of params to unique IDs

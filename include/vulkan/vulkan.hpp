@@ -6635,7 +6635,9 @@ namespace vk
     ePipelineCoverageModulationStateCreateInfoNV = VK_STRUCTURE_TYPE_PIPELINE_COVERAGE_MODULATION_STATE_CREATE_INFO_NV,
     eImportMemoryFuchsiaHandleInfoKHR = VK_STRUCTURE_TYPE_IMPORT_MEMORY_FUCHSIA_HANDLE_INFO_KHR,
     eMemoryFuchsiaHandlePropertiesKHR = VK_STRUCTURE_TYPE_MEMORY_FUCHSIA_HANDLE_PROPERTIES_KHR,
-    eMemoryGetFuchsiaHandleInfoKHR = VK_STRUCTURE_TYPE_MEMORY_GET_FUCHSIA_HANDLE_INFO_KHR
+    eMemoryGetFuchsiaHandleInfoKHR = VK_STRUCTURE_TYPE_MEMORY_GET_FUCHSIA_HANDLE_INFO_KHR,
+    eImportSemaphoreFuchsiaHandleInfoKHR = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_FUCHSIA_HANDLE_INFO_KHR,
+    eSemaphoreGetFuchsiaHandleInfoKHR = VK_STRUCTURE_TYPE_SEMAPHORE_GET_FUCHSIA_HANDLE_INFO_KHR
   };
 
   struct ApplicationInfo
@@ -21496,7 +21498,8 @@ namespace vk
     eOpaqueWin32 = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_BIT_KHR,
     eOpaqueWin32Kmt = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_OPAQUE_WIN32_KMT_BIT_KHR,
     eD3D12Fence = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT_KHR,
-    eSyncFd = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT_KHR
+    eSyncFd = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_SYNC_FD_BIT_KHR,
+    eFuchsiaFence = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_FUCHSIA_FENCE_BIT_KHR
   };
 
   using ExternalSemaphoreHandleTypeFlagsKHR = Flags<ExternalSemaphoreHandleTypeFlagBitsKHR, VkExternalSemaphoreHandleTypeFlagsKHR>;
@@ -21515,7 +21518,7 @@ namespace vk
   {
     enum
     {
-      allFlags = VkFlags(ExternalSemaphoreHandleTypeFlagBitsKHR::eOpaqueFd) | VkFlags(ExternalSemaphoreHandleTypeFlagBitsKHR::eOpaqueWin32) | VkFlags(ExternalSemaphoreHandleTypeFlagBitsKHR::eOpaqueWin32Kmt) | VkFlags(ExternalSemaphoreHandleTypeFlagBitsKHR::eD3D12Fence) | VkFlags(ExternalSemaphoreHandleTypeFlagBitsKHR::eSyncFd)
+      allFlags = VkFlags(ExternalSemaphoreHandleTypeFlagBitsKHR::eOpaqueFd) | VkFlags(ExternalSemaphoreHandleTypeFlagBitsKHR::eOpaqueWin32) | VkFlags(ExternalSemaphoreHandleTypeFlagBitsKHR::eOpaqueWin32Kmt) | VkFlags(ExternalSemaphoreHandleTypeFlagBitsKHR::eD3D12Fence) | VkFlags(ExternalSemaphoreHandleTypeFlagBitsKHR::eSyncFd) | VkFlags(ExternalSemaphoreHandleTypeFlagBitsKHR::eFuchsiaFence)
     };
   };
 
@@ -21766,6 +21769,72 @@ namespace vk
     ExternalSemaphoreHandleTypeFlagBitsKHR handleType;
   };
   static_assert( sizeof( SemaphoreGetFdInfoKHR ) == sizeof( VkSemaphoreGetFdInfoKHR ), "struct and wrapper have different size!" );
+
+  struct SemaphoreGetFuchsiaHandleInfoKHR
+  {
+    SemaphoreGetFuchsiaHandleInfoKHR( Semaphore semaphore_ = Semaphore(), ExternalSemaphoreHandleTypeFlagBitsKHR handleType_ = ExternalSemaphoreHandleTypeFlagBitsKHR::eOpaqueFd )
+      : sType( StructureType::eSemaphoreGetFuchsiaHandleInfoKHR )
+      , pNext( nullptr )
+      , semaphore( semaphore_ )
+      , handleType( handleType_ )
+    {
+    }
+
+    SemaphoreGetFuchsiaHandleInfoKHR( VkSemaphoreGetFuchsiaHandleInfoKHR const & rhs )
+    {
+      memcpy( this, &rhs, sizeof( SemaphoreGetFuchsiaHandleInfoKHR ) );
+    }
+
+    SemaphoreGetFuchsiaHandleInfoKHR& operator=( VkSemaphoreGetFuchsiaHandleInfoKHR const & rhs )
+    {
+      memcpy( this, &rhs, sizeof( SemaphoreGetFuchsiaHandleInfoKHR ) );
+      return *this;
+    }
+    SemaphoreGetFuchsiaHandleInfoKHR& setPNext( const void* pNext_ )
+    {
+      pNext = pNext_;
+      return *this;
+    }
+
+    SemaphoreGetFuchsiaHandleInfoKHR& setSemaphore( Semaphore semaphore_ )
+    {
+      semaphore = semaphore_;
+      return *this;
+    }
+
+    SemaphoreGetFuchsiaHandleInfoKHR& setHandleType( ExternalSemaphoreHandleTypeFlagBitsKHR handleType_ )
+    {
+      handleType = handleType_;
+      return *this;
+    }
+
+    operator const VkSemaphoreGetFuchsiaHandleInfoKHR&() const
+    {
+      return *reinterpret_cast<const VkSemaphoreGetFuchsiaHandleInfoKHR*>(this);
+    }
+
+    bool operator==( SemaphoreGetFuchsiaHandleInfoKHR const& rhs ) const
+    {
+      return ( sType == rhs.sType )
+          && ( pNext == rhs.pNext )
+          && ( semaphore == rhs.semaphore )
+          && ( handleType == rhs.handleType );
+    }
+
+    bool operator!=( SemaphoreGetFuchsiaHandleInfoKHR const& rhs ) const
+    {
+      return !operator==( rhs );
+    }
+
+  private:
+    StructureType sType;
+
+  public:
+    const void* pNext;
+    Semaphore semaphore;
+    ExternalSemaphoreHandleTypeFlagBitsKHR handleType;
+  };
+  static_assert( sizeof( SemaphoreGetFuchsiaHandleInfoKHR ) == sizeof( VkSemaphoreGetFuchsiaHandleInfoKHR ), "struct and wrapper have different size!" );
 
   enum class ExternalSemaphoreFeatureFlagBitsKHR
   {
@@ -22028,6 +22097,90 @@ namespace vk
     int fd;
   };
   static_assert( sizeof( ImportSemaphoreFdInfoKHR ) == sizeof( VkImportSemaphoreFdInfoKHR ), "struct and wrapper have different size!" );
+
+  struct ImportSemaphoreFuchsiaHandleInfoKHR
+  {
+    ImportSemaphoreFuchsiaHandleInfoKHR( Semaphore semaphore_ = Semaphore(), SemaphoreImportFlagsKHR flags_ = SemaphoreImportFlagsKHR(), ExternalSemaphoreHandleTypeFlagBitsKHR handleType_ = ExternalSemaphoreHandleTypeFlagBitsKHR::eOpaqueFd, uint32_t handle_ = 0 )
+      : sType( StructureType::eImportSemaphoreFuchsiaHandleInfoKHR )
+      , pNext( nullptr )
+      , semaphore( semaphore_ )
+      , flags( flags_ )
+      , handleType( handleType_ )
+      , handle( handle_ )
+    {
+    }
+
+    ImportSemaphoreFuchsiaHandleInfoKHR( VkImportSemaphoreFuchsiaHandleInfoKHR const & rhs )
+    {
+      memcpy( this, &rhs, sizeof( ImportSemaphoreFuchsiaHandleInfoKHR ) );
+    }
+
+    ImportSemaphoreFuchsiaHandleInfoKHR& operator=( VkImportSemaphoreFuchsiaHandleInfoKHR const & rhs )
+    {
+      memcpy( this, &rhs, sizeof( ImportSemaphoreFuchsiaHandleInfoKHR ) );
+      return *this;
+    }
+    ImportSemaphoreFuchsiaHandleInfoKHR& setPNext( const void* pNext_ )
+    {
+      pNext = pNext_;
+      return *this;
+    }
+
+    ImportSemaphoreFuchsiaHandleInfoKHR& setSemaphore( Semaphore semaphore_ )
+    {
+      semaphore = semaphore_;
+      return *this;
+    }
+
+    ImportSemaphoreFuchsiaHandleInfoKHR& setFlags( SemaphoreImportFlagsKHR flags_ )
+    {
+      flags = flags_;
+      return *this;
+    }
+
+    ImportSemaphoreFuchsiaHandleInfoKHR& setHandleType( ExternalSemaphoreHandleTypeFlagBitsKHR handleType_ )
+    {
+      handleType = handleType_;
+      return *this;
+    }
+
+    ImportSemaphoreFuchsiaHandleInfoKHR& setHandle( uint32_t handle_ )
+    {
+      handle = handle_;
+      return *this;
+    }
+
+    operator const VkImportSemaphoreFuchsiaHandleInfoKHR&() const
+    {
+      return *reinterpret_cast<const VkImportSemaphoreFuchsiaHandleInfoKHR*>(this);
+    }
+
+    bool operator==( ImportSemaphoreFuchsiaHandleInfoKHR const& rhs ) const
+    {
+      return ( sType == rhs.sType )
+          && ( pNext == rhs.pNext )
+          && ( semaphore == rhs.semaphore )
+          && ( flags == rhs.flags )
+          && ( handleType == rhs.handleType )
+          && ( handle == rhs.handle );
+    }
+
+    bool operator!=( ImportSemaphoreFuchsiaHandleInfoKHR const& rhs ) const
+    {
+      return !operator==( rhs );
+    }
+
+  private:
+    StructureType sType;
+
+  public:
+    const void* pNext;
+    Semaphore semaphore;
+    SemaphoreImportFlagsKHR flags;
+    ExternalSemaphoreHandleTypeFlagBitsKHR handleType;
+    uint32_t handle;
+  };
+  static_assert( sizeof( ImportSemaphoreFuchsiaHandleInfoKHR ) == sizeof( VkImportSemaphoreFuchsiaHandleInfoKHR ), "struct and wrapper have different size!" );
 
   enum class ExternalFenceHandleTypeFlagBitsKHR
   {
@@ -25942,6 +26095,16 @@ namespace vk
     ResultValueType<void>::type importSemaphoreFdKHR( const ImportSemaphoreFdInfoKHR & importSemaphoreFdInfo ) const;
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 
+    Result getSemaphoreFuchsiaHandleKHR( const SemaphoreGetFuchsiaHandleInfoKHR* pGetFuchsiaHandleInfo, uint32_t* pFuchsiaHandle ) const;
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+    ResultValueType<uint32_t>::type getSemaphoreFuchsiaHandleKHR( const SemaphoreGetFuchsiaHandleInfoKHR & getFuchsiaHandleInfo ) const;
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+
+    Result importSemaphoreFuchsiaHandleKHR( const ImportSemaphoreFuchsiaHandleInfoKHR* pImportSemaphoreFuchsiaHandleInfo ) const;
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+    ResultValueType<void>::type importSemaphoreFuchsiaHandleKHR( const ImportSemaphoreFuchsiaHandleInfoKHR & importSemaphoreFuchsiaHandleInfo ) const;
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     Result getFenceWin32HandleKHR( const FenceGetWin32HandleInfoKHR* pGetWin32HandleInfo, HANDLE* pHandle ) const;
 #ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
@@ -28051,6 +28214,31 @@ namespace vk
   {
     Result result = static_cast<Result>( vkImportSemaphoreFdKHR( m_device, reinterpret_cast<const VkImportSemaphoreFdInfoKHR*>( &importSemaphoreFdInfo ) ) );
     return createResultValue( result, "vk::Device::importSemaphoreFdKHR" );
+  }
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+
+  VULKAN_HPP_INLINE Result Device::getSemaphoreFuchsiaHandleKHR( const SemaphoreGetFuchsiaHandleInfoKHR* pGetFuchsiaHandleInfo, uint32_t* pFuchsiaHandle ) const
+  {
+    return static_cast<Result>( vkGetSemaphoreFuchsiaHandleKHR( m_device, reinterpret_cast<const VkSemaphoreGetFuchsiaHandleInfoKHR*>( pGetFuchsiaHandleInfo ), pFuchsiaHandle ) );
+  }
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+  VULKAN_HPP_INLINE ResultValueType<uint32_t>::type Device::getSemaphoreFuchsiaHandleKHR( const SemaphoreGetFuchsiaHandleInfoKHR & getFuchsiaHandleInfo ) const
+  {
+    uint32_t fuchsiaHandle;
+    Result result = static_cast<Result>( vkGetSemaphoreFuchsiaHandleKHR( m_device, reinterpret_cast<const VkSemaphoreGetFuchsiaHandleInfoKHR*>( &getFuchsiaHandleInfo ), &fuchsiaHandle ) );
+    return createResultValue( result, fuchsiaHandle, "vk::Device::getSemaphoreFuchsiaHandleKHR" );
+  }
+#endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
+
+  VULKAN_HPP_INLINE Result Device::importSemaphoreFuchsiaHandleKHR( const ImportSemaphoreFuchsiaHandleInfoKHR* pImportSemaphoreFuchsiaHandleInfo ) const
+  {
+    return static_cast<Result>( vkImportSemaphoreFuchsiaHandleKHR( m_device, reinterpret_cast<const VkImportSemaphoreFuchsiaHandleInfoKHR*>( pImportSemaphoreFuchsiaHandleInfo ) ) );
+  }
+#ifndef VULKAN_HPP_DISABLE_ENHANCED_MODE
+  VULKAN_HPP_INLINE ResultValueType<void>::type Device::importSemaphoreFuchsiaHandleKHR( const ImportSemaphoreFuchsiaHandleInfoKHR & importSemaphoreFuchsiaHandleInfo ) const
+  {
+    Result result = static_cast<Result>( vkImportSemaphoreFuchsiaHandleKHR( m_device, reinterpret_cast<const VkImportSemaphoreFuchsiaHandleInfoKHR*>( &importSemaphoreFuchsiaHandleInfo ) ) );
+    return createResultValue( result, "vk::Device::importSemaphoreFuchsiaHandleKHR" );
   }
 #endif /*VULKAN_HPP_DISABLE_ENHANCED_MODE*/
 
@@ -31859,6 +32047,8 @@ namespace vk
     case StructureType::eImportMemoryFuchsiaHandleInfoKHR: return "ImportMemoryFuchsiaHandleInfoKHR";
     case StructureType::eMemoryFuchsiaHandlePropertiesKHR: return "MemoryFuchsiaHandlePropertiesKHR";
     case StructureType::eMemoryGetFuchsiaHandleInfoKHR: return "MemoryGetFuchsiaHandleInfoKHR";
+    case StructureType::eImportSemaphoreFuchsiaHandleInfoKHR: return "ImportSemaphoreFuchsiaHandleInfoKHR";
+    case StructureType::eSemaphoreGetFuchsiaHandleInfoKHR: return "SemaphoreGetFuchsiaHandleInfoKHR";
     default: return "invalid";
     }
   }
@@ -33089,6 +33279,7 @@ namespace vk
     case ExternalSemaphoreHandleTypeFlagBitsKHR::eOpaqueWin32Kmt: return "OpaqueWin32Kmt";
     case ExternalSemaphoreHandleTypeFlagBitsKHR::eD3D12Fence: return "D3D12Fence";
     case ExternalSemaphoreHandleTypeFlagBitsKHR::eSyncFd: return "SyncFd";
+    case ExternalSemaphoreHandleTypeFlagBitsKHR::eFuchsiaFence: return "FuchsiaFence";
     default: return "invalid";
     }
   }
@@ -33102,6 +33293,7 @@ namespace vk
     if (value & ExternalSemaphoreHandleTypeFlagBitsKHR::eOpaqueWin32Kmt) result += "OpaqueWin32Kmt | ";
     if (value & ExternalSemaphoreHandleTypeFlagBitsKHR::eD3D12Fence) result += "D3D12Fence | ";
     if (value & ExternalSemaphoreHandleTypeFlagBitsKHR::eSyncFd) result += "SyncFd | ";
+    if (value & ExternalSemaphoreHandleTypeFlagBitsKHR::eFuchsiaFence) result += "FuchsiaFence | ";
     return "{" + result.substr(0, result.size() - 3) + "}";
   }
 

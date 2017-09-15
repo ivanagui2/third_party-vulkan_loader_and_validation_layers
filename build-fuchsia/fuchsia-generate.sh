@@ -18,18 +18,19 @@
 
 if [ -z "$1" ]
   then
-    echo "Usage: fuchsia-generate.sh OUTPUT_DIR"
+    echo "Usage: fuchsia-generate.sh TARGET_GEN_DIR"
     exit 1
 fi
 
-SOURCE_DIR=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-OUTPUT_DIR=$1
+function realpath { echo $(cd -P $(dirname $1); pwd)/$(basename $1); }
+# Get full path for the parent of this script
+SOURCE_DIR=$(realpath $(dirname $0))
+# Get full path for our gen directory
+OUTPUT_DIR=$(realpath $1)
 OUTPUT_INCLUDE_DIR=$OUTPUT_DIR/generated/include
+
 rm -rf $OUTPUT_DIR/generated
 mkdir -p $OUTPUT_INCLUDE_DIR
-dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-cd $dir
-
 
 ( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_safe_struct.h 2> /dev/null )
 ( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_safe_struct.cpp 2> /dev/null )

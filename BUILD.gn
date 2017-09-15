@@ -43,7 +43,7 @@ config("include_extra_vulkan_headers") {
 
 action("generate_extra_vulkan_headers") {
   script = "build-fuchsia/fuchsia-generate.sh"
-  args = [ rebase_path(target_gen_dir, "build-fuchsia" ) ]
+  args = [ rebase_path(target_gen_dir, "." ) ]
   inputs = [
     "scripts/dispatch_table_helper_generator.py",
     "scripts/helper_file_generator.py",

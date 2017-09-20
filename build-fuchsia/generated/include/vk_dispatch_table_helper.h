@@ -233,8 +233,6 @@ static inline void layer_init_device_dispatch_table(VkDevice device, VkLayerDisp
     table->GetPastPresentationTimingGOOGLE = (PFN_vkGetPastPresentationTimingGOOGLE) gpa(device, "vkGetPastPresentationTimingGOOGLE");
     table->CmdSetDiscardRectangleEXT = (PFN_vkCmdSetDiscardRectangleEXT) gpa(device, "vkCmdSetDiscardRectangleEXT");
     table->SetHdrMetadataEXT = (PFN_vkSetHdrMetadataEXT) gpa(device, "vkSetHdrMetadataEXT");
-    table->ExportDeviceMemoryMAGMA = (PFN_vkExportDeviceMemoryMAGMA) gpa(device, "vkExportDeviceMemoryMAGMA");
-    table->ImportDeviceMemoryMAGMA = (PFN_vkImportDeviceMemoryMAGMA) gpa(device, "vkImportDeviceMemoryMAGMA");
 }
 
 

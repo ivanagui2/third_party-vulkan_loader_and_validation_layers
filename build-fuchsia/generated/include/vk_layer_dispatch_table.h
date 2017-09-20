@@ -441,10 +441,6 @@ typedef struct VkLayerDispatchTable_ {
 
     // ---- VK_EXT_hdr_metadata extension commands
     PFN_vkSetHdrMetadataEXT SetHdrMetadataEXT;
-
-    // ---- VK_GOOGLE_external_memory_magma extension commands
-    PFN_vkExportDeviceMemoryMAGMA ExportDeviceMemoryMAGMA;
-    PFN_vkImportDeviceMemoryMAGMA ImportDeviceMemoryMAGMA;
 } VkLayerDispatchTable;
 
 

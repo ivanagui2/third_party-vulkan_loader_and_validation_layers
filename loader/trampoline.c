@@ -1945,24 +1945,3 @@ LOADER_EXPORT VKAPI_ATTR void VKAPI_CALL vkCmdExecuteCommands(VkCommandBuffer co
 
     disp->CmdExecuteCommands(commandBuffer, commandBuffersCount, pCommandBuffers);
 }
-
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-
-LOADER_EXPORT VKAPI_ATTR VkResult VKAPI_CALL vkExportDeviceMemoryMAGMA(VkDevice device, VkDeviceMemory memory, uint32_t* pHandle) {
-    const VkLayerDispatchTable *disp;
-
-    disp = loader_get_dispatch(device);
-
-    return disp->ExportDeviceMemoryMAGMA(device, memory, pHandle);
-}
-
-LOADER_EXPORT VKAPI_ATTR VkResult VKAPI_CALL vkImportDeviceMemoryMAGMA(VkDevice device, uint32_t handle,
-                                                                    const VkAllocationCallbacks* pAllocator, VkDeviceMemory* pMemory) {
-    const VkLayerDispatchTable *disp;
-
-    disp = loader_get_dispatch(device);
-
-    return disp->ImportDeviceMemoryMAGMA(device, handle, pAllocator, pMemory);
-}
-
-#endif  // VK_USE_PLATFORM_MAGMA_KHR

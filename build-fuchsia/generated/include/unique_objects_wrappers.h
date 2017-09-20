@@ -3638,36 +3638,6 @@ VKAPI_ATTR VkResult VKAPI_CALL CreateMacOSSurfaceMVK(
 }
 #endif // VK_USE_PLATFORM_MACOS_MVK
 
-VKAPI_ATTR VkResult VKAPI_CALL ExportDeviceMemoryMAGMA(
-    VkDevice                                    device,
-    VkDeviceMemory                              memory,
-    uint32_t*                                   pHandle)
-{
-    layer_data *dev_data = GetLayerDataPtr(get_dispatch_key(device), layer_data_map);
-    {
-        std::lock_guard<std::mutex> lock(global_lock);
-        memory = Unwrap(dev_data, memory);
-    }
-    VkResult result = dev_data->dispatch_table.ExportDeviceMemoryMAGMA(device, memory, pHandle);
-
-    return result;
-}
-
-VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(
-    VkDevice                                    device,
-    uint32_t                                    handle,
-    const VkAllocationCallbacks*                pAllocator,
-    VkDeviceMemory*                             pMemory)
-{
-    layer_data *dev_data = GetLayerDataPtr(get_dispatch_key(device), layer_data_map);
-    VkResult result = dev_data->dispatch_table.ImportDeviceMemoryMAGMA(device, handle, pAllocator, pMemory);
-    if (VK_SUCCESS == result) {
-        std::lock_guard<std::mutex> lock(global_lock);
-        *pMemory = WrapNew(dev_data, *pMemory);
-    }
-    return result;
-}
-
 // Layer Device Extension Whitelist
 static const char *kUniqueObjectsSupportedDeviceExtensions =
 "VK_KHR_swapchain"
@@ -3749,7 +3719,6 @@ static const char *kUniqueObjectsSupportedDeviceExtensions =
 "VK_NV_framebuffer_mixed_samples"
 "VK_NV_fill_rectangle"
 "VK_EXT_post_depth_coverage"
-"VK_GOOGLE_external_memory_magma"
 ;
 
 
@@ -4028,8 +3997,6 @@ static const std::unordered_map<std::string, void*> name_to_funcptr_map = {
 #ifdef VK_USE_PLATFORM_MACOS_MVK
     {"vkCreateMacOSSurfaceMVK", (void*)CreateMacOSSurfaceMVK},
 #endif
-    {"vkExportDeviceMemoryMAGMA", (void*)ExportDeviceMemoryMAGMA},
-    {"vkImportDeviceMemoryMAGMA", (void*)ImportDeviceMemoryMAGMA},
 };
 
 

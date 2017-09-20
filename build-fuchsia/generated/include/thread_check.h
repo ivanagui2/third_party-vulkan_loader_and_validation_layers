@@ -5228,54 +5228,6 @@ VKAPI_ATTR VkResult VKAPI_CALL CreateMacOSSurfaceMVK(
 
 
 
-VKAPI_ATTR VkResult VKAPI_CALL ExportDeviceMemoryMAGMA(
-    VkDevice                                    device,
-    VkDeviceMemory                              memory,
-    uint32_t*                                   pHandle)
-{
-    dispatch_key key = get_dispatch_key(device);
-    layer_data *my_data = GetLayerDataPtr(key, layer_data_map);
-    VkLayerDispatchTable *pTable = my_data->device_dispatch_table;
-    VkResult result;
-    bool threadChecks = startMultiThread();
-    if (threadChecks) {
-        startReadObject(my_data, device);
-        startReadObject(my_data, memory);
-    }
-    result = pTable->ExportDeviceMemoryMAGMA(device,memory,pHandle);
-    if (threadChecks) {
-        finishReadObject(my_data, device);
-        finishReadObject(my_data, memory);
-    } else {
-        finishMultiThread();
-    }
-    return result;
-}
-
-VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(
-    VkDevice                                    device,
-    uint32_t                                    handle,
-    const VkAllocationCallbacks*                pAllocator,
-    VkDeviceMemory*                             pMemory)
-{
-    dispatch_key key = get_dispatch_key(device);
-    layer_data *my_data = GetLayerDataPtr(key, layer_data_map);
-    VkLayerDispatchTable *pTable = my_data->device_dispatch_table;
-    VkResult result;
-    bool threadChecks = startMultiThread();
-    if (threadChecks) {
-        startReadObject(my_data, device);
-    }
-    result = pTable->ImportDeviceMemoryMAGMA(device,handle,pAllocator,pMemory);
-    if (threadChecks) {
-        finishReadObject(my_data, device);
-    } else {
-        finishMultiThread();
-    }
-    return result;
-}
-
-
 // Map of all APIs to be intercepted by this layer
 static const std::unordered_map<std::string, void*> name_to_funcptr_map = {
     {"vkCreateInstance", (void*)CreateInstance},
@@ -5531,8 +5483,6 @@ static const std::unordered_map<std::string, void*> name_to_funcptr_map = {
 #ifdef VK_USE_PLATFORM_MACOS_MVK
     {"vkCreateMacOSSurfaceMVK", (void*)CreateMacOSSurfaceMVK},
 #endif
-    {"vkExportDeviceMemoryMAGMA", (void*)ExportDeviceMemoryMAGMA},
-    {"vkImportDeviceMemoryMAGMA", (void*)ImportDeviceMemoryMAGMA},
 };
 
 

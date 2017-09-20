@@ -153,7 +153,6 @@ struct DeviceExtensions : public InstanceExtensions {
     bool vk_ext_post_depth_coverage{false};
     bool vk_nv_fill_rectangle{false};
     bool vk_amd_shader_trinary_minmax{false};
-    bool vk_google_external_memory_magma{false};
     bool vk_khr_external_semaphore_fd{false};
     bool vk_img_format_pvrtc{false};
     bool vk_nv_glsl_shader{false};
@@ -230,7 +229,6 @@ struct DeviceExtensions : public InstanceExtensions {
             {VK_EXT_POST_DEPTH_COVERAGE_EXTENSION_NAME, &DeviceExtensions::vk_ext_post_depth_coverage},
             {VK_NV_FILL_RECTANGLE_EXTENSION_NAME, &DeviceExtensions::vk_nv_fill_rectangle},
             {VK_AMD_SHADER_TRINARY_MINMAX_EXTENSION_NAME, &DeviceExtensions::vk_amd_shader_trinary_minmax},
-            {VK_GOOGLE_EXTERNAL_MEMORY_MAGMA_EXTENSION_NAME, &DeviceExtensions::vk_google_external_memory_magma},
             {VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME, &DeviceExtensions::vk_khr_external_semaphore_fd},
             {VK_IMG_FORMAT_PVRTC_EXTENSION_NAME, &DeviceExtensions::vk_img_format_pvrtc},
             {VK_NV_GLSL_SHADER_EXTENSION_NAME, &DeviceExtensions::vk_nv_glsl_shader},

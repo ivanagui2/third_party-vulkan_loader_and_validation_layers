@@ -6311,50 +6311,6 @@ static bool parameter_validation_vkCreateMacOSSurfaceMVK(
 
 
 
-static bool parameter_validation_vkExportDeviceMemoryMAGMA(
-    layer_data*                                 layer_data,
-    VkDeviceMemory                              memory,
-    uint32_t*                                   pHandle)
-{
-    bool skipCall = false;
-
-    if (!layer_data->extensions.vk_google_external_memory_magma) skipCall |= OutputExtensionError(layer_data, "vkExportDeviceMemoryMAGMA", VK_GOOGLE_EXTERNAL_MEMORY_MAGMA_EXTENSION_NAME);
-
-    skipCall |= validate_required_handle(layer_data->report_data, "vkExportDeviceMemoryMAGMA", "memory", memory);
-
-    skipCall |= validate_required_pointer(layer_data->report_data, "vkExportDeviceMemoryMAGMA", "pHandle", pHandle, VALIDATION_ERROR_UNDEFINED);
-
-    return skipCall;
-}
-
-static bool parameter_validation_vkImportDeviceMemoryMAGMA(
-    layer_data*                                 layer_data,
-    uint32_t                                    handle,
-    const VkAllocationCallbacks*                pAllocator,
-    VkDeviceMemory*                             pMemory)
-{
-    UNUSED_PARAMETER(handle);
-
-    bool skipCall = false;
-
-    if (!layer_data->extensions.vk_google_external_memory_magma) skipCall |= OutputExtensionError(layer_data, "vkImportDeviceMemoryMAGMA", VK_GOOGLE_EXTERNAL_MEMORY_MAGMA_EXTENSION_NAME);
-
-    if (pAllocator != NULL)
-    {
-        skipCall |= validate_required_pointer(layer_data->report_data, "vkImportDeviceMemoryMAGMA", "pAllocator->pfnAllocation", reinterpret_cast<const void*>(pAllocator->pfnAllocation), VALIDATION_ERROR_002004f0);
-
-        skipCall |= validate_required_pointer(layer_data->report_data, "vkImportDeviceMemoryMAGMA", "pAllocator->pfnReallocation", reinterpret_cast<const void*>(pAllocator->pfnReallocation), VALIDATION_ERROR_002004f2);
-
-        skipCall |= validate_required_pointer(layer_data->report_data, "vkImportDeviceMemoryMAGMA", "pAllocator->pfnFree", reinterpret_cast<const void*>(pAllocator->pfnFree), VALIDATION_ERROR_002004f4);
-    }
-
-    skipCall |= validate_required_pointer(layer_data->report_data, "vkImportDeviceMemoryMAGMA", "pMemory", pMemory, VALIDATION_ERROR_UNDEFINED);
-
-    return skipCall;
-}
-
-
-
 
 
 
@@ -7580,15 +7536,6 @@ VKAPI_ATTR VkResult VKAPI_CALL CreateMacOSSurfaceMVK(
     const VkAllocationCallbacks*                pAllocator,
     VkSurfaceKHR*                               pSurface);
 #endif
-VKAPI_ATTR VkResult VKAPI_CALL ExportDeviceMemoryMAGMA(
-    VkDevice                                    device,
-    VkDeviceMemory                              memory,
-    uint32_t*                                   pHandle);
-VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(
-    VkDevice                                    device,
-    uint32_t                                    handle,
-    const VkAllocationCallbacks*                pAllocator,
-    VkDeviceMemory*                             pMemory);
 // Map of all APIs to be intercepted by this layer
 static const std::unordered_map<std::string, void*> name_to_funcptr_map = {
     {"vkCreateInstance", (void*)CreateInstance},
@@ -7890,8 +7837,6 @@ static const std::unordered_map<std::string, void*> name_to_funcptr_map = {
 #ifdef VK_USE_PLATFORM_MACOS_MVK
     {"vkCreateMacOSSurfaceMVK", (void*)CreateMacOSSurfaceMVK},
 #endif
-    {"vkExportDeviceMemoryMAGMA", (void*)ExportDeviceMemoryMAGMA},
-    {"vkImportDeviceMemoryMAGMA", (void*)ImportDeviceMemoryMAGMA},
 };
 
 

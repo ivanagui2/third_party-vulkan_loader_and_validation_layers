@@ -491,10 +491,6 @@ VKAPI_ATTR void VKAPI_CALL loader_init_device_extension_dispatch_table(struct lo
 
     // ---- VK_EXT_hdr_metadata extension commands
     table->SetHdrMetadataEXT = (PFN_vkSetHdrMetadataEXT)gpa(dev, "vkSetHdrMetadataEXT");
-
-    // ---- VK_GOOGLE_external_memory_magma extension commands
-    table->ExportDeviceMemoryMAGMA = (PFN_vkExportDeviceMemoryMAGMA)gpa(dev, "vkExportDeviceMemoryMAGMA");
-    table->ImportDeviceMemoryMAGMA = (PFN_vkImportDeviceMemoryMAGMA)gpa(dev, "vkImportDeviceMemoryMAGMA");
 }
 
 // Init Instance function pointer dispatch table with core commands
@@ -915,10 +911,6 @@ VKAPI_ATTR void* VKAPI_CALL loader_lookup_device_dispatch_table(const VkLayerDis
 
     // ---- VK_EXT_hdr_metadata extension commands
     if (!strcmp(name, "SetHdrMetadataEXT")) return (void *)table->SetHdrMetadataEXT;
-
-    // ---- VK_GOOGLE_external_memory_magma extension commands
-    if (!strcmp(name, "ExportDeviceMemoryMAGMA")) return (void *)table->ExportDeviceMemoryMAGMA;
-    if (!strcmp(name, "ImportDeviceMemoryMAGMA")) return (void *)table->ImportDeviceMemoryMAGMA;
 
     return NULL;
 }
@@ -1874,26 +1866,6 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateMacOSSurfaceMVK(
 }
 
 #endif // VK_USE_PLATFORM_MACOS_MVK
-
-// ---- VK_GOOGLE_external_memory_magma extension trampoline/terminators
-
-VKAPI_ATTR VkResult VKAPI_CALL ExportDeviceMemoryMAGMA(
-    VkDevice                                    device,
-    VkDeviceMemory                              memory,
-    uint32_t*                                   pHandle) {
-    const VkLayerDispatchTable *disp = loader_get_dispatch(device);
-    return disp->ExportDeviceMemoryMAGMA(device, memory, pHandle);
-}
-
-VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(
-    VkDevice                                    device,
-    uint32_t                                    handle,
-    const VkAllocationCallbacks*                pAllocator,
-    VkDeviceMemory*                             pMemory) {
-    const VkLayerDispatchTable *disp = loader_get_dispatch(device);
-    return disp->ImportDeviceMemoryMAGMA(device, handle, pAllocator, pMemory);
-}
-
 // GPA helpers for extensions
 bool extension_instance_gpa(struct loader_instance *ptr_instance, const char *name, void **addr) {
     *addr = NULL;
@@ -2364,16 +2336,6 @@ bool extension_instance_gpa(struct loader_instance *ptr_instance, const char *na
         return true;
     }
 #endif // VK_USE_PLATFORM_MACOS_MVK
-
-    // ---- VK_GOOGLE_external_memory_magma extension commands
-    if (!strcmp("vkExportDeviceMemoryMAGMA", name)) {
-        *addr = (void *)ExportDeviceMemoryMAGMA;
-        return true;
-    }
-    if (!strcmp("vkImportDeviceMemoryMAGMA", name)) {
-        *addr = (void *)ImportDeviceMemoryMAGMA;
-        return true;
-    }
     return false;
 }
 

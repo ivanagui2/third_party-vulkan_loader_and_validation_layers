@@ -2,7 +2,14 @@
 
 - The `BUILD.gn` files are for building as a part of Fuchsia using `GN`.
 - The `build-fuchsia` directory contains customized scripts to generate some of
-the necessary header files. They are used in the root `BUILD.gn` file.
+the necessary header files. These header files are pre-generated and used in the
+root `BUILD.gn` file.
+- To regenerate the header files after an update, run the following command:
+```
+cd $FUCHSIA_ROOT/third_party/vulkan_loader_and_validation_layers
+./build-fuchsia/fuchsia-generate.sh build-fuchsia
+```
+
 - The header files `vulkan.h` and `vulkan.hpp` are generated from `vk.xml`. If
 `vk.xml` changes, regenerate the files with the following steps:
 

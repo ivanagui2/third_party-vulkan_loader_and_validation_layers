@@ -23,7 +23,10 @@ shared_library("loader") {
   # The Vulkan loader is named libvulkan
   output_name = "vulkan"
 
-  configs += [ "../:vulkan_build_config" ]
+  configs += [
+    "../:vulkan_build_config",
+    "../:include_extra_vulkan_headers",
+  ]
 
   include_dirs = [ "." ]
 
@@ -32,8 +35,6 @@ shared_library("loader") {
     "-DSYSCONFDIR=\"/system/data\"",
     "-DDATADIR=\"/usr/share\"",
   ]
-
-  deps = [ "../:extra_vulkan_headers", "../:generate_extra_vulkan_headers" ]
 
   sources = [
     "cJSON.c",

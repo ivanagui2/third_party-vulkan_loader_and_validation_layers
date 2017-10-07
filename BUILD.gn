@@ -33,45 +33,9 @@ group("vulkan") {
 }
 
 group("extra_vulkan_headers") {
-  public_configs = [ ":include_extra_vulkan_headers"]
-  deps = [ ":generate_extra_vulkan_headers" ]
+  public_configs = [ ":include_extra_vulkan_headers" ]
 }
 
 config("include_extra_vulkan_headers") {
-  include_dirs = [ "$target_gen_dir/generated/include" ]
-}
-
-action("generate_extra_vulkan_headers") {
-  script = "build-fuchsia/fuchsia-generate.sh"
-  args = [ rebase_path(target_gen_dir, "." ) ]
-  inputs = [
-    "scripts/dispatch_table_helper_generator.py",
-    "scripts/helper_file_generator.py",
-    "scripts/loader_extension_generator.py",
-    "scripts/lvl_genvk.py",
-    "scripts/object_tracker_generator.py",
-    "scripts/parameter_validation_generator.py",
-    "scripts/threading_generator.py",
-    "scripts/unique_objects_generator.py",
-  ]
-  sources = [
-    "include/vulkan/vulkan.h",
-    "scripts/vk.xml",
-  ]
-  outputs = [
-    "$target_gen_dir/generated/include/vk_safe_struct.h",
-    "$target_gen_dir/generated/include/vk_safe_struct.cpp",
-    "$target_gen_dir/generated/include/vk_struct_size_helper.h",
-    "$target_gen_dir/generated/include/vk_struct_size_helper.c",
-    "$target_gen_dir/generated/include/vk_enum_string_helper.h",
-    "$target_gen_dir/generated/include/vk_extension_helper.h",
-    "$target_gen_dir/generated/include/vk_object_types.h",
-    "$target_gen_dir/generated/include/vk_dispatch_table_helper.h",
-    "$target_gen_dir/generated/include/thread_check.h",
-    "$target_gen_dir/generated/include/parameter_validation.h",
-    "$target_gen_dir/generated/include/unique_objects_wrappers.h",
-    "$target_gen_dir/generated/include/vk_loader_extensions.h",
-    "$target_gen_dir/generated/include/vk_loader_extensions.c",
-    "$target_gen_dir/generated/include/vk_layer_dispatch_table.h",
-  ]
+  include_dirs = [ "build-fuchsia/generated/include" ]
 }

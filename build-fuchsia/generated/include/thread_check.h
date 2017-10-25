@@ -5276,6 +5276,7 @@ VKAPI_ATTR VkResult VKAPI_CALL ImportDeviceMemoryMAGMA(
 }
 
 
+
 // Map of all APIs to be intercepted by this layer
 static const std::unordered_map<std::string, void*> name_to_funcptr_map = {
     {"vkCreateInstance", (void*)CreateInstance},

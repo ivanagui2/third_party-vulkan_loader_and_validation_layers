@@ -1008,6 +1008,8 @@ static inline const char* string_VkImageUsageFlagBits(VkImageUsageFlagBits input
             return "VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT";
         case VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT:
             return "VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT";
+        case VK_IMAGE_USAGE_SCANOUT_BIT_GOOGLE:
+            return "VK_IMAGE_USAGE_SCANOUT_BIT_GOOGLE";
         default:
             return "Unhandled VkImageUsageFlagBits";
     }

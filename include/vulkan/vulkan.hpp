@@ -361,13 +361,28 @@ namespace vk
     {
       return &m_value;
     }
-
+    
+    Type * operator->()
+    {
+      return &m_value;
+    }
+    
     Type const& operator*() const
     {
       return m_value;
     }
 
-    Type get() const
+    Type & operator*()
+    {
+      return m_value;
+    }
+
+    const Type & get() const
+    {
+      return m_value;
+    }
+    
+    Type & get()
     {
       return m_value;
     }
@@ -454,8 +469,8 @@ namespace vk
 
     StructureChain& operator=(StructureChain const &rhs)
     {
-      linkAndCopy(rhs);
-      return this;
+      linkAndCopy<StructureElements...>(rhs);
+      return *this;
     }
 
     template<typename ClassType> ClassType& get() { return static_cast<ClassType&>(*this);}
@@ -14537,7 +14552,8 @@ namespace vk
     eColorAttachment = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
     eDepthStencilAttachment = VK_IMAGE_USAGE_DEPTH_STENCIL_ATTACHMENT_BIT,
     eTransientAttachment = VK_IMAGE_USAGE_TRANSIENT_ATTACHMENT_BIT,
-    eInputAttachment = VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT
+    eInputAttachment = VK_IMAGE_USAGE_INPUT_ATTACHMENT_BIT,
+    eScanoutGOOGLE = VK_IMAGE_USAGE_SCANOUT_BIT_GOOGLE
   };
 
   using ImageUsageFlags = Flags<ImageUsageFlagBits, VkImageUsageFlags>;
@@ -14556,7 +14572,7 @@ namespace vk
   {
     enum
     {
-      allFlags = VkFlags(ImageUsageFlagBits::eTransferSrc) | VkFlags(ImageUsageFlagBits::eTransferDst) | VkFlags(ImageUsageFlagBits::eSampled) | VkFlags(ImageUsageFlagBits::eStorage) | VkFlags(ImageUsageFlagBits::eColorAttachment) | VkFlags(ImageUsageFlagBits::eDepthStencilAttachment) | VkFlags(ImageUsageFlagBits::eTransientAttachment) | VkFlags(ImageUsageFlagBits::eInputAttachment)
+      allFlags = VkFlags(ImageUsageFlagBits::eTransferSrc) | VkFlags(ImageUsageFlagBits::eTransferDst) | VkFlags(ImageUsageFlagBits::eSampled) | VkFlags(ImageUsageFlagBits::eStorage) | VkFlags(ImageUsageFlagBits::eColorAttachment) | VkFlags(ImageUsageFlagBits::eDepthStencilAttachment) | VkFlags(ImageUsageFlagBits::eTransientAttachment) | VkFlags(ImageUsageFlagBits::eInputAttachment) | VkFlags(ImageUsageFlagBits::eScanoutGOOGLE)
     };
   };
 
@@ -32353,6 +32369,7 @@ namespace vk
     case ImageUsageFlagBits::eDepthStencilAttachment: return "DepthStencilAttachment";
     case ImageUsageFlagBits::eTransientAttachment: return "TransientAttachment";
     case ImageUsageFlagBits::eInputAttachment: return "InputAttachment";
+    case ImageUsageFlagBits::eScanoutGOOGLE: return "ScanoutGOOGLE";
     default: return "invalid";
     }
   }
@@ -32369,6 +32386,7 @@ namespace vk
     if (value & ImageUsageFlagBits::eDepthStencilAttachment) result += "DepthStencilAttachment | ";
     if (value & ImageUsageFlagBits::eTransientAttachment) result += "TransientAttachment | ";
     if (value & ImageUsageFlagBits::eInputAttachment) result += "InputAttachment | ";
+    if (value & ImageUsageFlagBits::eScanoutGOOGLE) result += "ScanoutGOOGLE | ";
     return "{" + result.substr(0, result.size() - 3) + "}";
   }
 

@@ -63,6 +63,7 @@ struct InstanceExtensions {
     bool vk_khr_surface{false};
     bool vk_google_image_tiling_scanout{false};
     bool vk_ext_display_surface_counter{false};
+    bool vk_google_image_usage_scanout{false};
 
     void InitFromInstanceCreateInfo(const VkInstanceCreateInfo *pCreateInfo) {
 
@@ -115,6 +116,7 @@ struct InstanceExtensions {
             {VK_KHR_SURFACE_EXTENSION_NAME, &InstanceExtensions::vk_khr_surface},
             {VK_GOOGLE_IMAGE_TILING_SCANOUT_EXTENSION_NAME, &InstanceExtensions::vk_google_image_tiling_scanout},
             {VK_EXT_DISPLAY_SURFACE_COUNTER_EXTENSION_NAME, &InstanceExtensions::vk_ext_display_surface_counter},
+            {VK_GOOGLE_IMAGE_USAGE_SCANOUT_EXTENSION_NAME, &InstanceExtensions::vk_google_image_usage_scanout},
         };
 
         // Initialize struct data
@@ -314,6 +316,7 @@ struct DeviceExtensions : public InstanceExtensions {
         vk_khr_surface = instance_extensions->vk_khr_surface;
         vk_google_image_tiling_scanout = instance_extensions->vk_google_image_tiling_scanout;
         vk_ext_display_surface_counter = instance_extensions->vk_ext_display_surface_counter;
+        vk_google_image_usage_scanout = instance_extensions->vk_google_image_usage_scanout;
 
         for (uint32_t i = 0; i < pCreateInfo->enabledExtensionCount; i++) {
             for (auto ext : known_extensions) {

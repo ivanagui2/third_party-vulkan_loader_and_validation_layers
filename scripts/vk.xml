@@ -7064,5 +7064,12 @@ private version is maintained in the 1.0 branch of the member gitlab server.
                 <command name="vkGetSemaphoreFuchsiaHandleKHR"/>
             </require>
         </extension>
+        <extension name="VK_GOOGLE_image_usage_scanout" number="1003" type="instance" supported="vulkan">
+            <require>
+                <enum value="1"                                          name="VK_GOOGLE_IMAGE_USAGE_SCANOUT_SPEC_VERSION"/>
+                <enum value="&quot;VK_GOOGLE_image_usage_scanout&quot;"  name="VK_GOOGLE_IMAGE_USAGE_SCANOUT_EXTENSION_NAME"/>
+                <enum bitpos="16" extends="VkImageUsageFlagBits"         name="VK_IMAGE_USAGE_SCANOUT_BIT_GOOGLE"/>
+            </require>
+        </extension>
     </extensions>
 </registry>

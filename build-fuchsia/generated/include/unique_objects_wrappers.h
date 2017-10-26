@@ -3802,7 +3802,6 @@ static const char *kUniqueObjectsSupportedInstanceExtensions =
 #ifdef VK_USE_PLATFORM_MACOS_MVK
 "VK_MVK_macos_surface"
 #endif
-"VK_GOOGLE_image_tiling_scanout"
 "VK_GOOGLE_image_usage_scanout"
 ;
 

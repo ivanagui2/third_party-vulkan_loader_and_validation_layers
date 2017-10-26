@@ -61,7 +61,6 @@ struct InstanceExtensions {
     bool vk_khr_external_fence_capabilities{false};
     bool vk_khr_wayland_surface{false};
     bool vk_khr_surface{false};
-    bool vk_google_image_tiling_scanout{false};
     bool vk_ext_display_surface_counter{false};
     bool vk_google_image_usage_scanout{false};
 
@@ -114,7 +113,6 @@ struct InstanceExtensions {
             {VK_KHR_WAYLAND_SURFACE_EXTENSION_NAME, &InstanceExtensions::vk_khr_wayland_surface},
 #endif
             {VK_KHR_SURFACE_EXTENSION_NAME, &InstanceExtensions::vk_khr_surface},
-            {VK_GOOGLE_IMAGE_TILING_SCANOUT_EXTENSION_NAME, &InstanceExtensions::vk_google_image_tiling_scanout},
             {VK_EXT_DISPLAY_SURFACE_COUNTER_EXTENSION_NAME, &InstanceExtensions::vk_ext_display_surface_counter},
             {VK_GOOGLE_IMAGE_USAGE_SCANOUT_EXTENSION_NAME, &InstanceExtensions::vk_google_image_usage_scanout},
         };
@@ -314,7 +312,6 @@ struct DeviceExtensions : public InstanceExtensions {
         vk_khr_external_fence_capabilities = instance_extensions->vk_khr_external_fence_capabilities;
         vk_khr_wayland_surface = instance_extensions->vk_khr_wayland_surface;
         vk_khr_surface = instance_extensions->vk_khr_surface;
-        vk_google_image_tiling_scanout = instance_extensions->vk_google_image_tiling_scanout;
         vk_ext_display_surface_counter = instance_extensions->vk_ext_display_surface_counter;
         vk_google_image_usage_scanout = instance_extensions->vk_google_image_usage_scanout;
 

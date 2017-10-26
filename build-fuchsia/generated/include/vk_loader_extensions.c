@@ -2678,7 +2678,6 @@ const char *const LOADER_INSTANCE_EXTENSIONS[] = {
                                                   VK_MVK_MACOS_SURFACE_EXTENSION_NAME,
 #endif // VK_USE_PLATFORM_MACOS_MVK
                                                   VK_AMD_MIXED_ATTACHMENT_SAMPLES_EXTENSION_NAME,
-                                                  VK_GOOGLE_IMAGE_TILING_SCANOUT_EXTENSION_NAME,
                                                   VK_GOOGLE_IMAGE_USAGE_SCANOUT_EXTENSION_NAME,
                                                   NULL };
 

@@ -981,8 +981,6 @@ static inline const char* string_VkImageTiling(VkImageTiling input_value)
             return "VK_IMAGE_TILING_OPTIMAL";
         case VK_IMAGE_TILING_LINEAR:
             return "VK_IMAGE_TILING_LINEAR";
-        case VK_IMAGE_TILING_SCANOUT_GOOGLE:
-            return "VK_IMAGE_TILING_SCANOUT_GOOGLE";
         default:
             return "Unhandled VkImageTiling";
     }

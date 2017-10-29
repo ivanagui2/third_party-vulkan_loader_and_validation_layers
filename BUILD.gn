@@ -21,7 +21,10 @@
 
 config("vulkan_build_config") {
   include_dirs = [ "include" ]
-  defines = [ "VK_USE_PLATFORM_MAGMA_KHR=1" ]
+  defines = [
+    "VK_USE_PLATFORM_MAGMA_KHR=1",
+    "VULKAN_HPP_NO_SMART_HANDLE",
+  ]
 }
 
 group("vulkan") {

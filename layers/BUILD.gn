@@ -20,7 +20,7 @@
 # IN THE SOFTWARE.
 
 import("//garnet/lib/magma/gnbuild/magma.gni")
-import("//packages/package.gni")
+import("//build/package.gni")
 
 package("vulkan_loader_and_layers") {
   system_image = true

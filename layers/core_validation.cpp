@@ -6511,7 +6511,7 @@ static bool ValidateBarriers(layer_data *device_data, const char *funcName, GLOB
                                     funcName, HandleToUint64(mem_barrier->image));
                 } else if (((src_q_f_index != VK_QUEUE_FAMILY_IGNORED) && (dst_q_f_index != VK_QUEUE_FAMILY_IGNORED)) &&
                            ((src_q_f_index >= device_data->phys_dev_properties.queue_family_properties.size()) ||
-                            (dst_q_f_index >= device_data->phys_dev_properties.queue_family_properties.size()))) {
+                            (dst_q_f_index != VK_QUEUE_FAMILY_EXTERNAL_KHR && dst_q_f_index >= device_data->phys_dev_properties.queue_family_properties.size()))) {
                     skip |= log_msg(device_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT,
                                     VK_DEBUG_REPORT_OBJECT_TYPE_COMMAND_BUFFER_EXT, HandleToUint64(cb_state->commandBuffer),
                                     __LINE__, DRAWSTATE_INVALID_QUEUE_INDEX, "DS",

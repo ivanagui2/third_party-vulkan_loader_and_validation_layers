@@ -204,7 +204,7 @@ void *loader_device_heap_realloc(const struct loader_device *device, void *pMemo
 }
 
 // Environment variables
-#if defined(__linux__)
+#if defined(__linux__) || defined(__Fuchsia__)
 
 static inline char *loader_getenv(const char *name, const struct loader_instance *inst) {
     // No allocation of memory necessary for Linux, but we should at least touch
@@ -223,9 +223,11 @@ static inline char *loader_secure_getenv(const char *name, const struct loader_i
 #elif defined(HAVE___SECURE_GETENV)
     return __secure_getenv(name);
 #else
+#if !defined(__Fuchsia__)
 #pragma message(                                                                       \
     "Warning:  Falling back to non-secure getenv for environmental lookups!  Consider" \
     " updating to a different libc.")
+#endif
     return loader_getenv(name, inst);
 #endif
 }

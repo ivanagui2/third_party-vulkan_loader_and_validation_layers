@@ -40,6 +40,7 @@ shared_library("loader") {
     "cJSON.c",
     "debug_report.c",
     "dev_ext_trampoline.c",
+    "dlopen_fuchsia.c",
     "extension_manual.c",
     "loader.c",
     "murmurhash.c",
@@ -47,5 +48,21 @@ shared_library("loader") {
     "trampoline.c",
     "unknown_ext_chain.c",
     "wsi.c",
+  ]
+
+  deps = [
+    # libvulkan.so doesn't actually depend on libmagma.so. Instead, the
+    # libraries it loads depend on libmagma.so, but those libraries are
+    # loaded from the system rather than from the package. In order for
+    # those library to find libmagma.so, we include a dependency here, which
+    # ensures that libmagma.so is pulled into every package that depends on
+    # libvulkan.so.
+    "//garnet/lib/magma:libmagma",
+
+    "//zircon/public/lib/fdio",
+  ]
+
+  libs = [
+    "zircon"
   ]
 }

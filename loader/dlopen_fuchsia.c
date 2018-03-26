@@ -34,7 +34,7 @@ void *dlopen_fuchsia(const char *name, int mode) {
         return NULL;
     }
     zx_handle_t vmo = ZX_HANDLE_INVALID;
-    zx_status_t status = fdio_get_vmo(fd, &vmo);
+    zx_status_t status = fdio_get_vmo_clone(fd, &vmo);
     close(fd);
     if (status != ZX_OK) {
         return NULL;

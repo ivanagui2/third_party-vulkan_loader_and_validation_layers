@@ -25,6 +25,7 @@
  * Author: Courtney Goeltzenleuchter <courtneygo@google.com>
  * Author: Tobin Ehlis <tobine@google.com>
  * Author: Chris Forbes <chrisforbes@google.com>
+ * Author: John Zulauf<jzulauf@lunarg.com>
  *
  ****************************************************************************/
 
@@ -43,6 +44,7 @@ struct safe_VkApplicationInfo {
     uint32_t apiVersion;
     safe_VkApplicationInfo(const VkApplicationInfo* in_struct);
     safe_VkApplicationInfo(const safe_VkApplicationInfo& src);
+    safe_VkApplicationInfo& operator=(const safe_VkApplicationInfo& src);
     safe_VkApplicationInfo();
     ~safe_VkApplicationInfo();
     void initialize(const VkApplicationInfo* in_struct);
@@ -62,6 +64,7 @@ struct safe_VkInstanceCreateInfo {
     const char* const* ppEnabledExtensionNames;
     safe_VkInstanceCreateInfo(const VkInstanceCreateInfo* in_struct);
     safe_VkInstanceCreateInfo(const safe_VkInstanceCreateInfo& src);
+    safe_VkInstanceCreateInfo& operator=(const safe_VkInstanceCreateInfo& src);
     safe_VkInstanceCreateInfo();
     ~safe_VkInstanceCreateInfo();
     void initialize(const VkInstanceCreateInfo* in_struct);
@@ -79,6 +82,7 @@ struct safe_VkAllocationCallbacks {
     PFN_vkInternalFreeNotification pfnInternalFree;
     safe_VkAllocationCallbacks(const VkAllocationCallbacks* in_struct);
     safe_VkAllocationCallbacks(const safe_VkAllocationCallbacks& src);
+    safe_VkAllocationCallbacks& operator=(const safe_VkAllocationCallbacks& src);
     safe_VkAllocationCallbacks();
     ~safe_VkAllocationCallbacks();
     void initialize(const VkAllocationCallbacks* in_struct);
@@ -96,6 +100,7 @@ struct safe_VkDeviceQueueCreateInfo {
     const float* pQueuePriorities;
     safe_VkDeviceQueueCreateInfo(const VkDeviceQueueCreateInfo* in_struct);
     safe_VkDeviceQueueCreateInfo(const safe_VkDeviceQueueCreateInfo& src);
+    safe_VkDeviceQueueCreateInfo& operator=(const safe_VkDeviceQueueCreateInfo& src);
     safe_VkDeviceQueueCreateInfo();
     ~safe_VkDeviceQueueCreateInfo();
     void initialize(const VkDeviceQueueCreateInfo* in_struct);
@@ -117,6 +122,7 @@ struct safe_VkDeviceCreateInfo {
     const VkPhysicalDeviceFeatures* pEnabledFeatures;
     safe_VkDeviceCreateInfo(const VkDeviceCreateInfo* in_struct);
     safe_VkDeviceCreateInfo(const safe_VkDeviceCreateInfo& src);
+    safe_VkDeviceCreateInfo& operator=(const safe_VkDeviceCreateInfo& src);
     safe_VkDeviceCreateInfo();
     ~safe_VkDeviceCreateInfo();
     void initialize(const VkDeviceCreateInfo* in_struct);
@@ -137,6 +143,7 @@ struct safe_VkSubmitInfo {
     VkSemaphore* pSignalSemaphores;
     safe_VkSubmitInfo(const VkSubmitInfo* in_struct);
     safe_VkSubmitInfo(const safe_VkSubmitInfo& src);
+    safe_VkSubmitInfo& operator=(const safe_VkSubmitInfo& src);
     safe_VkSubmitInfo();
     ~safe_VkSubmitInfo();
     void initialize(const VkSubmitInfo* in_struct);
@@ -152,6 +159,7 @@ struct safe_VkMemoryAllocateInfo {
     uint32_t memoryTypeIndex;
     safe_VkMemoryAllocateInfo(const VkMemoryAllocateInfo* in_struct);
     safe_VkMemoryAllocateInfo(const safe_VkMemoryAllocateInfo& src);
+    safe_VkMemoryAllocateInfo& operator=(const safe_VkMemoryAllocateInfo& src);
     safe_VkMemoryAllocateInfo();
     ~safe_VkMemoryAllocateInfo();
     void initialize(const VkMemoryAllocateInfo* in_struct);
@@ -168,6 +176,7 @@ struct safe_VkMappedMemoryRange {
     VkDeviceSize size;
     safe_VkMappedMemoryRange(const VkMappedMemoryRange* in_struct);
     safe_VkMappedMemoryRange(const safe_VkMappedMemoryRange& src);
+    safe_VkMappedMemoryRange& operator=(const safe_VkMappedMemoryRange& src);
     safe_VkMappedMemoryRange();
     ~safe_VkMappedMemoryRange();
     void initialize(const VkMappedMemoryRange* in_struct);
@@ -182,6 +191,7 @@ struct safe_VkSparseBufferMemoryBindInfo {
     VkSparseMemoryBind* pBinds;
     safe_VkSparseBufferMemoryBindInfo(const VkSparseBufferMemoryBindInfo* in_struct);
     safe_VkSparseBufferMemoryBindInfo(const safe_VkSparseBufferMemoryBindInfo& src);
+    safe_VkSparseBufferMemoryBindInfo& operator=(const safe_VkSparseBufferMemoryBindInfo& src);
     safe_VkSparseBufferMemoryBindInfo();
     ~safe_VkSparseBufferMemoryBindInfo();
     void initialize(const VkSparseBufferMemoryBindInfo* in_struct);
@@ -196,6 +206,7 @@ struct safe_VkSparseImageOpaqueMemoryBindInfo {
     VkSparseMemoryBind* pBinds;
     safe_VkSparseImageOpaqueMemoryBindInfo(const VkSparseImageOpaqueMemoryBindInfo* in_struct);
     safe_VkSparseImageOpaqueMemoryBindInfo(const safe_VkSparseImageOpaqueMemoryBindInfo& src);
+    safe_VkSparseImageOpaqueMemoryBindInfo& operator=(const safe_VkSparseImageOpaqueMemoryBindInfo& src);
     safe_VkSparseImageOpaqueMemoryBindInfo();
     ~safe_VkSparseImageOpaqueMemoryBindInfo();
     void initialize(const VkSparseImageOpaqueMemoryBindInfo* in_struct);
@@ -210,6 +221,7 @@ struct safe_VkSparseImageMemoryBindInfo {
     VkSparseImageMemoryBind* pBinds;
     safe_VkSparseImageMemoryBindInfo(const VkSparseImageMemoryBindInfo* in_struct);
     safe_VkSparseImageMemoryBindInfo(const safe_VkSparseImageMemoryBindInfo& src);
+    safe_VkSparseImageMemoryBindInfo& operator=(const safe_VkSparseImageMemoryBindInfo& src);
     safe_VkSparseImageMemoryBindInfo();
     ~safe_VkSparseImageMemoryBindInfo();
     void initialize(const VkSparseImageMemoryBindInfo* in_struct);
@@ -233,6 +245,7 @@ struct safe_VkBindSparseInfo {
     VkSemaphore* pSignalSemaphores;
     safe_VkBindSparseInfo(const VkBindSparseInfo* in_struct);
     safe_VkBindSparseInfo(const safe_VkBindSparseInfo& src);
+    safe_VkBindSparseInfo& operator=(const safe_VkBindSparseInfo& src);
     safe_VkBindSparseInfo();
     ~safe_VkBindSparseInfo();
     void initialize(const VkBindSparseInfo* in_struct);
@@ -247,6 +260,7 @@ struct safe_VkFenceCreateInfo {
     VkFenceCreateFlags flags;
     safe_VkFenceCreateInfo(const VkFenceCreateInfo* in_struct);
     safe_VkFenceCreateInfo(const safe_VkFenceCreateInfo& src);
+    safe_VkFenceCreateInfo& operator=(const safe_VkFenceCreateInfo& src);
     safe_VkFenceCreateInfo();
     ~safe_VkFenceCreateInfo();
     void initialize(const VkFenceCreateInfo* in_struct);
@@ -261,6 +275,7 @@ struct safe_VkSemaphoreCreateInfo {
     VkSemaphoreCreateFlags flags;
     safe_VkSemaphoreCreateInfo(const VkSemaphoreCreateInfo* in_struct);
     safe_VkSemaphoreCreateInfo(const safe_VkSemaphoreCreateInfo& src);
+    safe_VkSemaphoreCreateInfo& operator=(const safe_VkSemaphoreCreateInfo& src);
     safe_VkSemaphoreCreateInfo();
     ~safe_VkSemaphoreCreateInfo();
     void initialize(const VkSemaphoreCreateInfo* in_struct);
@@ -275,6 +290,7 @@ struct safe_VkEventCreateInfo {
     VkEventCreateFlags flags;
     safe_VkEventCreateInfo(const VkEventCreateInfo* in_struct);
     safe_VkEventCreateInfo(const safe_VkEventCreateInfo& src);
+    safe_VkEventCreateInfo& operator=(const safe_VkEventCreateInfo& src);
     safe_VkEventCreateInfo();
     ~safe_VkEventCreateInfo();
     void initialize(const VkEventCreateInfo* in_struct);
@@ -292,6 +308,7 @@ struct safe_VkQueryPoolCreateInfo {
     VkQueryPipelineStatisticFlags pipelineStatistics;
     safe_VkQueryPoolCreateInfo(const VkQueryPoolCreateInfo* in_struct);
     safe_VkQueryPoolCreateInfo(const safe_VkQueryPoolCreateInfo& src);
+    safe_VkQueryPoolCreateInfo& operator=(const safe_VkQueryPoolCreateInfo& src);
     safe_VkQueryPoolCreateInfo();
     ~safe_VkQueryPoolCreateInfo();
     void initialize(const VkQueryPoolCreateInfo* in_struct);
@@ -311,6 +328,7 @@ struct safe_VkBufferCreateInfo {
     const uint32_t* pQueueFamilyIndices;
     safe_VkBufferCreateInfo(const VkBufferCreateInfo* in_struct);
     safe_VkBufferCreateInfo(const safe_VkBufferCreateInfo& src);
+    safe_VkBufferCreateInfo& operator=(const safe_VkBufferCreateInfo& src);
     safe_VkBufferCreateInfo();
     ~safe_VkBufferCreateInfo();
     void initialize(const VkBufferCreateInfo* in_struct);
@@ -329,6 +347,7 @@ struct safe_VkBufferViewCreateInfo {
     VkDeviceSize range;
     safe_VkBufferViewCreateInfo(const VkBufferViewCreateInfo* in_struct);
     safe_VkBufferViewCreateInfo(const safe_VkBufferViewCreateInfo& src);
+    safe_VkBufferViewCreateInfo& operator=(const safe_VkBufferViewCreateInfo& src);
     safe_VkBufferViewCreateInfo();
     ~safe_VkBufferViewCreateInfo();
     void initialize(const VkBufferViewCreateInfo* in_struct);
@@ -355,6 +374,7 @@ struct safe_VkImageCreateInfo {
     VkImageLayout initialLayout;
     safe_VkImageCreateInfo(const VkImageCreateInfo* in_struct);
     safe_VkImageCreateInfo(const safe_VkImageCreateInfo& src);
+    safe_VkImageCreateInfo& operator=(const safe_VkImageCreateInfo& src);
     safe_VkImageCreateInfo();
     ~safe_VkImageCreateInfo();
     void initialize(const VkImageCreateInfo* in_struct);
@@ -374,6 +394,7 @@ struct safe_VkImageViewCreateInfo {
     VkImageSubresourceRange subresourceRange;
     safe_VkImageViewCreateInfo(const VkImageViewCreateInfo* in_struct);
     safe_VkImageViewCreateInfo(const safe_VkImageViewCreateInfo& src);
+    safe_VkImageViewCreateInfo& operator=(const safe_VkImageViewCreateInfo& src);
     safe_VkImageViewCreateInfo();
     ~safe_VkImageViewCreateInfo();
     void initialize(const VkImageViewCreateInfo* in_struct);
@@ -390,6 +411,7 @@ struct safe_VkShaderModuleCreateInfo {
     const uint32_t* pCode;
     safe_VkShaderModuleCreateInfo(const VkShaderModuleCreateInfo* in_struct);
     safe_VkShaderModuleCreateInfo(const safe_VkShaderModuleCreateInfo& src);
+    safe_VkShaderModuleCreateInfo& operator=(const safe_VkShaderModuleCreateInfo& src);
     safe_VkShaderModuleCreateInfo();
     ~safe_VkShaderModuleCreateInfo();
     void initialize(const VkShaderModuleCreateInfo* in_struct);
@@ -406,6 +428,7 @@ struct safe_VkPipelineCacheCreateInfo {
     const void* pInitialData;
     safe_VkPipelineCacheCreateInfo(const VkPipelineCacheCreateInfo* in_struct);
     safe_VkPipelineCacheCreateInfo(const safe_VkPipelineCacheCreateInfo& src);
+    safe_VkPipelineCacheCreateInfo& operator=(const safe_VkPipelineCacheCreateInfo& src);
     safe_VkPipelineCacheCreateInfo();
     ~safe_VkPipelineCacheCreateInfo();
     void initialize(const VkPipelineCacheCreateInfo* in_struct);
@@ -421,6 +444,7 @@ struct safe_VkSpecializationInfo {
     const void* pData;
     safe_VkSpecializationInfo(const VkSpecializationInfo* in_struct);
     safe_VkSpecializationInfo(const safe_VkSpecializationInfo& src);
+    safe_VkSpecializationInfo& operator=(const safe_VkSpecializationInfo& src);
     safe_VkSpecializationInfo();
     ~safe_VkSpecializationInfo();
     void initialize(const VkSpecializationInfo* in_struct);
@@ -439,6 +463,7 @@ struct safe_VkPipelineShaderStageCreateInfo {
     safe_VkSpecializationInfo* pSpecializationInfo;
     safe_VkPipelineShaderStageCreateInfo(const VkPipelineShaderStageCreateInfo* in_struct);
     safe_VkPipelineShaderStageCreateInfo(const safe_VkPipelineShaderStageCreateInfo& src);
+    safe_VkPipelineShaderStageCreateInfo& operator=(const safe_VkPipelineShaderStageCreateInfo& src);
     safe_VkPipelineShaderStageCreateInfo();
     ~safe_VkPipelineShaderStageCreateInfo();
     void initialize(const VkPipelineShaderStageCreateInfo* in_struct);
@@ -457,6 +482,7 @@ struct safe_VkPipelineVertexInputStateCreateInfo {
     const VkVertexInputAttributeDescription* pVertexAttributeDescriptions;
     safe_VkPipelineVertexInputStateCreateInfo(const VkPipelineVertexInputStateCreateInfo* in_struct);
     safe_VkPipelineVertexInputStateCreateInfo(const safe_VkPipelineVertexInputStateCreateInfo& src);
+    safe_VkPipelineVertexInputStateCreateInfo& operator=(const safe_VkPipelineVertexInputStateCreateInfo& src);
     safe_VkPipelineVertexInputStateCreateInfo();
     ~safe_VkPipelineVertexInputStateCreateInfo();
     void initialize(const VkPipelineVertexInputStateCreateInfo* in_struct);
@@ -473,6 +499,7 @@ struct safe_VkPipelineInputAssemblyStateCreateInfo {
     VkBool32 primitiveRestartEnable;
     safe_VkPipelineInputAssemblyStateCreateInfo(const VkPipelineInputAssemblyStateCreateInfo* in_struct);
     safe_VkPipelineInputAssemblyStateCreateInfo(const safe_VkPipelineInputAssemblyStateCreateInfo& src);
+    safe_VkPipelineInputAssemblyStateCreateInfo& operator=(const safe_VkPipelineInputAssemblyStateCreateInfo& src);
     safe_VkPipelineInputAssemblyStateCreateInfo();
     ~safe_VkPipelineInputAssemblyStateCreateInfo();
     void initialize(const VkPipelineInputAssemblyStateCreateInfo* in_struct);
@@ -488,6 +515,7 @@ struct safe_VkPipelineTessellationStateCreateInfo {
     uint32_t patchControlPoints;
     safe_VkPipelineTessellationStateCreateInfo(const VkPipelineTessellationStateCreateInfo* in_struct);
     safe_VkPipelineTessellationStateCreateInfo(const safe_VkPipelineTessellationStateCreateInfo& src);
+    safe_VkPipelineTessellationStateCreateInfo& operator=(const safe_VkPipelineTessellationStateCreateInfo& src);
     safe_VkPipelineTessellationStateCreateInfo();
     ~safe_VkPipelineTessellationStateCreateInfo();
     void initialize(const VkPipelineTessellationStateCreateInfo* in_struct);
@@ -504,11 +532,12 @@ struct safe_VkPipelineViewportStateCreateInfo {
     const VkViewport* pViewports;
     uint32_t scissorCount;
     const VkRect2D* pScissors;
-    safe_VkPipelineViewportStateCreateInfo(const VkPipelineViewportStateCreateInfo* in_struct);
+    safe_VkPipelineViewportStateCreateInfo(const VkPipelineViewportStateCreateInfo* in_struct, const bool is_dynamic_viewports, const bool is_dynamic_scissors);
     safe_VkPipelineViewportStateCreateInfo(const safe_VkPipelineViewportStateCreateInfo& src);
+    safe_VkPipelineViewportStateCreateInfo& operator=(const safe_VkPipelineViewportStateCreateInfo& src);
     safe_VkPipelineViewportStateCreateInfo();
     ~safe_VkPipelineViewportStateCreateInfo();
-    void initialize(const VkPipelineViewportStateCreateInfo* in_struct);
+    void initialize(const VkPipelineViewportStateCreateInfo* in_struct, const bool is_dynamic_viewports, const bool is_dynamic_scissors);
     void initialize(const safe_VkPipelineViewportStateCreateInfo* src);
     VkPipelineViewportStateCreateInfo *ptr() { return reinterpret_cast<VkPipelineViewportStateCreateInfo *>(this); }
     VkPipelineViewportStateCreateInfo const *ptr() const { return reinterpret_cast<VkPipelineViewportStateCreateInfo const *>(this); }
@@ -530,6 +559,7 @@ struct safe_VkPipelineRasterizationStateCreateInfo {
     float lineWidth;
     safe_VkPipelineRasterizationStateCreateInfo(const VkPipelineRasterizationStateCreateInfo* in_struct);
     safe_VkPipelineRasterizationStateCreateInfo(const safe_VkPipelineRasterizationStateCreateInfo& src);
+    safe_VkPipelineRasterizationStateCreateInfo& operator=(const safe_VkPipelineRasterizationStateCreateInfo& src);
     safe_VkPipelineRasterizationStateCreateInfo();
     ~safe_VkPipelineRasterizationStateCreateInfo();
     void initialize(const VkPipelineRasterizationStateCreateInfo* in_struct);
@@ -550,6 +580,7 @@ struct safe_VkPipelineMultisampleStateCreateInfo {
     VkBool32 alphaToOneEnable;
     safe_VkPipelineMultisampleStateCreateInfo(const VkPipelineMultisampleStateCreateInfo* in_struct);
     safe_VkPipelineMultisampleStateCreateInfo(const safe_VkPipelineMultisampleStateCreateInfo& src);
+    safe_VkPipelineMultisampleStateCreateInfo& operator=(const safe_VkPipelineMultisampleStateCreateInfo& src);
     safe_VkPipelineMultisampleStateCreateInfo();
     ~safe_VkPipelineMultisampleStateCreateInfo();
     void initialize(const VkPipelineMultisampleStateCreateInfo* in_struct);
@@ -573,6 +604,7 @@ struct safe_VkPipelineDepthStencilStateCreateInfo {
     float maxDepthBounds;
     safe_VkPipelineDepthStencilStateCreateInfo(const VkPipelineDepthStencilStateCreateInfo* in_struct);
     safe_VkPipelineDepthStencilStateCreateInfo(const safe_VkPipelineDepthStencilStateCreateInfo& src);
+    safe_VkPipelineDepthStencilStateCreateInfo& operator=(const safe_VkPipelineDepthStencilStateCreateInfo& src);
     safe_VkPipelineDepthStencilStateCreateInfo();
     ~safe_VkPipelineDepthStencilStateCreateInfo();
     void initialize(const VkPipelineDepthStencilStateCreateInfo* in_struct);
@@ -592,6 +624,7 @@ struct safe_VkPipelineColorBlendStateCreateInfo {
     float blendConstants[4];
     safe_VkPipelineColorBlendStateCreateInfo(const VkPipelineColorBlendStateCreateInfo* in_struct);
     safe_VkPipelineColorBlendStateCreateInfo(const safe_VkPipelineColorBlendStateCreateInfo& src);
+    safe_VkPipelineColorBlendStateCreateInfo& operator=(const safe_VkPipelineColorBlendStateCreateInfo& src);
     safe_VkPipelineColorBlendStateCreateInfo();
     ~safe_VkPipelineColorBlendStateCreateInfo();
     void initialize(const VkPipelineColorBlendStateCreateInfo* in_struct);
@@ -608,6 +641,7 @@ struct safe_VkPipelineDynamicStateCreateInfo {
     const VkDynamicState* pDynamicStates;
     safe_VkPipelineDynamicStateCreateInfo(const VkPipelineDynamicStateCreateInfo* in_struct);
     safe_VkPipelineDynamicStateCreateInfo(const safe_VkPipelineDynamicStateCreateInfo& src);
+    safe_VkPipelineDynamicStateCreateInfo& operator=(const safe_VkPipelineDynamicStateCreateInfo& src);
     safe_VkPipelineDynamicStateCreateInfo();
     ~safe_VkPipelineDynamicStateCreateInfo();
     void initialize(const VkPipelineDynamicStateCreateInfo* in_struct);
@@ -636,11 +670,12 @@ struct safe_VkGraphicsPipelineCreateInfo {
     uint32_t subpass;
     VkPipeline basePipelineHandle;
     int32_t basePipelineIndex;
-    safe_VkGraphicsPipelineCreateInfo(const VkGraphicsPipelineCreateInfo* in_struct);
+    safe_VkGraphicsPipelineCreateInfo(const VkGraphicsPipelineCreateInfo* in_struct, const bool uses_color_attachment, const bool uses_depthstencil_attachment);
     safe_VkGraphicsPipelineCreateInfo(const safe_VkGraphicsPipelineCreateInfo& src);
+    safe_VkGraphicsPipelineCreateInfo& operator=(const safe_VkGraphicsPipelineCreateInfo& src);
     safe_VkGraphicsPipelineCreateInfo();
     ~safe_VkGraphicsPipelineCreateInfo();
-    void initialize(const VkGraphicsPipelineCreateInfo* in_struct);
+    void initialize(const VkGraphicsPipelineCreateInfo* in_struct, const bool uses_color_attachment, const bool uses_depthstencil_attachment);
     void initialize(const safe_VkGraphicsPipelineCreateInfo* src);
     VkGraphicsPipelineCreateInfo *ptr() { return reinterpret_cast<VkGraphicsPipelineCreateInfo *>(this); }
     VkGraphicsPipelineCreateInfo const *ptr() const { return reinterpret_cast<VkGraphicsPipelineCreateInfo const *>(this); }
@@ -656,6 +691,7 @@ struct safe_VkComputePipelineCreateInfo {
     int32_t basePipelineIndex;
     safe_VkComputePipelineCreateInfo(const VkComputePipelineCreateInfo* in_struct);
     safe_VkComputePipelineCreateInfo(const safe_VkComputePipelineCreateInfo& src);
+    safe_VkComputePipelineCreateInfo& operator=(const safe_VkComputePipelineCreateInfo& src);
     safe_VkComputePipelineCreateInfo();
     ~safe_VkComputePipelineCreateInfo();
     void initialize(const VkComputePipelineCreateInfo* in_struct);
@@ -674,6 +710,7 @@ struct safe_VkPipelineLayoutCreateInfo {
     const VkPushConstantRange* pPushConstantRanges;
     safe_VkPipelineLayoutCreateInfo(const VkPipelineLayoutCreateInfo* in_struct);
     safe_VkPipelineLayoutCreateInfo(const safe_VkPipelineLayoutCreateInfo& src);
+    safe_VkPipelineLayoutCreateInfo& operator=(const safe_VkPipelineLayoutCreateInfo& src);
     safe_VkPipelineLayoutCreateInfo();
     ~safe_VkPipelineLayoutCreateInfo();
     void initialize(const VkPipelineLayoutCreateInfo* in_struct);
@@ -703,6 +740,7 @@ struct safe_VkSamplerCreateInfo {
     VkBool32 unnormalizedCoordinates;
     safe_VkSamplerCreateInfo(const VkSamplerCreateInfo* in_struct);
     safe_VkSamplerCreateInfo(const safe_VkSamplerCreateInfo& src);
+    safe_VkSamplerCreateInfo& operator=(const safe_VkSamplerCreateInfo& src);
     safe_VkSamplerCreateInfo();
     ~safe_VkSamplerCreateInfo();
     void initialize(const VkSamplerCreateInfo* in_struct);
@@ -719,6 +757,7 @@ struct safe_VkDescriptorSetLayoutBinding {
     VkSampler* pImmutableSamplers;
     safe_VkDescriptorSetLayoutBinding(const VkDescriptorSetLayoutBinding* in_struct);
     safe_VkDescriptorSetLayoutBinding(const safe_VkDescriptorSetLayoutBinding& src);
+    safe_VkDescriptorSetLayoutBinding& operator=(const safe_VkDescriptorSetLayoutBinding& src);
     safe_VkDescriptorSetLayoutBinding();
     ~safe_VkDescriptorSetLayoutBinding();
     void initialize(const VkDescriptorSetLayoutBinding* in_struct);
@@ -735,6 +774,7 @@ struct safe_VkDescriptorSetLayoutCreateInfo {
     safe_VkDescriptorSetLayoutBinding* pBindings;
     safe_VkDescriptorSetLayoutCreateInfo(const VkDescriptorSetLayoutCreateInfo* in_struct);
     safe_VkDescriptorSetLayoutCreateInfo(const safe_VkDescriptorSetLayoutCreateInfo& src);
+    safe_VkDescriptorSetLayoutCreateInfo& operator=(const safe_VkDescriptorSetLayoutCreateInfo& src);
     safe_VkDescriptorSetLayoutCreateInfo();
     ~safe_VkDescriptorSetLayoutCreateInfo();
     void initialize(const VkDescriptorSetLayoutCreateInfo* in_struct);
@@ -752,6 +792,7 @@ struct safe_VkDescriptorPoolCreateInfo {
     const VkDescriptorPoolSize* pPoolSizes;
     safe_VkDescriptorPoolCreateInfo(const VkDescriptorPoolCreateInfo* in_struct);
     safe_VkDescriptorPoolCreateInfo(const safe_VkDescriptorPoolCreateInfo& src);
+    safe_VkDescriptorPoolCreateInfo& operator=(const safe_VkDescriptorPoolCreateInfo& src);
     safe_VkDescriptorPoolCreateInfo();
     ~safe_VkDescriptorPoolCreateInfo();
     void initialize(const VkDescriptorPoolCreateInfo* in_struct);
@@ -768,6 +809,7 @@ struct safe_VkDescriptorSetAllocateInfo {
     VkDescriptorSetLayout* pSetLayouts;
     safe_VkDescriptorSetAllocateInfo(const VkDescriptorSetAllocateInfo* in_struct);
     safe_VkDescriptorSetAllocateInfo(const safe_VkDescriptorSetAllocateInfo& src);
+    safe_VkDescriptorSetAllocateInfo& operator=(const safe_VkDescriptorSetAllocateInfo& src);
     safe_VkDescriptorSetAllocateInfo();
     ~safe_VkDescriptorSetAllocateInfo();
     void initialize(const VkDescriptorSetAllocateInfo* in_struct);
@@ -789,6 +831,7 @@ struct safe_VkWriteDescriptorSet {
     VkBufferView* pTexelBufferView;
     safe_VkWriteDescriptorSet(const VkWriteDescriptorSet* in_struct);
     safe_VkWriteDescriptorSet(const safe_VkWriteDescriptorSet& src);
+    safe_VkWriteDescriptorSet& operator=(const safe_VkWriteDescriptorSet& src);
     safe_VkWriteDescriptorSet();
     ~safe_VkWriteDescriptorSet();
     void initialize(const VkWriteDescriptorSet* in_struct);
@@ -809,6 +852,7 @@ struct safe_VkCopyDescriptorSet {
     uint32_t descriptorCount;
     safe_VkCopyDescriptorSet(const VkCopyDescriptorSet* in_struct);
     safe_VkCopyDescriptorSet(const safe_VkCopyDescriptorSet& src);
+    safe_VkCopyDescriptorSet& operator=(const safe_VkCopyDescriptorSet& src);
     safe_VkCopyDescriptorSet();
     ~safe_VkCopyDescriptorSet();
     void initialize(const VkCopyDescriptorSet* in_struct);
@@ -829,6 +873,7 @@ struct safe_VkFramebufferCreateInfo {
     uint32_t layers;
     safe_VkFramebufferCreateInfo(const VkFramebufferCreateInfo* in_struct);
     safe_VkFramebufferCreateInfo(const safe_VkFramebufferCreateInfo& src);
+    safe_VkFramebufferCreateInfo& operator=(const safe_VkFramebufferCreateInfo& src);
     safe_VkFramebufferCreateInfo();
     ~safe_VkFramebufferCreateInfo();
     void initialize(const VkFramebufferCreateInfo* in_struct);
@@ -850,6 +895,7 @@ struct safe_VkSubpassDescription {
     const uint32_t* pPreserveAttachments;
     safe_VkSubpassDescription(const VkSubpassDescription* in_struct);
     safe_VkSubpassDescription(const safe_VkSubpassDescription& src);
+    safe_VkSubpassDescription& operator=(const safe_VkSubpassDescription& src);
     safe_VkSubpassDescription();
     ~safe_VkSubpassDescription();
     void initialize(const VkSubpassDescription* in_struct);
@@ -870,6 +916,7 @@ struct safe_VkRenderPassCreateInfo {
     const VkSubpassDependency* pDependencies;
     safe_VkRenderPassCreateInfo(const VkRenderPassCreateInfo* in_struct);
     safe_VkRenderPassCreateInfo(const safe_VkRenderPassCreateInfo& src);
+    safe_VkRenderPassCreateInfo& operator=(const safe_VkRenderPassCreateInfo& src);
     safe_VkRenderPassCreateInfo();
     ~safe_VkRenderPassCreateInfo();
     void initialize(const VkRenderPassCreateInfo* in_struct);
@@ -885,6 +932,7 @@ struct safe_VkCommandPoolCreateInfo {
     uint32_t queueFamilyIndex;
     safe_VkCommandPoolCreateInfo(const VkCommandPoolCreateInfo* in_struct);
     safe_VkCommandPoolCreateInfo(const safe_VkCommandPoolCreateInfo& src);
+    safe_VkCommandPoolCreateInfo& operator=(const safe_VkCommandPoolCreateInfo& src);
     safe_VkCommandPoolCreateInfo();
     ~safe_VkCommandPoolCreateInfo();
     void initialize(const VkCommandPoolCreateInfo* in_struct);
@@ -901,6 +949,7 @@ struct safe_VkCommandBufferAllocateInfo {
     uint32_t commandBufferCount;
     safe_VkCommandBufferAllocateInfo(const VkCommandBufferAllocateInfo* in_struct);
     safe_VkCommandBufferAllocateInfo(const safe_VkCommandBufferAllocateInfo& src);
+    safe_VkCommandBufferAllocateInfo& operator=(const safe_VkCommandBufferAllocateInfo& src);
     safe_VkCommandBufferAllocateInfo();
     ~safe_VkCommandBufferAllocateInfo();
     void initialize(const VkCommandBufferAllocateInfo* in_struct);
@@ -920,6 +969,7 @@ struct safe_VkCommandBufferInheritanceInfo {
     VkQueryPipelineStatisticFlags pipelineStatistics;
     safe_VkCommandBufferInheritanceInfo(const VkCommandBufferInheritanceInfo* in_struct);
     safe_VkCommandBufferInheritanceInfo(const safe_VkCommandBufferInheritanceInfo& src);
+    safe_VkCommandBufferInheritanceInfo& operator=(const safe_VkCommandBufferInheritanceInfo& src);
     safe_VkCommandBufferInheritanceInfo();
     ~safe_VkCommandBufferInheritanceInfo();
     void initialize(const VkCommandBufferInheritanceInfo* in_struct);
@@ -935,6 +985,7 @@ struct safe_VkCommandBufferBeginInfo {
     safe_VkCommandBufferInheritanceInfo* pInheritanceInfo;
     safe_VkCommandBufferBeginInfo(const VkCommandBufferBeginInfo* in_struct);
     safe_VkCommandBufferBeginInfo(const safe_VkCommandBufferBeginInfo& src);
+    safe_VkCommandBufferBeginInfo& operator=(const safe_VkCommandBufferBeginInfo& src);
     safe_VkCommandBufferBeginInfo();
     ~safe_VkCommandBufferBeginInfo();
     void initialize(const VkCommandBufferBeginInfo* in_struct);
@@ -950,6 +1001,7 @@ struct safe_VkMemoryBarrier {
     VkAccessFlags dstAccessMask;
     safe_VkMemoryBarrier(const VkMemoryBarrier* in_struct);
     safe_VkMemoryBarrier(const safe_VkMemoryBarrier& src);
+    safe_VkMemoryBarrier& operator=(const safe_VkMemoryBarrier& src);
     safe_VkMemoryBarrier();
     ~safe_VkMemoryBarrier();
     void initialize(const VkMemoryBarrier* in_struct);
@@ -970,6 +1022,7 @@ struct safe_VkBufferMemoryBarrier {
     VkDeviceSize size;
     safe_VkBufferMemoryBarrier(const VkBufferMemoryBarrier* in_struct);
     safe_VkBufferMemoryBarrier(const safe_VkBufferMemoryBarrier& src);
+    safe_VkBufferMemoryBarrier& operator=(const safe_VkBufferMemoryBarrier& src);
     safe_VkBufferMemoryBarrier();
     ~safe_VkBufferMemoryBarrier();
     void initialize(const VkBufferMemoryBarrier* in_struct);
@@ -991,6 +1044,7 @@ struct safe_VkImageMemoryBarrier {
     VkImageSubresourceRange subresourceRange;
     safe_VkImageMemoryBarrier(const VkImageMemoryBarrier* in_struct);
     safe_VkImageMemoryBarrier(const safe_VkImageMemoryBarrier& src);
+    safe_VkImageMemoryBarrier& operator=(const safe_VkImageMemoryBarrier& src);
     safe_VkImageMemoryBarrier();
     ~safe_VkImageMemoryBarrier();
     void initialize(const VkImageMemoryBarrier* in_struct);
@@ -1009,6 +1063,7 @@ struct safe_VkRenderPassBeginInfo {
     const VkClearValue* pClearValues;
     safe_VkRenderPassBeginInfo(const VkRenderPassBeginInfo* in_struct);
     safe_VkRenderPassBeginInfo(const safe_VkRenderPassBeginInfo& src);
+    safe_VkRenderPassBeginInfo& operator=(const safe_VkRenderPassBeginInfo& src);
     safe_VkRenderPassBeginInfo();
     ~safe_VkRenderPassBeginInfo();
     void initialize(const VkRenderPassBeginInfo* in_struct);
@@ -1038,6 +1093,7 @@ struct safe_VkSwapchainCreateInfoKHR {
     VkSwapchainKHR oldSwapchain;
     safe_VkSwapchainCreateInfoKHR(const VkSwapchainCreateInfoKHR* in_struct);
     safe_VkSwapchainCreateInfoKHR(const safe_VkSwapchainCreateInfoKHR& src);
+    safe_VkSwapchainCreateInfoKHR& operator=(const safe_VkSwapchainCreateInfoKHR& src);
     safe_VkSwapchainCreateInfoKHR();
     ~safe_VkSwapchainCreateInfoKHR();
     void initialize(const VkSwapchainCreateInfoKHR* in_struct);
@@ -1057,6 +1113,7 @@ struct safe_VkPresentInfoKHR {
     VkResult* pResults;
     safe_VkPresentInfoKHR(const VkPresentInfoKHR* in_struct);
     safe_VkPresentInfoKHR(const safe_VkPresentInfoKHR& src);
+    safe_VkPresentInfoKHR& operator=(const safe_VkPresentInfoKHR& src);
     safe_VkPresentInfoKHR();
     ~safe_VkPresentInfoKHR();
     void initialize(const VkPresentInfoKHR* in_struct);
@@ -1075,6 +1132,7 @@ struct safe_VkDisplayPropertiesKHR {
     VkBool32 persistentContent;
     safe_VkDisplayPropertiesKHR(const VkDisplayPropertiesKHR* in_struct);
     safe_VkDisplayPropertiesKHR(const safe_VkDisplayPropertiesKHR& src);
+    safe_VkDisplayPropertiesKHR& operator=(const safe_VkDisplayPropertiesKHR& src);
     safe_VkDisplayPropertiesKHR();
     ~safe_VkDisplayPropertiesKHR();
     void initialize(const VkDisplayPropertiesKHR* in_struct);
@@ -1090,6 +1148,7 @@ struct safe_VkDisplayModeCreateInfoKHR {
     VkDisplayModeParametersKHR parameters;
     safe_VkDisplayModeCreateInfoKHR(const VkDisplayModeCreateInfoKHR* in_struct);
     safe_VkDisplayModeCreateInfoKHR(const safe_VkDisplayModeCreateInfoKHR& src);
+    safe_VkDisplayModeCreateInfoKHR& operator=(const safe_VkDisplayModeCreateInfoKHR& src);
     safe_VkDisplayModeCreateInfoKHR();
     ~safe_VkDisplayModeCreateInfoKHR();
     void initialize(const VkDisplayModeCreateInfoKHR* in_struct);
@@ -1111,6 +1170,7 @@ struct safe_VkDisplaySurfaceCreateInfoKHR {
     VkExtent2D imageExtent;
     safe_VkDisplaySurfaceCreateInfoKHR(const VkDisplaySurfaceCreateInfoKHR* in_struct);
     safe_VkDisplaySurfaceCreateInfoKHR(const safe_VkDisplaySurfaceCreateInfoKHR& src);
+    safe_VkDisplaySurfaceCreateInfoKHR& operator=(const safe_VkDisplaySurfaceCreateInfoKHR& src);
     safe_VkDisplaySurfaceCreateInfoKHR();
     ~safe_VkDisplaySurfaceCreateInfoKHR();
     void initialize(const VkDisplaySurfaceCreateInfoKHR* in_struct);
@@ -1127,6 +1187,7 @@ struct safe_VkDisplayPresentInfoKHR {
     VkBool32 persistent;
     safe_VkDisplayPresentInfoKHR(const VkDisplayPresentInfoKHR* in_struct);
     safe_VkDisplayPresentInfoKHR(const safe_VkDisplayPresentInfoKHR& src);
+    safe_VkDisplayPresentInfoKHR& operator=(const safe_VkDisplayPresentInfoKHR& src);
     safe_VkDisplayPresentInfoKHR();
     ~safe_VkDisplayPresentInfoKHR();
     void initialize(const VkDisplayPresentInfoKHR* in_struct);
@@ -1144,6 +1205,7 @@ struct safe_VkXlibSurfaceCreateInfoKHR {
     Window window;
     safe_VkXlibSurfaceCreateInfoKHR(const VkXlibSurfaceCreateInfoKHR* in_struct);
     safe_VkXlibSurfaceCreateInfoKHR(const safe_VkXlibSurfaceCreateInfoKHR& src);
+    safe_VkXlibSurfaceCreateInfoKHR& operator=(const safe_VkXlibSurfaceCreateInfoKHR& src);
     safe_VkXlibSurfaceCreateInfoKHR();
     ~safe_VkXlibSurfaceCreateInfoKHR();
     void initialize(const VkXlibSurfaceCreateInfoKHR* in_struct);
@@ -1162,6 +1224,7 @@ struct safe_VkXcbSurfaceCreateInfoKHR {
     xcb_window_t window;
     safe_VkXcbSurfaceCreateInfoKHR(const VkXcbSurfaceCreateInfoKHR* in_struct);
     safe_VkXcbSurfaceCreateInfoKHR(const safe_VkXcbSurfaceCreateInfoKHR& src);
+    safe_VkXcbSurfaceCreateInfoKHR& operator=(const safe_VkXcbSurfaceCreateInfoKHR& src);
     safe_VkXcbSurfaceCreateInfoKHR();
     ~safe_VkXcbSurfaceCreateInfoKHR();
     void initialize(const VkXcbSurfaceCreateInfoKHR* in_struct);
@@ -1180,6 +1243,7 @@ struct safe_VkWaylandSurfaceCreateInfoKHR {
     struct wl_surface* surface;
     safe_VkWaylandSurfaceCreateInfoKHR(const VkWaylandSurfaceCreateInfoKHR* in_struct);
     safe_VkWaylandSurfaceCreateInfoKHR(const safe_VkWaylandSurfaceCreateInfoKHR& src);
+    safe_VkWaylandSurfaceCreateInfoKHR& operator=(const safe_VkWaylandSurfaceCreateInfoKHR& src);
     safe_VkWaylandSurfaceCreateInfoKHR();
     ~safe_VkWaylandSurfaceCreateInfoKHR();
     void initialize(const VkWaylandSurfaceCreateInfoKHR* in_struct);
@@ -1198,6 +1262,7 @@ struct safe_VkMirSurfaceCreateInfoKHR {
     MirSurface* mirSurface;
     safe_VkMirSurfaceCreateInfoKHR(const VkMirSurfaceCreateInfoKHR* in_struct);
     safe_VkMirSurfaceCreateInfoKHR(const safe_VkMirSurfaceCreateInfoKHR& src);
+    safe_VkMirSurfaceCreateInfoKHR& operator=(const safe_VkMirSurfaceCreateInfoKHR& src);
     safe_VkMirSurfaceCreateInfoKHR();
     ~safe_VkMirSurfaceCreateInfoKHR();
     void initialize(const VkMirSurfaceCreateInfoKHR* in_struct);
@@ -1215,6 +1280,7 @@ struct safe_VkAndroidSurfaceCreateInfoKHR {
     ANativeWindow* window;
     safe_VkAndroidSurfaceCreateInfoKHR(const VkAndroidSurfaceCreateInfoKHR* in_struct);
     safe_VkAndroidSurfaceCreateInfoKHR(const safe_VkAndroidSurfaceCreateInfoKHR& src);
+    safe_VkAndroidSurfaceCreateInfoKHR& operator=(const safe_VkAndroidSurfaceCreateInfoKHR& src);
     safe_VkAndroidSurfaceCreateInfoKHR();
     ~safe_VkAndroidSurfaceCreateInfoKHR();
     void initialize(const VkAndroidSurfaceCreateInfoKHR* in_struct);
@@ -1233,6 +1299,7 @@ struct safe_VkWin32SurfaceCreateInfoKHR {
     HWND hwnd;
     safe_VkWin32SurfaceCreateInfoKHR(const VkWin32SurfaceCreateInfoKHR* in_struct);
     safe_VkWin32SurfaceCreateInfoKHR(const safe_VkWin32SurfaceCreateInfoKHR& src);
+    safe_VkWin32SurfaceCreateInfoKHR& operator=(const safe_VkWin32SurfaceCreateInfoKHR& src);
     safe_VkWin32SurfaceCreateInfoKHR();
     ~safe_VkWin32SurfaceCreateInfoKHR();
     void initialize(const VkWin32SurfaceCreateInfoKHR* in_struct);
@@ -1242,30 +1309,13 @@ struct safe_VkWin32SurfaceCreateInfoKHR {
 };
 #endif // VK_USE_PLATFORM_WIN32_KHR
 
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-struct safe_VkMagmaSurfaceCreateInfoKHR {
-    VkStructureType sType;
-    const void* pNext;
-    uint32_t imagePipeHandle;
-    uint32_t width;
-    uint32_t height;
-    safe_VkMagmaSurfaceCreateInfoKHR(const VkMagmaSurfaceCreateInfoKHR* in_struct);
-    safe_VkMagmaSurfaceCreateInfoKHR(const safe_VkMagmaSurfaceCreateInfoKHR& src);
-    safe_VkMagmaSurfaceCreateInfoKHR();
-    ~safe_VkMagmaSurfaceCreateInfoKHR();
-    void initialize(const VkMagmaSurfaceCreateInfoKHR* in_struct);
-    void initialize(const safe_VkMagmaSurfaceCreateInfoKHR* src);
-    VkMagmaSurfaceCreateInfoKHR *ptr() { return reinterpret_cast<VkMagmaSurfaceCreateInfoKHR *>(this); }
-    VkMagmaSurfaceCreateInfoKHR const *ptr() const { return reinterpret_cast<VkMagmaSurfaceCreateInfoKHR const *>(this); }
-};
-#endif // VK_USE_PLATFORM_MAGMA_KHR
-
 struct safe_VkPhysicalDeviceFeatures2KHR {
     VkStructureType sType;
     void* pNext;
     VkPhysicalDeviceFeatures features;
     safe_VkPhysicalDeviceFeatures2KHR(const VkPhysicalDeviceFeatures2KHR* in_struct);
     safe_VkPhysicalDeviceFeatures2KHR(const safe_VkPhysicalDeviceFeatures2KHR& src);
+    safe_VkPhysicalDeviceFeatures2KHR& operator=(const safe_VkPhysicalDeviceFeatures2KHR& src);
     safe_VkPhysicalDeviceFeatures2KHR();
     ~safe_VkPhysicalDeviceFeatures2KHR();
     void initialize(const VkPhysicalDeviceFeatures2KHR* in_struct);
@@ -1280,6 +1330,7 @@ struct safe_VkPhysicalDeviceProperties2KHR {
     VkPhysicalDeviceProperties properties;
     safe_VkPhysicalDeviceProperties2KHR(const VkPhysicalDeviceProperties2KHR* in_struct);
     safe_VkPhysicalDeviceProperties2KHR(const safe_VkPhysicalDeviceProperties2KHR& src);
+    safe_VkPhysicalDeviceProperties2KHR& operator=(const safe_VkPhysicalDeviceProperties2KHR& src);
     safe_VkPhysicalDeviceProperties2KHR();
     ~safe_VkPhysicalDeviceProperties2KHR();
     void initialize(const VkPhysicalDeviceProperties2KHR* in_struct);
@@ -1294,6 +1345,7 @@ struct safe_VkFormatProperties2KHR {
     VkFormatProperties formatProperties;
     safe_VkFormatProperties2KHR(const VkFormatProperties2KHR* in_struct);
     safe_VkFormatProperties2KHR(const safe_VkFormatProperties2KHR& src);
+    safe_VkFormatProperties2KHR& operator=(const safe_VkFormatProperties2KHR& src);
     safe_VkFormatProperties2KHR();
     ~safe_VkFormatProperties2KHR();
     void initialize(const VkFormatProperties2KHR* in_struct);
@@ -1308,6 +1360,7 @@ struct safe_VkImageFormatProperties2KHR {
     VkImageFormatProperties imageFormatProperties;
     safe_VkImageFormatProperties2KHR(const VkImageFormatProperties2KHR* in_struct);
     safe_VkImageFormatProperties2KHR(const safe_VkImageFormatProperties2KHR& src);
+    safe_VkImageFormatProperties2KHR& operator=(const safe_VkImageFormatProperties2KHR& src);
     safe_VkImageFormatProperties2KHR();
     ~safe_VkImageFormatProperties2KHR();
     void initialize(const VkImageFormatProperties2KHR* in_struct);
@@ -1326,6 +1379,7 @@ struct safe_VkPhysicalDeviceImageFormatInfo2KHR {
     VkImageCreateFlags flags;
     safe_VkPhysicalDeviceImageFormatInfo2KHR(const VkPhysicalDeviceImageFormatInfo2KHR* in_struct);
     safe_VkPhysicalDeviceImageFormatInfo2KHR(const safe_VkPhysicalDeviceImageFormatInfo2KHR& src);
+    safe_VkPhysicalDeviceImageFormatInfo2KHR& operator=(const safe_VkPhysicalDeviceImageFormatInfo2KHR& src);
     safe_VkPhysicalDeviceImageFormatInfo2KHR();
     ~safe_VkPhysicalDeviceImageFormatInfo2KHR();
     void initialize(const VkPhysicalDeviceImageFormatInfo2KHR* in_struct);
@@ -1340,6 +1394,7 @@ struct safe_VkQueueFamilyProperties2KHR {
     VkQueueFamilyProperties queueFamilyProperties;
     safe_VkQueueFamilyProperties2KHR(const VkQueueFamilyProperties2KHR* in_struct);
     safe_VkQueueFamilyProperties2KHR(const safe_VkQueueFamilyProperties2KHR& src);
+    safe_VkQueueFamilyProperties2KHR& operator=(const safe_VkQueueFamilyProperties2KHR& src);
     safe_VkQueueFamilyProperties2KHR();
     ~safe_VkQueueFamilyProperties2KHR();
     void initialize(const VkQueueFamilyProperties2KHR* in_struct);
@@ -1354,6 +1409,7 @@ struct safe_VkPhysicalDeviceMemoryProperties2KHR {
     VkPhysicalDeviceMemoryProperties memoryProperties;
     safe_VkPhysicalDeviceMemoryProperties2KHR(const VkPhysicalDeviceMemoryProperties2KHR* in_struct);
     safe_VkPhysicalDeviceMemoryProperties2KHR(const safe_VkPhysicalDeviceMemoryProperties2KHR& src);
+    safe_VkPhysicalDeviceMemoryProperties2KHR& operator=(const safe_VkPhysicalDeviceMemoryProperties2KHR& src);
     safe_VkPhysicalDeviceMemoryProperties2KHR();
     ~safe_VkPhysicalDeviceMemoryProperties2KHR();
     void initialize(const VkPhysicalDeviceMemoryProperties2KHR* in_struct);
@@ -1368,6 +1424,7 @@ struct safe_VkSparseImageFormatProperties2KHR {
     VkSparseImageFormatProperties properties;
     safe_VkSparseImageFormatProperties2KHR(const VkSparseImageFormatProperties2KHR* in_struct);
     safe_VkSparseImageFormatProperties2KHR(const safe_VkSparseImageFormatProperties2KHR& src);
+    safe_VkSparseImageFormatProperties2KHR& operator=(const safe_VkSparseImageFormatProperties2KHR& src);
     safe_VkSparseImageFormatProperties2KHR();
     ~safe_VkSparseImageFormatProperties2KHR();
     void initialize(const VkSparseImageFormatProperties2KHR* in_struct);
@@ -1386,6 +1443,7 @@ struct safe_VkPhysicalDeviceSparseImageFormatInfo2KHR {
     VkImageTiling tiling;
     safe_VkPhysicalDeviceSparseImageFormatInfo2KHR(const VkPhysicalDeviceSparseImageFormatInfo2KHR* in_struct);
     safe_VkPhysicalDeviceSparseImageFormatInfo2KHR(const safe_VkPhysicalDeviceSparseImageFormatInfo2KHR& src);
+    safe_VkPhysicalDeviceSparseImageFormatInfo2KHR& operator=(const safe_VkPhysicalDeviceSparseImageFormatInfo2KHR& src);
     safe_VkPhysicalDeviceSparseImageFormatInfo2KHR();
     ~safe_VkPhysicalDeviceSparseImageFormatInfo2KHR();
     void initialize(const VkPhysicalDeviceSparseImageFormatInfo2KHR* in_struct);
@@ -1400,6 +1458,7 @@ struct safe_VkPhysicalDeviceExternalImageFormatInfoKHR {
     VkExternalMemoryHandleTypeFlagBitsKHR handleType;
     safe_VkPhysicalDeviceExternalImageFormatInfoKHR(const VkPhysicalDeviceExternalImageFormatInfoKHR* in_struct);
     safe_VkPhysicalDeviceExternalImageFormatInfoKHR(const safe_VkPhysicalDeviceExternalImageFormatInfoKHR& src);
+    safe_VkPhysicalDeviceExternalImageFormatInfoKHR& operator=(const safe_VkPhysicalDeviceExternalImageFormatInfoKHR& src);
     safe_VkPhysicalDeviceExternalImageFormatInfoKHR();
     ~safe_VkPhysicalDeviceExternalImageFormatInfoKHR();
     void initialize(const VkPhysicalDeviceExternalImageFormatInfoKHR* in_struct);
@@ -1414,6 +1473,7 @@ struct safe_VkExternalImageFormatPropertiesKHR {
     VkExternalMemoryPropertiesKHR externalMemoryProperties;
     safe_VkExternalImageFormatPropertiesKHR(const VkExternalImageFormatPropertiesKHR* in_struct);
     safe_VkExternalImageFormatPropertiesKHR(const safe_VkExternalImageFormatPropertiesKHR& src);
+    safe_VkExternalImageFormatPropertiesKHR& operator=(const safe_VkExternalImageFormatPropertiesKHR& src);
     safe_VkExternalImageFormatPropertiesKHR();
     ~safe_VkExternalImageFormatPropertiesKHR();
     void initialize(const VkExternalImageFormatPropertiesKHR* in_struct);
@@ -1430,6 +1490,7 @@ struct safe_VkPhysicalDeviceExternalBufferInfoKHR {
     VkExternalMemoryHandleTypeFlagBitsKHR handleType;
     safe_VkPhysicalDeviceExternalBufferInfoKHR(const VkPhysicalDeviceExternalBufferInfoKHR* in_struct);
     safe_VkPhysicalDeviceExternalBufferInfoKHR(const safe_VkPhysicalDeviceExternalBufferInfoKHR& src);
+    safe_VkPhysicalDeviceExternalBufferInfoKHR& operator=(const safe_VkPhysicalDeviceExternalBufferInfoKHR& src);
     safe_VkPhysicalDeviceExternalBufferInfoKHR();
     ~safe_VkPhysicalDeviceExternalBufferInfoKHR();
     void initialize(const VkPhysicalDeviceExternalBufferInfoKHR* in_struct);
@@ -1444,6 +1505,7 @@ struct safe_VkExternalBufferPropertiesKHR {
     VkExternalMemoryPropertiesKHR externalMemoryProperties;
     safe_VkExternalBufferPropertiesKHR(const VkExternalBufferPropertiesKHR* in_struct);
     safe_VkExternalBufferPropertiesKHR(const safe_VkExternalBufferPropertiesKHR& src);
+    safe_VkExternalBufferPropertiesKHR& operator=(const safe_VkExternalBufferPropertiesKHR& src);
     safe_VkExternalBufferPropertiesKHR();
     ~safe_VkExternalBufferPropertiesKHR();
     void initialize(const VkExternalBufferPropertiesKHR* in_struct);
@@ -1462,6 +1524,7 @@ struct safe_VkPhysicalDeviceIDPropertiesKHR {
     VkBool32 deviceLUIDValid;
     safe_VkPhysicalDeviceIDPropertiesKHR(const VkPhysicalDeviceIDPropertiesKHR* in_struct);
     safe_VkPhysicalDeviceIDPropertiesKHR(const safe_VkPhysicalDeviceIDPropertiesKHR& src);
+    safe_VkPhysicalDeviceIDPropertiesKHR& operator=(const safe_VkPhysicalDeviceIDPropertiesKHR& src);
     safe_VkPhysicalDeviceIDPropertiesKHR();
     ~safe_VkPhysicalDeviceIDPropertiesKHR();
     void initialize(const VkPhysicalDeviceIDPropertiesKHR* in_struct);
@@ -1476,6 +1539,7 @@ struct safe_VkExternalMemoryImageCreateInfoKHR {
     VkExternalMemoryHandleTypeFlagsKHR handleTypes;
     safe_VkExternalMemoryImageCreateInfoKHR(const VkExternalMemoryImageCreateInfoKHR* in_struct);
     safe_VkExternalMemoryImageCreateInfoKHR(const safe_VkExternalMemoryImageCreateInfoKHR& src);
+    safe_VkExternalMemoryImageCreateInfoKHR& operator=(const safe_VkExternalMemoryImageCreateInfoKHR& src);
     safe_VkExternalMemoryImageCreateInfoKHR();
     ~safe_VkExternalMemoryImageCreateInfoKHR();
     void initialize(const VkExternalMemoryImageCreateInfoKHR* in_struct);
@@ -1490,6 +1554,7 @@ struct safe_VkExternalMemoryBufferCreateInfoKHR {
     VkExternalMemoryHandleTypeFlagsKHR handleTypes;
     safe_VkExternalMemoryBufferCreateInfoKHR(const VkExternalMemoryBufferCreateInfoKHR* in_struct);
     safe_VkExternalMemoryBufferCreateInfoKHR(const safe_VkExternalMemoryBufferCreateInfoKHR& src);
+    safe_VkExternalMemoryBufferCreateInfoKHR& operator=(const safe_VkExternalMemoryBufferCreateInfoKHR& src);
     safe_VkExternalMemoryBufferCreateInfoKHR();
     ~safe_VkExternalMemoryBufferCreateInfoKHR();
     void initialize(const VkExternalMemoryBufferCreateInfoKHR* in_struct);
@@ -1504,6 +1569,7 @@ struct safe_VkExportMemoryAllocateInfoKHR {
     VkExternalMemoryHandleTypeFlagsKHR handleTypes;
     safe_VkExportMemoryAllocateInfoKHR(const VkExportMemoryAllocateInfoKHR* in_struct);
     safe_VkExportMemoryAllocateInfoKHR(const safe_VkExportMemoryAllocateInfoKHR& src);
+    safe_VkExportMemoryAllocateInfoKHR& operator=(const safe_VkExportMemoryAllocateInfoKHR& src);
     safe_VkExportMemoryAllocateInfoKHR();
     ~safe_VkExportMemoryAllocateInfoKHR();
     void initialize(const VkExportMemoryAllocateInfoKHR* in_struct);
@@ -1521,6 +1587,7 @@ struct safe_VkImportMemoryWin32HandleInfoKHR {
     LPCWSTR name;
     safe_VkImportMemoryWin32HandleInfoKHR(const VkImportMemoryWin32HandleInfoKHR* in_struct);
     safe_VkImportMemoryWin32HandleInfoKHR(const safe_VkImportMemoryWin32HandleInfoKHR& src);
+    safe_VkImportMemoryWin32HandleInfoKHR& operator=(const safe_VkImportMemoryWin32HandleInfoKHR& src);
     safe_VkImportMemoryWin32HandleInfoKHR();
     ~safe_VkImportMemoryWin32HandleInfoKHR();
     void initialize(const VkImportMemoryWin32HandleInfoKHR* in_struct);
@@ -1539,6 +1606,7 @@ struct safe_VkExportMemoryWin32HandleInfoKHR {
     LPCWSTR name;
     safe_VkExportMemoryWin32HandleInfoKHR(const VkExportMemoryWin32HandleInfoKHR* in_struct);
     safe_VkExportMemoryWin32HandleInfoKHR(const safe_VkExportMemoryWin32HandleInfoKHR& src);
+    safe_VkExportMemoryWin32HandleInfoKHR& operator=(const safe_VkExportMemoryWin32HandleInfoKHR& src);
     safe_VkExportMemoryWin32HandleInfoKHR();
     ~safe_VkExportMemoryWin32HandleInfoKHR();
     void initialize(const VkExportMemoryWin32HandleInfoKHR* in_struct);
@@ -1555,6 +1623,7 @@ struct safe_VkMemoryWin32HandlePropertiesKHR {
     uint32_t memoryTypeBits;
     safe_VkMemoryWin32HandlePropertiesKHR(const VkMemoryWin32HandlePropertiesKHR* in_struct);
     safe_VkMemoryWin32HandlePropertiesKHR(const safe_VkMemoryWin32HandlePropertiesKHR& src);
+    safe_VkMemoryWin32HandlePropertiesKHR& operator=(const safe_VkMemoryWin32HandlePropertiesKHR& src);
     safe_VkMemoryWin32HandlePropertiesKHR();
     ~safe_VkMemoryWin32HandlePropertiesKHR();
     void initialize(const VkMemoryWin32HandlePropertiesKHR* in_struct);
@@ -1572,6 +1641,7 @@ struct safe_VkMemoryGetWin32HandleInfoKHR {
     VkExternalMemoryHandleTypeFlagBitsKHR handleType;
     safe_VkMemoryGetWin32HandleInfoKHR(const VkMemoryGetWin32HandleInfoKHR* in_struct);
     safe_VkMemoryGetWin32HandleInfoKHR(const safe_VkMemoryGetWin32HandleInfoKHR& src);
+    safe_VkMemoryGetWin32HandleInfoKHR& operator=(const safe_VkMemoryGetWin32HandleInfoKHR& src);
     safe_VkMemoryGetWin32HandleInfoKHR();
     ~safe_VkMemoryGetWin32HandleInfoKHR();
     void initialize(const VkMemoryGetWin32HandleInfoKHR* in_struct);
@@ -1588,6 +1658,7 @@ struct safe_VkImportMemoryFdInfoKHR {
     int fd;
     safe_VkImportMemoryFdInfoKHR(const VkImportMemoryFdInfoKHR* in_struct);
     safe_VkImportMemoryFdInfoKHR(const safe_VkImportMemoryFdInfoKHR& src);
+    safe_VkImportMemoryFdInfoKHR& operator=(const safe_VkImportMemoryFdInfoKHR& src);
     safe_VkImportMemoryFdInfoKHR();
     ~safe_VkImportMemoryFdInfoKHR();
     void initialize(const VkImportMemoryFdInfoKHR* in_struct);
@@ -1602,6 +1673,7 @@ struct safe_VkMemoryFdPropertiesKHR {
     uint32_t memoryTypeBits;
     safe_VkMemoryFdPropertiesKHR(const VkMemoryFdPropertiesKHR* in_struct);
     safe_VkMemoryFdPropertiesKHR(const safe_VkMemoryFdPropertiesKHR& src);
+    safe_VkMemoryFdPropertiesKHR& operator=(const safe_VkMemoryFdPropertiesKHR& src);
     safe_VkMemoryFdPropertiesKHR();
     ~safe_VkMemoryFdPropertiesKHR();
     void initialize(const VkMemoryFdPropertiesKHR* in_struct);
@@ -1617,6 +1689,7 @@ struct safe_VkMemoryGetFdInfoKHR {
     VkExternalMemoryHandleTypeFlagBitsKHR handleType;
     safe_VkMemoryGetFdInfoKHR(const VkMemoryGetFdInfoKHR* in_struct);
     safe_VkMemoryGetFdInfoKHR(const safe_VkMemoryGetFdInfoKHR& src);
+    safe_VkMemoryGetFdInfoKHR& operator=(const safe_VkMemoryGetFdInfoKHR& src);
     safe_VkMemoryGetFdInfoKHR();
     ~safe_VkMemoryGetFdInfoKHR();
     void initialize(const VkMemoryGetFdInfoKHR* in_struct);
@@ -1638,6 +1711,7 @@ struct safe_VkWin32KeyedMutexAcquireReleaseInfoKHR {
     const uint64_t* pReleaseKeys;
     safe_VkWin32KeyedMutexAcquireReleaseInfoKHR(const VkWin32KeyedMutexAcquireReleaseInfoKHR* in_struct);
     safe_VkWin32KeyedMutexAcquireReleaseInfoKHR(const safe_VkWin32KeyedMutexAcquireReleaseInfoKHR& src);
+    safe_VkWin32KeyedMutexAcquireReleaseInfoKHR& operator=(const safe_VkWin32KeyedMutexAcquireReleaseInfoKHR& src);
     safe_VkWin32KeyedMutexAcquireReleaseInfoKHR();
     ~safe_VkWin32KeyedMutexAcquireReleaseInfoKHR();
     void initialize(const VkWin32KeyedMutexAcquireReleaseInfoKHR* in_struct);
@@ -1653,6 +1727,7 @@ struct safe_VkPhysicalDeviceExternalSemaphoreInfoKHR {
     VkExternalSemaphoreHandleTypeFlagBitsKHR handleType;
     safe_VkPhysicalDeviceExternalSemaphoreInfoKHR(const VkPhysicalDeviceExternalSemaphoreInfoKHR* in_struct);
     safe_VkPhysicalDeviceExternalSemaphoreInfoKHR(const safe_VkPhysicalDeviceExternalSemaphoreInfoKHR& src);
+    safe_VkPhysicalDeviceExternalSemaphoreInfoKHR& operator=(const safe_VkPhysicalDeviceExternalSemaphoreInfoKHR& src);
     safe_VkPhysicalDeviceExternalSemaphoreInfoKHR();
     ~safe_VkPhysicalDeviceExternalSemaphoreInfoKHR();
     void initialize(const VkPhysicalDeviceExternalSemaphoreInfoKHR* in_struct);
@@ -1669,6 +1744,7 @@ struct safe_VkExternalSemaphorePropertiesKHR {
     VkExternalSemaphoreFeatureFlagsKHR externalSemaphoreFeatures;
     safe_VkExternalSemaphorePropertiesKHR(const VkExternalSemaphorePropertiesKHR* in_struct);
     safe_VkExternalSemaphorePropertiesKHR(const safe_VkExternalSemaphorePropertiesKHR& src);
+    safe_VkExternalSemaphorePropertiesKHR& operator=(const safe_VkExternalSemaphorePropertiesKHR& src);
     safe_VkExternalSemaphorePropertiesKHR();
     ~safe_VkExternalSemaphorePropertiesKHR();
     void initialize(const VkExternalSemaphorePropertiesKHR* in_struct);
@@ -1683,6 +1759,7 @@ struct safe_VkExportSemaphoreCreateInfoKHR {
     VkExternalSemaphoreHandleTypeFlagsKHR handleTypes;
     safe_VkExportSemaphoreCreateInfoKHR(const VkExportSemaphoreCreateInfoKHR* in_struct);
     safe_VkExportSemaphoreCreateInfoKHR(const safe_VkExportSemaphoreCreateInfoKHR& src);
+    safe_VkExportSemaphoreCreateInfoKHR& operator=(const safe_VkExportSemaphoreCreateInfoKHR& src);
     safe_VkExportSemaphoreCreateInfoKHR();
     ~safe_VkExportSemaphoreCreateInfoKHR();
     void initialize(const VkExportSemaphoreCreateInfoKHR* in_struct);
@@ -1702,6 +1779,7 @@ struct safe_VkImportSemaphoreWin32HandleInfoKHR {
     LPCWSTR name;
     safe_VkImportSemaphoreWin32HandleInfoKHR(const VkImportSemaphoreWin32HandleInfoKHR* in_struct);
     safe_VkImportSemaphoreWin32HandleInfoKHR(const safe_VkImportSemaphoreWin32HandleInfoKHR& src);
+    safe_VkImportSemaphoreWin32HandleInfoKHR& operator=(const safe_VkImportSemaphoreWin32HandleInfoKHR& src);
     safe_VkImportSemaphoreWin32HandleInfoKHR();
     ~safe_VkImportSemaphoreWin32HandleInfoKHR();
     void initialize(const VkImportSemaphoreWin32HandleInfoKHR* in_struct);
@@ -1720,6 +1798,7 @@ struct safe_VkExportSemaphoreWin32HandleInfoKHR {
     LPCWSTR name;
     safe_VkExportSemaphoreWin32HandleInfoKHR(const VkExportSemaphoreWin32HandleInfoKHR* in_struct);
     safe_VkExportSemaphoreWin32HandleInfoKHR(const safe_VkExportSemaphoreWin32HandleInfoKHR& src);
+    safe_VkExportSemaphoreWin32HandleInfoKHR& operator=(const safe_VkExportSemaphoreWin32HandleInfoKHR& src);
     safe_VkExportSemaphoreWin32HandleInfoKHR();
     ~safe_VkExportSemaphoreWin32HandleInfoKHR();
     void initialize(const VkExportSemaphoreWin32HandleInfoKHR* in_struct);
@@ -1739,6 +1818,7 @@ struct safe_VkD3D12FenceSubmitInfoKHR {
     const uint64_t* pSignalSemaphoreValues;
     safe_VkD3D12FenceSubmitInfoKHR(const VkD3D12FenceSubmitInfoKHR* in_struct);
     safe_VkD3D12FenceSubmitInfoKHR(const safe_VkD3D12FenceSubmitInfoKHR& src);
+    safe_VkD3D12FenceSubmitInfoKHR& operator=(const safe_VkD3D12FenceSubmitInfoKHR& src);
     safe_VkD3D12FenceSubmitInfoKHR();
     ~safe_VkD3D12FenceSubmitInfoKHR();
     void initialize(const VkD3D12FenceSubmitInfoKHR* in_struct);
@@ -1756,6 +1836,7 @@ struct safe_VkSemaphoreGetWin32HandleInfoKHR {
     VkExternalSemaphoreHandleTypeFlagBitsKHR handleType;
     safe_VkSemaphoreGetWin32HandleInfoKHR(const VkSemaphoreGetWin32HandleInfoKHR* in_struct);
     safe_VkSemaphoreGetWin32HandleInfoKHR(const safe_VkSemaphoreGetWin32HandleInfoKHR& src);
+    safe_VkSemaphoreGetWin32HandleInfoKHR& operator=(const safe_VkSemaphoreGetWin32HandleInfoKHR& src);
     safe_VkSemaphoreGetWin32HandleInfoKHR();
     ~safe_VkSemaphoreGetWin32HandleInfoKHR();
     void initialize(const VkSemaphoreGetWin32HandleInfoKHR* in_struct);
@@ -1774,6 +1855,7 @@ struct safe_VkImportSemaphoreFdInfoKHR {
     int fd;
     safe_VkImportSemaphoreFdInfoKHR(const VkImportSemaphoreFdInfoKHR* in_struct);
     safe_VkImportSemaphoreFdInfoKHR(const safe_VkImportSemaphoreFdInfoKHR& src);
+    safe_VkImportSemaphoreFdInfoKHR& operator=(const safe_VkImportSemaphoreFdInfoKHR& src);
     safe_VkImportSemaphoreFdInfoKHR();
     ~safe_VkImportSemaphoreFdInfoKHR();
     void initialize(const VkImportSemaphoreFdInfoKHR* in_struct);
@@ -1789,6 +1871,7 @@ struct safe_VkSemaphoreGetFdInfoKHR {
     VkExternalSemaphoreHandleTypeFlagBitsKHR handleType;
     safe_VkSemaphoreGetFdInfoKHR(const VkSemaphoreGetFdInfoKHR* in_struct);
     safe_VkSemaphoreGetFdInfoKHR(const safe_VkSemaphoreGetFdInfoKHR& src);
+    safe_VkSemaphoreGetFdInfoKHR& operator=(const safe_VkSemaphoreGetFdInfoKHR& src);
     safe_VkSemaphoreGetFdInfoKHR();
     ~safe_VkSemaphoreGetFdInfoKHR();
     void initialize(const VkSemaphoreGetFdInfoKHR* in_struct);
@@ -1803,6 +1886,7 @@ struct safe_VkPhysicalDevicePushDescriptorPropertiesKHR {
     uint32_t maxPushDescriptors;
     safe_VkPhysicalDevicePushDescriptorPropertiesKHR(const VkPhysicalDevicePushDescriptorPropertiesKHR* in_struct);
     safe_VkPhysicalDevicePushDescriptorPropertiesKHR(const safe_VkPhysicalDevicePushDescriptorPropertiesKHR& src);
+    safe_VkPhysicalDevicePushDescriptorPropertiesKHR& operator=(const safe_VkPhysicalDevicePushDescriptorPropertiesKHR& src);
     safe_VkPhysicalDevicePushDescriptorPropertiesKHR();
     ~safe_VkPhysicalDevicePushDescriptorPropertiesKHR();
     void initialize(const VkPhysicalDevicePushDescriptorPropertiesKHR* in_struct);
@@ -1820,6 +1904,7 @@ struct safe_VkPhysicalDevice16BitStorageFeaturesKHR {
     VkBool32 storageInputOutput16;
     safe_VkPhysicalDevice16BitStorageFeaturesKHR(const VkPhysicalDevice16BitStorageFeaturesKHR* in_struct);
     safe_VkPhysicalDevice16BitStorageFeaturesKHR(const safe_VkPhysicalDevice16BitStorageFeaturesKHR& src);
+    safe_VkPhysicalDevice16BitStorageFeaturesKHR& operator=(const safe_VkPhysicalDevice16BitStorageFeaturesKHR& src);
     safe_VkPhysicalDevice16BitStorageFeaturesKHR();
     ~safe_VkPhysicalDevice16BitStorageFeaturesKHR();
     void initialize(const VkPhysicalDevice16BitStorageFeaturesKHR* in_struct);
@@ -1833,6 +1918,7 @@ struct safe_VkPresentRegionKHR {
     const VkRectLayerKHR* pRectangles;
     safe_VkPresentRegionKHR(const VkPresentRegionKHR* in_struct);
     safe_VkPresentRegionKHR(const safe_VkPresentRegionKHR& src);
+    safe_VkPresentRegionKHR& operator=(const safe_VkPresentRegionKHR& src);
     safe_VkPresentRegionKHR();
     ~safe_VkPresentRegionKHR();
     void initialize(const VkPresentRegionKHR* in_struct);
@@ -1848,6 +1934,7 @@ struct safe_VkPresentRegionsKHR {
     safe_VkPresentRegionKHR* pRegions;
     safe_VkPresentRegionsKHR(const VkPresentRegionsKHR* in_struct);
     safe_VkPresentRegionsKHR(const safe_VkPresentRegionsKHR& src);
+    safe_VkPresentRegionsKHR& operator=(const safe_VkPresentRegionsKHR& src);
     safe_VkPresentRegionsKHR();
     ~safe_VkPresentRegionsKHR();
     void initialize(const VkPresentRegionsKHR* in_struct);
@@ -1869,6 +1956,7 @@ struct safe_VkDescriptorUpdateTemplateCreateInfoKHR {
     uint32_t set;
     safe_VkDescriptorUpdateTemplateCreateInfoKHR(const VkDescriptorUpdateTemplateCreateInfoKHR* in_struct);
     safe_VkDescriptorUpdateTemplateCreateInfoKHR(const safe_VkDescriptorUpdateTemplateCreateInfoKHR& src);
+    safe_VkDescriptorUpdateTemplateCreateInfoKHR& operator=(const safe_VkDescriptorUpdateTemplateCreateInfoKHR& src);
     safe_VkDescriptorUpdateTemplateCreateInfoKHR();
     ~safe_VkDescriptorUpdateTemplateCreateInfoKHR();
     void initialize(const VkDescriptorUpdateTemplateCreateInfoKHR* in_struct);
@@ -1883,6 +1971,7 @@ struct safe_VkSharedPresentSurfaceCapabilitiesKHR {
     VkImageUsageFlags sharedPresentSupportedUsageFlags;
     safe_VkSharedPresentSurfaceCapabilitiesKHR(const VkSharedPresentSurfaceCapabilitiesKHR* in_struct);
     safe_VkSharedPresentSurfaceCapabilitiesKHR(const safe_VkSharedPresentSurfaceCapabilitiesKHR& src);
+    safe_VkSharedPresentSurfaceCapabilitiesKHR& operator=(const safe_VkSharedPresentSurfaceCapabilitiesKHR& src);
     safe_VkSharedPresentSurfaceCapabilitiesKHR();
     ~safe_VkSharedPresentSurfaceCapabilitiesKHR();
     void initialize(const VkSharedPresentSurfaceCapabilitiesKHR* in_struct);
@@ -1897,6 +1986,7 @@ struct safe_VkPhysicalDeviceExternalFenceInfoKHR {
     VkExternalFenceHandleTypeFlagBitsKHR handleType;
     safe_VkPhysicalDeviceExternalFenceInfoKHR(const VkPhysicalDeviceExternalFenceInfoKHR* in_struct);
     safe_VkPhysicalDeviceExternalFenceInfoKHR(const safe_VkPhysicalDeviceExternalFenceInfoKHR& src);
+    safe_VkPhysicalDeviceExternalFenceInfoKHR& operator=(const safe_VkPhysicalDeviceExternalFenceInfoKHR& src);
     safe_VkPhysicalDeviceExternalFenceInfoKHR();
     ~safe_VkPhysicalDeviceExternalFenceInfoKHR();
     void initialize(const VkPhysicalDeviceExternalFenceInfoKHR* in_struct);
@@ -1913,6 +2003,7 @@ struct safe_VkExternalFencePropertiesKHR {
     VkExternalFenceFeatureFlagsKHR externalFenceFeatures;
     safe_VkExternalFencePropertiesKHR(const VkExternalFencePropertiesKHR* in_struct);
     safe_VkExternalFencePropertiesKHR(const safe_VkExternalFencePropertiesKHR& src);
+    safe_VkExternalFencePropertiesKHR& operator=(const safe_VkExternalFencePropertiesKHR& src);
     safe_VkExternalFencePropertiesKHR();
     ~safe_VkExternalFencePropertiesKHR();
     void initialize(const VkExternalFencePropertiesKHR* in_struct);
@@ -1927,6 +2018,7 @@ struct safe_VkExportFenceCreateInfoKHR {
     VkExternalFenceHandleTypeFlagsKHR handleTypes;
     safe_VkExportFenceCreateInfoKHR(const VkExportFenceCreateInfoKHR* in_struct);
     safe_VkExportFenceCreateInfoKHR(const safe_VkExportFenceCreateInfoKHR& src);
+    safe_VkExportFenceCreateInfoKHR& operator=(const safe_VkExportFenceCreateInfoKHR& src);
     safe_VkExportFenceCreateInfoKHR();
     ~safe_VkExportFenceCreateInfoKHR();
     void initialize(const VkExportFenceCreateInfoKHR* in_struct);
@@ -1946,6 +2038,7 @@ struct safe_VkImportFenceWin32HandleInfoKHR {
     LPCWSTR name;
     safe_VkImportFenceWin32HandleInfoKHR(const VkImportFenceWin32HandleInfoKHR* in_struct);
     safe_VkImportFenceWin32HandleInfoKHR(const safe_VkImportFenceWin32HandleInfoKHR& src);
+    safe_VkImportFenceWin32HandleInfoKHR& operator=(const safe_VkImportFenceWin32HandleInfoKHR& src);
     safe_VkImportFenceWin32HandleInfoKHR();
     ~safe_VkImportFenceWin32HandleInfoKHR();
     void initialize(const VkImportFenceWin32HandleInfoKHR* in_struct);
@@ -1964,6 +2057,7 @@ struct safe_VkExportFenceWin32HandleInfoKHR {
     LPCWSTR name;
     safe_VkExportFenceWin32HandleInfoKHR(const VkExportFenceWin32HandleInfoKHR* in_struct);
     safe_VkExportFenceWin32HandleInfoKHR(const safe_VkExportFenceWin32HandleInfoKHR& src);
+    safe_VkExportFenceWin32HandleInfoKHR& operator=(const safe_VkExportFenceWin32HandleInfoKHR& src);
     safe_VkExportFenceWin32HandleInfoKHR();
     ~safe_VkExportFenceWin32HandleInfoKHR();
     void initialize(const VkExportFenceWin32HandleInfoKHR* in_struct);
@@ -1981,6 +2075,7 @@ struct safe_VkFenceGetWin32HandleInfoKHR {
     VkExternalFenceHandleTypeFlagBitsKHR handleType;
     safe_VkFenceGetWin32HandleInfoKHR(const VkFenceGetWin32HandleInfoKHR* in_struct);
     safe_VkFenceGetWin32HandleInfoKHR(const safe_VkFenceGetWin32HandleInfoKHR& src);
+    safe_VkFenceGetWin32HandleInfoKHR& operator=(const safe_VkFenceGetWin32HandleInfoKHR& src);
     safe_VkFenceGetWin32HandleInfoKHR();
     ~safe_VkFenceGetWin32HandleInfoKHR();
     void initialize(const VkFenceGetWin32HandleInfoKHR* in_struct);
@@ -1999,6 +2094,7 @@ struct safe_VkImportFenceFdInfoKHR {
     int fd;
     safe_VkImportFenceFdInfoKHR(const VkImportFenceFdInfoKHR* in_struct);
     safe_VkImportFenceFdInfoKHR(const safe_VkImportFenceFdInfoKHR& src);
+    safe_VkImportFenceFdInfoKHR& operator=(const safe_VkImportFenceFdInfoKHR& src);
     safe_VkImportFenceFdInfoKHR();
     ~safe_VkImportFenceFdInfoKHR();
     void initialize(const VkImportFenceFdInfoKHR* in_struct);
@@ -2014,6 +2110,7 @@ struct safe_VkFenceGetFdInfoKHR {
     VkExternalFenceHandleTypeFlagBitsKHR handleType;
     safe_VkFenceGetFdInfoKHR(const VkFenceGetFdInfoKHR* in_struct);
     safe_VkFenceGetFdInfoKHR(const safe_VkFenceGetFdInfoKHR& src);
+    safe_VkFenceGetFdInfoKHR& operator=(const safe_VkFenceGetFdInfoKHR& src);
     safe_VkFenceGetFdInfoKHR();
     ~safe_VkFenceGetFdInfoKHR();
     void initialize(const VkFenceGetFdInfoKHR* in_struct);
@@ -2022,12 +2119,74 @@ struct safe_VkFenceGetFdInfoKHR {
     VkFenceGetFdInfoKHR const *ptr() const { return reinterpret_cast<VkFenceGetFdInfoKHR const *>(this); }
 };
 
+struct safe_VkPhysicalDevicePointClippingPropertiesKHR {
+    VkStructureType sType;
+    void* pNext;
+    VkPointClippingBehaviorKHR pointClippingBehavior;
+    safe_VkPhysicalDevicePointClippingPropertiesKHR(const VkPhysicalDevicePointClippingPropertiesKHR* in_struct);
+    safe_VkPhysicalDevicePointClippingPropertiesKHR(const safe_VkPhysicalDevicePointClippingPropertiesKHR& src);
+    safe_VkPhysicalDevicePointClippingPropertiesKHR& operator=(const safe_VkPhysicalDevicePointClippingPropertiesKHR& src);
+    safe_VkPhysicalDevicePointClippingPropertiesKHR();
+    ~safe_VkPhysicalDevicePointClippingPropertiesKHR();
+    void initialize(const VkPhysicalDevicePointClippingPropertiesKHR* in_struct);
+    void initialize(const safe_VkPhysicalDevicePointClippingPropertiesKHR* src);
+    VkPhysicalDevicePointClippingPropertiesKHR *ptr() { return reinterpret_cast<VkPhysicalDevicePointClippingPropertiesKHR *>(this); }
+    VkPhysicalDevicePointClippingPropertiesKHR const *ptr() const { return reinterpret_cast<VkPhysicalDevicePointClippingPropertiesKHR const *>(this); }
+};
+
+struct safe_VkRenderPassInputAttachmentAspectCreateInfoKHR {
+    VkStructureType sType;
+    const void* pNext;
+    uint32_t aspectReferenceCount;
+    const VkInputAttachmentAspectReferenceKHR* pAspectReferences;
+    safe_VkRenderPassInputAttachmentAspectCreateInfoKHR(const VkRenderPassInputAttachmentAspectCreateInfoKHR* in_struct);
+    safe_VkRenderPassInputAttachmentAspectCreateInfoKHR(const safe_VkRenderPassInputAttachmentAspectCreateInfoKHR& src);
+    safe_VkRenderPassInputAttachmentAspectCreateInfoKHR& operator=(const safe_VkRenderPassInputAttachmentAspectCreateInfoKHR& src);
+    safe_VkRenderPassInputAttachmentAspectCreateInfoKHR();
+    ~safe_VkRenderPassInputAttachmentAspectCreateInfoKHR();
+    void initialize(const VkRenderPassInputAttachmentAspectCreateInfoKHR* in_struct);
+    void initialize(const safe_VkRenderPassInputAttachmentAspectCreateInfoKHR* src);
+    VkRenderPassInputAttachmentAspectCreateInfoKHR *ptr() { return reinterpret_cast<VkRenderPassInputAttachmentAspectCreateInfoKHR *>(this); }
+    VkRenderPassInputAttachmentAspectCreateInfoKHR const *ptr() const { return reinterpret_cast<VkRenderPassInputAttachmentAspectCreateInfoKHR const *>(this); }
+};
+
+struct safe_VkImageViewUsageCreateInfoKHR {
+    VkStructureType sType;
+    const void* pNext;
+    VkImageUsageFlags usage;
+    safe_VkImageViewUsageCreateInfoKHR(const VkImageViewUsageCreateInfoKHR* in_struct);
+    safe_VkImageViewUsageCreateInfoKHR(const safe_VkImageViewUsageCreateInfoKHR& src);
+    safe_VkImageViewUsageCreateInfoKHR& operator=(const safe_VkImageViewUsageCreateInfoKHR& src);
+    safe_VkImageViewUsageCreateInfoKHR();
+    ~safe_VkImageViewUsageCreateInfoKHR();
+    void initialize(const VkImageViewUsageCreateInfoKHR* in_struct);
+    void initialize(const safe_VkImageViewUsageCreateInfoKHR* src);
+    VkImageViewUsageCreateInfoKHR *ptr() { return reinterpret_cast<VkImageViewUsageCreateInfoKHR *>(this); }
+    VkImageViewUsageCreateInfoKHR const *ptr() const { return reinterpret_cast<VkImageViewUsageCreateInfoKHR const *>(this); }
+};
+
+struct safe_VkPipelineTessellationDomainOriginStateCreateInfoKHR {
+    VkStructureType sType;
+    const void* pNext;
+    VkTessellationDomainOriginKHR domainOrigin;
+    safe_VkPipelineTessellationDomainOriginStateCreateInfoKHR(const VkPipelineTessellationDomainOriginStateCreateInfoKHR* in_struct);
+    safe_VkPipelineTessellationDomainOriginStateCreateInfoKHR(const safe_VkPipelineTessellationDomainOriginStateCreateInfoKHR& src);
+    safe_VkPipelineTessellationDomainOriginStateCreateInfoKHR& operator=(const safe_VkPipelineTessellationDomainOriginStateCreateInfoKHR& src);
+    safe_VkPipelineTessellationDomainOriginStateCreateInfoKHR();
+    ~safe_VkPipelineTessellationDomainOriginStateCreateInfoKHR();
+    void initialize(const VkPipelineTessellationDomainOriginStateCreateInfoKHR* in_struct);
+    void initialize(const safe_VkPipelineTessellationDomainOriginStateCreateInfoKHR* src);
+    VkPipelineTessellationDomainOriginStateCreateInfoKHR *ptr() { return reinterpret_cast<VkPipelineTessellationDomainOriginStateCreateInfoKHR *>(this); }
+    VkPipelineTessellationDomainOriginStateCreateInfoKHR const *ptr() const { return reinterpret_cast<VkPipelineTessellationDomainOriginStateCreateInfoKHR const *>(this); }
+};
+
 struct safe_VkPhysicalDeviceSurfaceInfo2KHR {
     VkStructureType sType;
     const void* pNext;
     VkSurfaceKHR surface;
     safe_VkPhysicalDeviceSurfaceInfo2KHR(const VkPhysicalDeviceSurfaceInfo2KHR* in_struct);
     safe_VkPhysicalDeviceSurfaceInfo2KHR(const safe_VkPhysicalDeviceSurfaceInfo2KHR& src);
+    safe_VkPhysicalDeviceSurfaceInfo2KHR& operator=(const safe_VkPhysicalDeviceSurfaceInfo2KHR& src);
     safe_VkPhysicalDeviceSurfaceInfo2KHR();
     ~safe_VkPhysicalDeviceSurfaceInfo2KHR();
     void initialize(const VkPhysicalDeviceSurfaceInfo2KHR* in_struct);
@@ -2042,6 +2201,7 @@ struct safe_VkSurfaceCapabilities2KHR {
     VkSurfaceCapabilitiesKHR surfaceCapabilities;
     safe_VkSurfaceCapabilities2KHR(const VkSurfaceCapabilities2KHR* in_struct);
     safe_VkSurfaceCapabilities2KHR(const safe_VkSurfaceCapabilities2KHR& src);
+    safe_VkSurfaceCapabilities2KHR& operator=(const safe_VkSurfaceCapabilities2KHR& src);
     safe_VkSurfaceCapabilities2KHR();
     ~safe_VkSurfaceCapabilities2KHR();
     void initialize(const VkSurfaceCapabilities2KHR* in_struct);
@@ -2056,6 +2216,7 @@ struct safe_VkSurfaceFormat2KHR {
     VkSurfaceFormatKHR surfaceFormat;
     safe_VkSurfaceFormat2KHR(const VkSurfaceFormat2KHR* in_struct);
     safe_VkSurfaceFormat2KHR(const safe_VkSurfaceFormat2KHR& src);
+    safe_VkSurfaceFormat2KHR& operator=(const safe_VkSurfaceFormat2KHR& src);
     safe_VkSurfaceFormat2KHR();
     ~safe_VkSurfaceFormat2KHR();
     void initialize(const VkSurfaceFormat2KHR* in_struct);
@@ -2071,6 +2232,7 @@ struct safe_VkPhysicalDeviceVariablePointerFeaturesKHR {
     VkBool32 variablePointers;
     safe_VkPhysicalDeviceVariablePointerFeaturesKHR(const VkPhysicalDeviceVariablePointerFeaturesKHR* in_struct);
     safe_VkPhysicalDeviceVariablePointerFeaturesKHR(const safe_VkPhysicalDeviceVariablePointerFeaturesKHR& src);
+    safe_VkPhysicalDeviceVariablePointerFeaturesKHR& operator=(const safe_VkPhysicalDeviceVariablePointerFeaturesKHR& src);
     safe_VkPhysicalDeviceVariablePointerFeaturesKHR();
     ~safe_VkPhysicalDeviceVariablePointerFeaturesKHR();
     void initialize(const VkPhysicalDeviceVariablePointerFeaturesKHR* in_struct);
@@ -2086,6 +2248,7 @@ struct safe_VkMemoryDedicatedRequirementsKHR {
     VkBool32 requiresDedicatedAllocation;
     safe_VkMemoryDedicatedRequirementsKHR(const VkMemoryDedicatedRequirementsKHR* in_struct);
     safe_VkMemoryDedicatedRequirementsKHR(const safe_VkMemoryDedicatedRequirementsKHR& src);
+    safe_VkMemoryDedicatedRequirementsKHR& operator=(const safe_VkMemoryDedicatedRequirementsKHR& src);
     safe_VkMemoryDedicatedRequirementsKHR();
     ~safe_VkMemoryDedicatedRequirementsKHR();
     void initialize(const VkMemoryDedicatedRequirementsKHR* in_struct);
@@ -2101,6 +2264,7 @@ struct safe_VkMemoryDedicatedAllocateInfoKHR {
     VkBuffer buffer;
     safe_VkMemoryDedicatedAllocateInfoKHR(const VkMemoryDedicatedAllocateInfoKHR* in_struct);
     safe_VkMemoryDedicatedAllocateInfoKHR(const safe_VkMemoryDedicatedAllocateInfoKHR& src);
+    safe_VkMemoryDedicatedAllocateInfoKHR& operator=(const safe_VkMemoryDedicatedAllocateInfoKHR& src);
     safe_VkMemoryDedicatedAllocateInfoKHR();
     ~safe_VkMemoryDedicatedAllocateInfoKHR();
     void initialize(const VkMemoryDedicatedAllocateInfoKHR* in_struct);
@@ -2115,6 +2279,7 @@ struct safe_VkBufferMemoryRequirementsInfo2KHR {
     VkBuffer buffer;
     safe_VkBufferMemoryRequirementsInfo2KHR(const VkBufferMemoryRequirementsInfo2KHR* in_struct);
     safe_VkBufferMemoryRequirementsInfo2KHR(const safe_VkBufferMemoryRequirementsInfo2KHR& src);
+    safe_VkBufferMemoryRequirementsInfo2KHR& operator=(const safe_VkBufferMemoryRequirementsInfo2KHR& src);
     safe_VkBufferMemoryRequirementsInfo2KHR();
     ~safe_VkBufferMemoryRequirementsInfo2KHR();
     void initialize(const VkBufferMemoryRequirementsInfo2KHR* in_struct);
@@ -2129,6 +2294,7 @@ struct safe_VkImageMemoryRequirementsInfo2KHR {
     VkImage image;
     safe_VkImageMemoryRequirementsInfo2KHR(const VkImageMemoryRequirementsInfo2KHR* in_struct);
     safe_VkImageMemoryRequirementsInfo2KHR(const safe_VkImageMemoryRequirementsInfo2KHR& src);
+    safe_VkImageMemoryRequirementsInfo2KHR& operator=(const safe_VkImageMemoryRequirementsInfo2KHR& src);
     safe_VkImageMemoryRequirementsInfo2KHR();
     ~safe_VkImageMemoryRequirementsInfo2KHR();
     void initialize(const VkImageMemoryRequirementsInfo2KHR* in_struct);
@@ -2143,6 +2309,7 @@ struct safe_VkImageSparseMemoryRequirementsInfo2KHR {
     VkImage image;
     safe_VkImageSparseMemoryRequirementsInfo2KHR(const VkImageSparseMemoryRequirementsInfo2KHR* in_struct);
     safe_VkImageSparseMemoryRequirementsInfo2KHR(const safe_VkImageSparseMemoryRequirementsInfo2KHR& src);
+    safe_VkImageSparseMemoryRequirementsInfo2KHR& operator=(const safe_VkImageSparseMemoryRequirementsInfo2KHR& src);
     safe_VkImageSparseMemoryRequirementsInfo2KHR();
     ~safe_VkImageSparseMemoryRequirementsInfo2KHR();
     void initialize(const VkImageSparseMemoryRequirementsInfo2KHR* in_struct);
@@ -2157,6 +2324,7 @@ struct safe_VkMemoryRequirements2KHR {
     VkMemoryRequirements memoryRequirements;
     safe_VkMemoryRequirements2KHR(const VkMemoryRequirements2KHR* in_struct);
     safe_VkMemoryRequirements2KHR(const safe_VkMemoryRequirements2KHR& src);
+    safe_VkMemoryRequirements2KHR& operator=(const safe_VkMemoryRequirements2KHR& src);
     safe_VkMemoryRequirements2KHR();
     ~safe_VkMemoryRequirements2KHR();
     void initialize(const VkMemoryRequirements2KHR* in_struct);
@@ -2171,12 +2339,160 @@ struct safe_VkSparseImageMemoryRequirements2KHR {
     VkSparseImageMemoryRequirements memoryRequirements;
     safe_VkSparseImageMemoryRequirements2KHR(const VkSparseImageMemoryRequirements2KHR* in_struct);
     safe_VkSparseImageMemoryRequirements2KHR(const safe_VkSparseImageMemoryRequirements2KHR& src);
+    safe_VkSparseImageMemoryRequirements2KHR& operator=(const safe_VkSparseImageMemoryRequirements2KHR& src);
     safe_VkSparseImageMemoryRequirements2KHR();
     ~safe_VkSparseImageMemoryRequirements2KHR();
     void initialize(const VkSparseImageMemoryRequirements2KHR* in_struct);
     void initialize(const safe_VkSparseImageMemoryRequirements2KHR* src);
     VkSparseImageMemoryRequirements2KHR *ptr() { return reinterpret_cast<VkSparseImageMemoryRequirements2KHR *>(this); }
     VkSparseImageMemoryRequirements2KHR const *ptr() const { return reinterpret_cast<VkSparseImageMemoryRequirements2KHR const *>(this); }
+};
+
+struct safe_VkImageFormatListCreateInfoKHR {
+    VkStructureType sType;
+    const void* pNext;
+    uint32_t viewFormatCount;
+    const VkFormat* pViewFormats;
+    safe_VkImageFormatListCreateInfoKHR(const VkImageFormatListCreateInfoKHR* in_struct);
+    safe_VkImageFormatListCreateInfoKHR(const safe_VkImageFormatListCreateInfoKHR& src);
+    safe_VkImageFormatListCreateInfoKHR& operator=(const safe_VkImageFormatListCreateInfoKHR& src);
+    safe_VkImageFormatListCreateInfoKHR();
+    ~safe_VkImageFormatListCreateInfoKHR();
+    void initialize(const VkImageFormatListCreateInfoKHR* in_struct);
+    void initialize(const safe_VkImageFormatListCreateInfoKHR* src);
+    VkImageFormatListCreateInfoKHR *ptr() { return reinterpret_cast<VkImageFormatListCreateInfoKHR *>(this); }
+    VkImageFormatListCreateInfoKHR const *ptr() const { return reinterpret_cast<VkImageFormatListCreateInfoKHR const *>(this); }
+};
+
+struct safe_VkSamplerYcbcrConversionCreateInfoKHR {
+    VkStructureType sType;
+    const void* pNext;
+    VkFormat format;
+    VkSamplerYcbcrModelConversionKHR ycbcrModel;
+    VkSamplerYcbcrRangeKHR ycbcrRange;
+    VkComponentMapping components;
+    VkChromaLocationKHR xChromaOffset;
+    VkChromaLocationKHR yChromaOffset;
+    VkFilter chromaFilter;
+    VkBool32 forceExplicitReconstruction;
+    safe_VkSamplerYcbcrConversionCreateInfoKHR(const VkSamplerYcbcrConversionCreateInfoKHR* in_struct);
+    safe_VkSamplerYcbcrConversionCreateInfoKHR(const safe_VkSamplerYcbcrConversionCreateInfoKHR& src);
+    safe_VkSamplerYcbcrConversionCreateInfoKHR& operator=(const safe_VkSamplerYcbcrConversionCreateInfoKHR& src);
+    safe_VkSamplerYcbcrConversionCreateInfoKHR();
+    ~safe_VkSamplerYcbcrConversionCreateInfoKHR();
+    void initialize(const VkSamplerYcbcrConversionCreateInfoKHR* in_struct);
+    void initialize(const safe_VkSamplerYcbcrConversionCreateInfoKHR* src);
+    VkSamplerYcbcrConversionCreateInfoKHR *ptr() { return reinterpret_cast<VkSamplerYcbcrConversionCreateInfoKHR *>(this); }
+    VkSamplerYcbcrConversionCreateInfoKHR const *ptr() const { return reinterpret_cast<VkSamplerYcbcrConversionCreateInfoKHR const *>(this); }
+};
+
+struct safe_VkSamplerYcbcrConversionInfoKHR {
+    VkStructureType sType;
+    const void* pNext;
+    VkSamplerYcbcrConversionKHR conversion;
+    safe_VkSamplerYcbcrConversionInfoKHR(const VkSamplerYcbcrConversionInfoKHR* in_struct);
+    safe_VkSamplerYcbcrConversionInfoKHR(const safe_VkSamplerYcbcrConversionInfoKHR& src);
+    safe_VkSamplerYcbcrConversionInfoKHR& operator=(const safe_VkSamplerYcbcrConversionInfoKHR& src);
+    safe_VkSamplerYcbcrConversionInfoKHR();
+    ~safe_VkSamplerYcbcrConversionInfoKHR();
+    void initialize(const VkSamplerYcbcrConversionInfoKHR* in_struct);
+    void initialize(const safe_VkSamplerYcbcrConversionInfoKHR* src);
+    VkSamplerYcbcrConversionInfoKHR *ptr() { return reinterpret_cast<VkSamplerYcbcrConversionInfoKHR *>(this); }
+    VkSamplerYcbcrConversionInfoKHR const *ptr() const { return reinterpret_cast<VkSamplerYcbcrConversionInfoKHR const *>(this); }
+};
+
+struct safe_VkBindImagePlaneMemoryInfoKHR {
+    VkStructureType sType;
+    const void* pNext;
+    VkImageAspectFlagBits planeAspect;
+    safe_VkBindImagePlaneMemoryInfoKHR(const VkBindImagePlaneMemoryInfoKHR* in_struct);
+    safe_VkBindImagePlaneMemoryInfoKHR(const safe_VkBindImagePlaneMemoryInfoKHR& src);
+    safe_VkBindImagePlaneMemoryInfoKHR& operator=(const safe_VkBindImagePlaneMemoryInfoKHR& src);
+    safe_VkBindImagePlaneMemoryInfoKHR();
+    ~safe_VkBindImagePlaneMemoryInfoKHR();
+    void initialize(const VkBindImagePlaneMemoryInfoKHR* in_struct);
+    void initialize(const safe_VkBindImagePlaneMemoryInfoKHR* src);
+    VkBindImagePlaneMemoryInfoKHR *ptr() { return reinterpret_cast<VkBindImagePlaneMemoryInfoKHR *>(this); }
+    VkBindImagePlaneMemoryInfoKHR const *ptr() const { return reinterpret_cast<VkBindImagePlaneMemoryInfoKHR const *>(this); }
+};
+
+struct safe_VkImagePlaneMemoryRequirementsInfoKHR {
+    VkStructureType sType;
+    const void* pNext;
+    VkImageAspectFlagBits planeAspect;
+    safe_VkImagePlaneMemoryRequirementsInfoKHR(const VkImagePlaneMemoryRequirementsInfoKHR* in_struct);
+    safe_VkImagePlaneMemoryRequirementsInfoKHR(const safe_VkImagePlaneMemoryRequirementsInfoKHR& src);
+    safe_VkImagePlaneMemoryRequirementsInfoKHR& operator=(const safe_VkImagePlaneMemoryRequirementsInfoKHR& src);
+    safe_VkImagePlaneMemoryRequirementsInfoKHR();
+    ~safe_VkImagePlaneMemoryRequirementsInfoKHR();
+    void initialize(const VkImagePlaneMemoryRequirementsInfoKHR* in_struct);
+    void initialize(const safe_VkImagePlaneMemoryRequirementsInfoKHR* src);
+    VkImagePlaneMemoryRequirementsInfoKHR *ptr() { return reinterpret_cast<VkImagePlaneMemoryRequirementsInfoKHR *>(this); }
+    VkImagePlaneMemoryRequirementsInfoKHR const *ptr() const { return reinterpret_cast<VkImagePlaneMemoryRequirementsInfoKHR const *>(this); }
+};
+
+struct safe_VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR {
+    VkStructureType sType;
+    void* pNext;
+    VkBool32 samplerYcbcrConversion;
+    safe_VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR(const VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR* in_struct);
+    safe_VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR(const safe_VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR& src);
+    safe_VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR& operator=(const safe_VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR& src);
+    safe_VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR();
+    ~safe_VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR();
+    void initialize(const VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR* in_struct);
+    void initialize(const safe_VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR* src);
+    VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR *ptr() { return reinterpret_cast<VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR *>(this); }
+    VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR const *ptr() const { return reinterpret_cast<VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR const *>(this); }
+};
+
+struct safe_VkSamplerYcbcrConversionImageFormatPropertiesKHR {
+    VkStructureType sType;
+    void* pNext;
+    uint32_t combinedImageSamplerDescriptorCount;
+    safe_VkSamplerYcbcrConversionImageFormatPropertiesKHR(const VkSamplerYcbcrConversionImageFormatPropertiesKHR* in_struct);
+    safe_VkSamplerYcbcrConversionImageFormatPropertiesKHR(const safe_VkSamplerYcbcrConversionImageFormatPropertiesKHR& src);
+    safe_VkSamplerYcbcrConversionImageFormatPropertiesKHR& operator=(const safe_VkSamplerYcbcrConversionImageFormatPropertiesKHR& src);
+    safe_VkSamplerYcbcrConversionImageFormatPropertiesKHR();
+    ~safe_VkSamplerYcbcrConversionImageFormatPropertiesKHR();
+    void initialize(const VkSamplerYcbcrConversionImageFormatPropertiesKHR* in_struct);
+    void initialize(const safe_VkSamplerYcbcrConversionImageFormatPropertiesKHR* src);
+    VkSamplerYcbcrConversionImageFormatPropertiesKHR *ptr() { return reinterpret_cast<VkSamplerYcbcrConversionImageFormatPropertiesKHR *>(this); }
+    VkSamplerYcbcrConversionImageFormatPropertiesKHR const *ptr() const { return reinterpret_cast<VkSamplerYcbcrConversionImageFormatPropertiesKHR const *>(this); }
+};
+
+struct safe_VkBindBufferMemoryInfoKHR {
+    VkStructureType sType;
+    const void* pNext;
+    VkBuffer buffer;
+    VkDeviceMemory memory;
+    VkDeviceSize memoryOffset;
+    safe_VkBindBufferMemoryInfoKHR(const VkBindBufferMemoryInfoKHR* in_struct);
+    safe_VkBindBufferMemoryInfoKHR(const safe_VkBindBufferMemoryInfoKHR& src);
+    safe_VkBindBufferMemoryInfoKHR& operator=(const safe_VkBindBufferMemoryInfoKHR& src);
+    safe_VkBindBufferMemoryInfoKHR();
+    ~safe_VkBindBufferMemoryInfoKHR();
+    void initialize(const VkBindBufferMemoryInfoKHR* in_struct);
+    void initialize(const safe_VkBindBufferMemoryInfoKHR* src);
+    VkBindBufferMemoryInfoKHR *ptr() { return reinterpret_cast<VkBindBufferMemoryInfoKHR *>(this); }
+    VkBindBufferMemoryInfoKHR const *ptr() const { return reinterpret_cast<VkBindBufferMemoryInfoKHR const *>(this); }
+};
+
+struct safe_VkBindImageMemoryInfoKHR {
+    VkStructureType sType;
+    const void* pNext;
+    VkImage image;
+    VkDeviceMemory memory;
+    VkDeviceSize memoryOffset;
+    safe_VkBindImageMemoryInfoKHR(const VkBindImageMemoryInfoKHR* in_struct);
+    safe_VkBindImageMemoryInfoKHR(const safe_VkBindImageMemoryInfoKHR& src);
+    safe_VkBindImageMemoryInfoKHR& operator=(const safe_VkBindImageMemoryInfoKHR& src);
+    safe_VkBindImageMemoryInfoKHR();
+    ~safe_VkBindImageMemoryInfoKHR();
+    void initialize(const VkBindImageMemoryInfoKHR* in_struct);
+    void initialize(const safe_VkBindImageMemoryInfoKHR* src);
+    VkBindImageMemoryInfoKHR *ptr() { return reinterpret_cast<VkBindImageMemoryInfoKHR *>(this); }
+    VkBindImageMemoryInfoKHR const *ptr() const { return reinterpret_cast<VkBindImageMemoryInfoKHR const *>(this); }
 };
 
 struct safe_VkImportMemoryFuchsiaHandleInfoKHR {
@@ -2186,6 +2502,7 @@ struct safe_VkImportMemoryFuchsiaHandleInfoKHR {
     uint32_t handle;
     safe_VkImportMemoryFuchsiaHandleInfoKHR(const VkImportMemoryFuchsiaHandleInfoKHR* in_struct);
     safe_VkImportMemoryFuchsiaHandleInfoKHR(const safe_VkImportMemoryFuchsiaHandleInfoKHR& src);
+    safe_VkImportMemoryFuchsiaHandleInfoKHR& operator=(const safe_VkImportMemoryFuchsiaHandleInfoKHR& src);
     safe_VkImportMemoryFuchsiaHandleInfoKHR();
     ~safe_VkImportMemoryFuchsiaHandleInfoKHR();
     void initialize(const VkImportMemoryFuchsiaHandleInfoKHR* in_struct);
@@ -2200,6 +2517,7 @@ struct safe_VkMemoryFuchsiaHandlePropertiesKHR {
     uint32_t memoryTypeBits;
     safe_VkMemoryFuchsiaHandlePropertiesKHR(const VkMemoryFuchsiaHandlePropertiesKHR* in_struct);
     safe_VkMemoryFuchsiaHandlePropertiesKHR(const safe_VkMemoryFuchsiaHandlePropertiesKHR& src);
+    safe_VkMemoryFuchsiaHandlePropertiesKHR& operator=(const safe_VkMemoryFuchsiaHandlePropertiesKHR& src);
     safe_VkMemoryFuchsiaHandlePropertiesKHR();
     ~safe_VkMemoryFuchsiaHandlePropertiesKHR();
     void initialize(const VkMemoryFuchsiaHandlePropertiesKHR* in_struct);
@@ -2215,6 +2533,7 @@ struct safe_VkMemoryGetFuchsiaHandleInfoKHR {
     VkExternalMemoryHandleTypeFlagBitsKHR handleType;
     safe_VkMemoryGetFuchsiaHandleInfoKHR(const VkMemoryGetFuchsiaHandleInfoKHR* in_struct);
     safe_VkMemoryGetFuchsiaHandleInfoKHR(const safe_VkMemoryGetFuchsiaHandleInfoKHR& src);
+    safe_VkMemoryGetFuchsiaHandleInfoKHR& operator=(const safe_VkMemoryGetFuchsiaHandleInfoKHR& src);
     safe_VkMemoryGetFuchsiaHandleInfoKHR();
     ~safe_VkMemoryGetFuchsiaHandleInfoKHR();
     void initialize(const VkMemoryGetFuchsiaHandleInfoKHR* in_struct);
@@ -2232,6 +2551,7 @@ struct safe_VkImportSemaphoreFuchsiaHandleInfoKHR {
     uint32_t handle;
     safe_VkImportSemaphoreFuchsiaHandleInfoKHR(const VkImportSemaphoreFuchsiaHandleInfoKHR* in_struct);
     safe_VkImportSemaphoreFuchsiaHandleInfoKHR(const safe_VkImportSemaphoreFuchsiaHandleInfoKHR& src);
+    safe_VkImportSemaphoreFuchsiaHandleInfoKHR& operator=(const safe_VkImportSemaphoreFuchsiaHandleInfoKHR& src);
     safe_VkImportSemaphoreFuchsiaHandleInfoKHR();
     ~safe_VkImportSemaphoreFuchsiaHandleInfoKHR();
     void initialize(const VkImportSemaphoreFuchsiaHandleInfoKHR* in_struct);
@@ -2247,6 +2567,7 @@ struct safe_VkSemaphoreGetFuchsiaHandleInfoKHR {
     VkExternalSemaphoreHandleTypeFlagBitsKHR handleType;
     safe_VkSemaphoreGetFuchsiaHandleInfoKHR(const VkSemaphoreGetFuchsiaHandleInfoKHR* in_struct);
     safe_VkSemaphoreGetFuchsiaHandleInfoKHR(const safe_VkSemaphoreGetFuchsiaHandleInfoKHR& src);
+    safe_VkSemaphoreGetFuchsiaHandleInfoKHR& operator=(const safe_VkSemaphoreGetFuchsiaHandleInfoKHR& src);
     safe_VkSemaphoreGetFuchsiaHandleInfoKHR();
     ~safe_VkSemaphoreGetFuchsiaHandleInfoKHR();
     void initialize(const VkSemaphoreGetFuchsiaHandleInfoKHR* in_struct);
@@ -2254,6 +2575,25 @@ struct safe_VkSemaphoreGetFuchsiaHandleInfoKHR {
     VkSemaphoreGetFuchsiaHandleInfoKHR *ptr() { return reinterpret_cast<VkSemaphoreGetFuchsiaHandleInfoKHR *>(this); }
     VkSemaphoreGetFuchsiaHandleInfoKHR const *ptr() const { return reinterpret_cast<VkSemaphoreGetFuchsiaHandleInfoKHR const *>(this); }
 };
+
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+struct safe_VkMagmaSurfaceCreateInfoKHR {
+    VkStructureType sType;
+    const void* pNext;
+    uint32_t imagePipeHandle;
+    uint32_t width;
+    uint32_t height;
+    safe_VkMagmaSurfaceCreateInfoKHR(const VkMagmaSurfaceCreateInfoKHR* in_struct);
+    safe_VkMagmaSurfaceCreateInfoKHR(const safe_VkMagmaSurfaceCreateInfoKHR& src);
+    safe_VkMagmaSurfaceCreateInfoKHR& operator=(const safe_VkMagmaSurfaceCreateInfoKHR& src);
+    safe_VkMagmaSurfaceCreateInfoKHR();
+    ~safe_VkMagmaSurfaceCreateInfoKHR();
+    void initialize(const VkMagmaSurfaceCreateInfoKHR* in_struct);
+    void initialize(const safe_VkMagmaSurfaceCreateInfoKHR* src);
+    VkMagmaSurfaceCreateInfoKHR *ptr() { return reinterpret_cast<VkMagmaSurfaceCreateInfoKHR *>(this); }
+    VkMagmaSurfaceCreateInfoKHR const *ptr() const { return reinterpret_cast<VkMagmaSurfaceCreateInfoKHR const *>(this); }
+};
+#endif // VK_USE_PLATFORM_MAGMA_KHR
 
 struct safe_VkDebugReportCallbackCreateInfoEXT {
     VkStructureType sType;
@@ -2263,6 +2603,7 @@ struct safe_VkDebugReportCallbackCreateInfoEXT {
     void* pUserData;
     safe_VkDebugReportCallbackCreateInfoEXT(const VkDebugReportCallbackCreateInfoEXT* in_struct);
     safe_VkDebugReportCallbackCreateInfoEXT(const safe_VkDebugReportCallbackCreateInfoEXT& src);
+    safe_VkDebugReportCallbackCreateInfoEXT& operator=(const safe_VkDebugReportCallbackCreateInfoEXT& src);
     safe_VkDebugReportCallbackCreateInfoEXT();
     ~safe_VkDebugReportCallbackCreateInfoEXT();
     void initialize(const VkDebugReportCallbackCreateInfoEXT* in_struct);
@@ -2277,6 +2618,7 @@ struct safe_VkPipelineRasterizationStateRasterizationOrderAMD {
     VkRasterizationOrderAMD rasterizationOrder;
     safe_VkPipelineRasterizationStateRasterizationOrderAMD(const VkPipelineRasterizationStateRasterizationOrderAMD* in_struct);
     safe_VkPipelineRasterizationStateRasterizationOrderAMD(const safe_VkPipelineRasterizationStateRasterizationOrderAMD& src);
+    safe_VkPipelineRasterizationStateRasterizationOrderAMD& operator=(const safe_VkPipelineRasterizationStateRasterizationOrderAMD& src);
     safe_VkPipelineRasterizationStateRasterizationOrderAMD();
     ~safe_VkPipelineRasterizationStateRasterizationOrderAMD();
     void initialize(const VkPipelineRasterizationStateRasterizationOrderAMD* in_struct);
@@ -2293,6 +2635,7 @@ struct safe_VkDebugMarkerObjectNameInfoEXT {
     const char* pObjectName;
     safe_VkDebugMarkerObjectNameInfoEXT(const VkDebugMarkerObjectNameInfoEXT* in_struct);
     safe_VkDebugMarkerObjectNameInfoEXT(const safe_VkDebugMarkerObjectNameInfoEXT& src);
+    safe_VkDebugMarkerObjectNameInfoEXT& operator=(const safe_VkDebugMarkerObjectNameInfoEXT& src);
     safe_VkDebugMarkerObjectNameInfoEXT();
     ~safe_VkDebugMarkerObjectNameInfoEXT();
     void initialize(const VkDebugMarkerObjectNameInfoEXT* in_struct);
@@ -2311,6 +2654,7 @@ struct safe_VkDebugMarkerObjectTagInfoEXT {
     const void* pTag;
     safe_VkDebugMarkerObjectTagInfoEXT(const VkDebugMarkerObjectTagInfoEXT* in_struct);
     safe_VkDebugMarkerObjectTagInfoEXT(const safe_VkDebugMarkerObjectTagInfoEXT& src);
+    safe_VkDebugMarkerObjectTagInfoEXT& operator=(const safe_VkDebugMarkerObjectTagInfoEXT& src);
     safe_VkDebugMarkerObjectTagInfoEXT();
     ~safe_VkDebugMarkerObjectTagInfoEXT();
     void initialize(const VkDebugMarkerObjectTagInfoEXT* in_struct);
@@ -2326,6 +2670,7 @@ struct safe_VkDebugMarkerMarkerInfoEXT {
     float color[4];
     safe_VkDebugMarkerMarkerInfoEXT(const VkDebugMarkerMarkerInfoEXT* in_struct);
     safe_VkDebugMarkerMarkerInfoEXT(const safe_VkDebugMarkerMarkerInfoEXT& src);
+    safe_VkDebugMarkerMarkerInfoEXT& operator=(const safe_VkDebugMarkerMarkerInfoEXT& src);
     safe_VkDebugMarkerMarkerInfoEXT();
     ~safe_VkDebugMarkerMarkerInfoEXT();
     void initialize(const VkDebugMarkerMarkerInfoEXT* in_struct);
@@ -2340,6 +2685,7 @@ struct safe_VkDedicatedAllocationImageCreateInfoNV {
     VkBool32 dedicatedAllocation;
     safe_VkDedicatedAllocationImageCreateInfoNV(const VkDedicatedAllocationImageCreateInfoNV* in_struct);
     safe_VkDedicatedAllocationImageCreateInfoNV(const safe_VkDedicatedAllocationImageCreateInfoNV& src);
+    safe_VkDedicatedAllocationImageCreateInfoNV& operator=(const safe_VkDedicatedAllocationImageCreateInfoNV& src);
     safe_VkDedicatedAllocationImageCreateInfoNV();
     ~safe_VkDedicatedAllocationImageCreateInfoNV();
     void initialize(const VkDedicatedAllocationImageCreateInfoNV* in_struct);
@@ -2354,6 +2700,7 @@ struct safe_VkDedicatedAllocationBufferCreateInfoNV {
     VkBool32 dedicatedAllocation;
     safe_VkDedicatedAllocationBufferCreateInfoNV(const VkDedicatedAllocationBufferCreateInfoNV* in_struct);
     safe_VkDedicatedAllocationBufferCreateInfoNV(const safe_VkDedicatedAllocationBufferCreateInfoNV& src);
+    safe_VkDedicatedAllocationBufferCreateInfoNV& operator=(const safe_VkDedicatedAllocationBufferCreateInfoNV& src);
     safe_VkDedicatedAllocationBufferCreateInfoNV();
     ~safe_VkDedicatedAllocationBufferCreateInfoNV();
     void initialize(const VkDedicatedAllocationBufferCreateInfoNV* in_struct);
@@ -2369,6 +2716,7 @@ struct safe_VkDedicatedAllocationMemoryAllocateInfoNV {
     VkBuffer buffer;
     safe_VkDedicatedAllocationMemoryAllocateInfoNV(const VkDedicatedAllocationMemoryAllocateInfoNV* in_struct);
     safe_VkDedicatedAllocationMemoryAllocateInfoNV(const safe_VkDedicatedAllocationMemoryAllocateInfoNV& src);
+    safe_VkDedicatedAllocationMemoryAllocateInfoNV& operator=(const safe_VkDedicatedAllocationMemoryAllocateInfoNV& src);
     safe_VkDedicatedAllocationMemoryAllocateInfoNV();
     ~safe_VkDedicatedAllocationMemoryAllocateInfoNV();
     void initialize(const VkDedicatedAllocationMemoryAllocateInfoNV* in_struct);
@@ -2383,6 +2731,7 @@ struct safe_VkTextureLODGatherFormatPropertiesAMD {
     VkBool32 supportsTextureGatherLODBiasAMD;
     safe_VkTextureLODGatherFormatPropertiesAMD(const VkTextureLODGatherFormatPropertiesAMD* in_struct);
     safe_VkTextureLODGatherFormatPropertiesAMD(const safe_VkTextureLODGatherFormatPropertiesAMD& src);
+    safe_VkTextureLODGatherFormatPropertiesAMD& operator=(const safe_VkTextureLODGatherFormatPropertiesAMD& src);
     safe_VkTextureLODGatherFormatPropertiesAMD();
     ~safe_VkTextureLODGatherFormatPropertiesAMD();
     void initialize(const VkTextureLODGatherFormatPropertiesAMD* in_struct);
@@ -2402,6 +2751,7 @@ struct safe_VkRenderPassMultiviewCreateInfoKHX {
     const uint32_t* pCorrelationMasks;
     safe_VkRenderPassMultiviewCreateInfoKHX(const VkRenderPassMultiviewCreateInfoKHX* in_struct);
     safe_VkRenderPassMultiviewCreateInfoKHX(const safe_VkRenderPassMultiviewCreateInfoKHX& src);
+    safe_VkRenderPassMultiviewCreateInfoKHX& operator=(const safe_VkRenderPassMultiviewCreateInfoKHX& src);
     safe_VkRenderPassMultiviewCreateInfoKHX();
     ~safe_VkRenderPassMultiviewCreateInfoKHX();
     void initialize(const VkRenderPassMultiviewCreateInfoKHX* in_struct);
@@ -2418,6 +2768,7 @@ struct safe_VkPhysicalDeviceMultiviewFeaturesKHX {
     VkBool32 multiviewTessellationShader;
     safe_VkPhysicalDeviceMultiviewFeaturesKHX(const VkPhysicalDeviceMultiviewFeaturesKHX* in_struct);
     safe_VkPhysicalDeviceMultiviewFeaturesKHX(const safe_VkPhysicalDeviceMultiviewFeaturesKHX& src);
+    safe_VkPhysicalDeviceMultiviewFeaturesKHX& operator=(const safe_VkPhysicalDeviceMultiviewFeaturesKHX& src);
     safe_VkPhysicalDeviceMultiviewFeaturesKHX();
     ~safe_VkPhysicalDeviceMultiviewFeaturesKHX();
     void initialize(const VkPhysicalDeviceMultiviewFeaturesKHX* in_struct);
@@ -2433,6 +2784,7 @@ struct safe_VkPhysicalDeviceMultiviewPropertiesKHX {
     uint32_t maxMultiviewInstanceIndex;
     safe_VkPhysicalDeviceMultiviewPropertiesKHX(const VkPhysicalDeviceMultiviewPropertiesKHX* in_struct);
     safe_VkPhysicalDeviceMultiviewPropertiesKHX(const safe_VkPhysicalDeviceMultiviewPropertiesKHX& src);
+    safe_VkPhysicalDeviceMultiviewPropertiesKHX& operator=(const safe_VkPhysicalDeviceMultiviewPropertiesKHX& src);
     safe_VkPhysicalDeviceMultiviewPropertiesKHX();
     ~safe_VkPhysicalDeviceMultiviewPropertiesKHX();
     void initialize(const VkPhysicalDeviceMultiviewPropertiesKHX* in_struct);
@@ -2447,6 +2799,7 @@ struct safe_VkExternalMemoryImageCreateInfoNV {
     VkExternalMemoryHandleTypeFlagsNV handleTypes;
     safe_VkExternalMemoryImageCreateInfoNV(const VkExternalMemoryImageCreateInfoNV* in_struct);
     safe_VkExternalMemoryImageCreateInfoNV(const safe_VkExternalMemoryImageCreateInfoNV& src);
+    safe_VkExternalMemoryImageCreateInfoNV& operator=(const safe_VkExternalMemoryImageCreateInfoNV& src);
     safe_VkExternalMemoryImageCreateInfoNV();
     ~safe_VkExternalMemoryImageCreateInfoNV();
     void initialize(const VkExternalMemoryImageCreateInfoNV* in_struct);
@@ -2461,6 +2814,7 @@ struct safe_VkExportMemoryAllocateInfoNV {
     VkExternalMemoryHandleTypeFlagsNV handleTypes;
     safe_VkExportMemoryAllocateInfoNV(const VkExportMemoryAllocateInfoNV* in_struct);
     safe_VkExportMemoryAllocateInfoNV(const safe_VkExportMemoryAllocateInfoNV& src);
+    safe_VkExportMemoryAllocateInfoNV& operator=(const safe_VkExportMemoryAllocateInfoNV& src);
     safe_VkExportMemoryAllocateInfoNV();
     ~safe_VkExportMemoryAllocateInfoNV();
     void initialize(const VkExportMemoryAllocateInfoNV* in_struct);
@@ -2477,6 +2831,7 @@ struct safe_VkImportMemoryWin32HandleInfoNV {
     HANDLE handle;
     safe_VkImportMemoryWin32HandleInfoNV(const VkImportMemoryWin32HandleInfoNV* in_struct);
     safe_VkImportMemoryWin32HandleInfoNV(const safe_VkImportMemoryWin32HandleInfoNV& src);
+    safe_VkImportMemoryWin32HandleInfoNV& operator=(const safe_VkImportMemoryWin32HandleInfoNV& src);
     safe_VkImportMemoryWin32HandleInfoNV();
     ~safe_VkImportMemoryWin32HandleInfoNV();
     void initialize(const VkImportMemoryWin32HandleInfoNV* in_struct);
@@ -2494,6 +2849,7 @@ struct safe_VkExportMemoryWin32HandleInfoNV {
     DWORD dwAccess;
     safe_VkExportMemoryWin32HandleInfoNV(const VkExportMemoryWin32HandleInfoNV* in_struct);
     safe_VkExportMemoryWin32HandleInfoNV(const safe_VkExportMemoryWin32HandleInfoNV& src);
+    safe_VkExportMemoryWin32HandleInfoNV& operator=(const safe_VkExportMemoryWin32HandleInfoNV& src);
     safe_VkExportMemoryWin32HandleInfoNV();
     ~safe_VkExportMemoryWin32HandleInfoNV();
     void initialize(const VkExportMemoryWin32HandleInfoNV* in_struct);
@@ -2516,6 +2872,7 @@ struct safe_VkWin32KeyedMutexAcquireReleaseInfoNV {
     const uint64_t* pReleaseKeys;
     safe_VkWin32KeyedMutexAcquireReleaseInfoNV(const VkWin32KeyedMutexAcquireReleaseInfoNV* in_struct);
     safe_VkWin32KeyedMutexAcquireReleaseInfoNV(const safe_VkWin32KeyedMutexAcquireReleaseInfoNV& src);
+    safe_VkWin32KeyedMutexAcquireReleaseInfoNV& operator=(const safe_VkWin32KeyedMutexAcquireReleaseInfoNV& src);
     safe_VkWin32KeyedMutexAcquireReleaseInfoNV();
     ~safe_VkWin32KeyedMutexAcquireReleaseInfoNV();
     void initialize(const VkWin32KeyedMutexAcquireReleaseInfoNV* in_struct);
@@ -2532,50 +2889,13 @@ struct safe_VkMemoryAllocateFlagsInfoKHX {
     uint32_t deviceMask;
     safe_VkMemoryAllocateFlagsInfoKHX(const VkMemoryAllocateFlagsInfoKHX* in_struct);
     safe_VkMemoryAllocateFlagsInfoKHX(const safe_VkMemoryAllocateFlagsInfoKHX& src);
+    safe_VkMemoryAllocateFlagsInfoKHX& operator=(const safe_VkMemoryAllocateFlagsInfoKHX& src);
     safe_VkMemoryAllocateFlagsInfoKHX();
     ~safe_VkMemoryAllocateFlagsInfoKHX();
     void initialize(const VkMemoryAllocateFlagsInfoKHX* in_struct);
     void initialize(const safe_VkMemoryAllocateFlagsInfoKHX* src);
     VkMemoryAllocateFlagsInfoKHX *ptr() { return reinterpret_cast<VkMemoryAllocateFlagsInfoKHX *>(this); }
     VkMemoryAllocateFlagsInfoKHX const *ptr() const { return reinterpret_cast<VkMemoryAllocateFlagsInfoKHX const *>(this); }
-};
-
-struct safe_VkBindBufferMemoryInfoKHX {
-    VkStructureType sType;
-    const void* pNext;
-    VkBuffer buffer;
-    VkDeviceMemory memory;
-    VkDeviceSize memoryOffset;
-    uint32_t deviceIndexCount;
-    const uint32_t* pDeviceIndices;
-    safe_VkBindBufferMemoryInfoKHX(const VkBindBufferMemoryInfoKHX* in_struct);
-    safe_VkBindBufferMemoryInfoKHX(const safe_VkBindBufferMemoryInfoKHX& src);
-    safe_VkBindBufferMemoryInfoKHX();
-    ~safe_VkBindBufferMemoryInfoKHX();
-    void initialize(const VkBindBufferMemoryInfoKHX* in_struct);
-    void initialize(const safe_VkBindBufferMemoryInfoKHX* src);
-    VkBindBufferMemoryInfoKHX *ptr() { return reinterpret_cast<VkBindBufferMemoryInfoKHX *>(this); }
-    VkBindBufferMemoryInfoKHX const *ptr() const { return reinterpret_cast<VkBindBufferMemoryInfoKHX const *>(this); }
-};
-
-struct safe_VkBindImageMemoryInfoKHX {
-    VkStructureType sType;
-    const void* pNext;
-    VkImage image;
-    VkDeviceMemory memory;
-    VkDeviceSize memoryOffset;
-    uint32_t deviceIndexCount;
-    const uint32_t* pDeviceIndices;
-    uint32_t SFRRectCount;
-    const VkRect2D* pSFRRects;
-    safe_VkBindImageMemoryInfoKHX(const VkBindImageMemoryInfoKHX* in_struct);
-    safe_VkBindImageMemoryInfoKHX(const safe_VkBindImageMemoryInfoKHX& src);
-    safe_VkBindImageMemoryInfoKHX();
-    ~safe_VkBindImageMemoryInfoKHX();
-    void initialize(const VkBindImageMemoryInfoKHX* in_struct);
-    void initialize(const safe_VkBindImageMemoryInfoKHX* src);
-    VkBindImageMemoryInfoKHX *ptr() { return reinterpret_cast<VkBindImageMemoryInfoKHX *>(this); }
-    VkBindImageMemoryInfoKHX const *ptr() const { return reinterpret_cast<VkBindImageMemoryInfoKHX const *>(this); }
 };
 
 struct safe_VkDeviceGroupRenderPassBeginInfoKHX {
@@ -2586,6 +2906,7 @@ struct safe_VkDeviceGroupRenderPassBeginInfoKHX {
     const VkRect2D* pDeviceRenderAreas;
     safe_VkDeviceGroupRenderPassBeginInfoKHX(const VkDeviceGroupRenderPassBeginInfoKHX* in_struct);
     safe_VkDeviceGroupRenderPassBeginInfoKHX(const safe_VkDeviceGroupRenderPassBeginInfoKHX& src);
+    safe_VkDeviceGroupRenderPassBeginInfoKHX& operator=(const safe_VkDeviceGroupRenderPassBeginInfoKHX& src);
     safe_VkDeviceGroupRenderPassBeginInfoKHX();
     ~safe_VkDeviceGroupRenderPassBeginInfoKHX();
     void initialize(const VkDeviceGroupRenderPassBeginInfoKHX* in_struct);
@@ -2600,6 +2921,7 @@ struct safe_VkDeviceGroupCommandBufferBeginInfoKHX {
     uint32_t deviceMask;
     safe_VkDeviceGroupCommandBufferBeginInfoKHX(const VkDeviceGroupCommandBufferBeginInfoKHX* in_struct);
     safe_VkDeviceGroupCommandBufferBeginInfoKHX(const safe_VkDeviceGroupCommandBufferBeginInfoKHX& src);
+    safe_VkDeviceGroupCommandBufferBeginInfoKHX& operator=(const safe_VkDeviceGroupCommandBufferBeginInfoKHX& src);
     safe_VkDeviceGroupCommandBufferBeginInfoKHX();
     ~safe_VkDeviceGroupCommandBufferBeginInfoKHX();
     void initialize(const VkDeviceGroupCommandBufferBeginInfoKHX* in_struct);
@@ -2619,6 +2941,7 @@ struct safe_VkDeviceGroupSubmitInfoKHX {
     const uint32_t* pSignalSemaphoreDeviceIndices;
     safe_VkDeviceGroupSubmitInfoKHX(const VkDeviceGroupSubmitInfoKHX* in_struct);
     safe_VkDeviceGroupSubmitInfoKHX(const safe_VkDeviceGroupSubmitInfoKHX& src);
+    safe_VkDeviceGroupSubmitInfoKHX& operator=(const safe_VkDeviceGroupSubmitInfoKHX& src);
     safe_VkDeviceGroupSubmitInfoKHX();
     ~safe_VkDeviceGroupSubmitInfoKHX();
     void initialize(const VkDeviceGroupSubmitInfoKHX* in_struct);
@@ -2634,12 +2957,47 @@ struct safe_VkDeviceGroupBindSparseInfoKHX {
     uint32_t memoryDeviceIndex;
     safe_VkDeviceGroupBindSparseInfoKHX(const VkDeviceGroupBindSparseInfoKHX* in_struct);
     safe_VkDeviceGroupBindSparseInfoKHX(const safe_VkDeviceGroupBindSparseInfoKHX& src);
+    safe_VkDeviceGroupBindSparseInfoKHX& operator=(const safe_VkDeviceGroupBindSparseInfoKHX& src);
     safe_VkDeviceGroupBindSparseInfoKHX();
     ~safe_VkDeviceGroupBindSparseInfoKHX();
     void initialize(const VkDeviceGroupBindSparseInfoKHX* in_struct);
     void initialize(const safe_VkDeviceGroupBindSparseInfoKHX* src);
     VkDeviceGroupBindSparseInfoKHX *ptr() { return reinterpret_cast<VkDeviceGroupBindSparseInfoKHX *>(this); }
     VkDeviceGroupBindSparseInfoKHX const *ptr() const { return reinterpret_cast<VkDeviceGroupBindSparseInfoKHX const *>(this); }
+};
+
+struct safe_VkBindBufferMemoryDeviceGroupInfoKHX {
+    VkStructureType sType;
+    const void* pNext;
+    uint32_t deviceIndexCount;
+    const uint32_t* pDeviceIndices;
+    safe_VkBindBufferMemoryDeviceGroupInfoKHX(const VkBindBufferMemoryDeviceGroupInfoKHX* in_struct);
+    safe_VkBindBufferMemoryDeviceGroupInfoKHX(const safe_VkBindBufferMemoryDeviceGroupInfoKHX& src);
+    safe_VkBindBufferMemoryDeviceGroupInfoKHX& operator=(const safe_VkBindBufferMemoryDeviceGroupInfoKHX& src);
+    safe_VkBindBufferMemoryDeviceGroupInfoKHX();
+    ~safe_VkBindBufferMemoryDeviceGroupInfoKHX();
+    void initialize(const VkBindBufferMemoryDeviceGroupInfoKHX* in_struct);
+    void initialize(const safe_VkBindBufferMemoryDeviceGroupInfoKHX* src);
+    VkBindBufferMemoryDeviceGroupInfoKHX *ptr() { return reinterpret_cast<VkBindBufferMemoryDeviceGroupInfoKHX *>(this); }
+    VkBindBufferMemoryDeviceGroupInfoKHX const *ptr() const { return reinterpret_cast<VkBindBufferMemoryDeviceGroupInfoKHX const *>(this); }
+};
+
+struct safe_VkBindImageMemoryDeviceGroupInfoKHX {
+    VkStructureType sType;
+    const void* pNext;
+    uint32_t deviceIndexCount;
+    const uint32_t* pDeviceIndices;
+    uint32_t SFRRectCount;
+    const VkRect2D* pSFRRects;
+    safe_VkBindImageMemoryDeviceGroupInfoKHX(const VkBindImageMemoryDeviceGroupInfoKHX* in_struct);
+    safe_VkBindImageMemoryDeviceGroupInfoKHX(const safe_VkBindImageMemoryDeviceGroupInfoKHX& src);
+    safe_VkBindImageMemoryDeviceGroupInfoKHX& operator=(const safe_VkBindImageMemoryDeviceGroupInfoKHX& src);
+    safe_VkBindImageMemoryDeviceGroupInfoKHX();
+    ~safe_VkBindImageMemoryDeviceGroupInfoKHX();
+    void initialize(const VkBindImageMemoryDeviceGroupInfoKHX* in_struct);
+    void initialize(const safe_VkBindImageMemoryDeviceGroupInfoKHX* src);
+    VkBindImageMemoryDeviceGroupInfoKHX *ptr() { return reinterpret_cast<VkBindImageMemoryDeviceGroupInfoKHX *>(this); }
+    VkBindImageMemoryDeviceGroupInfoKHX const *ptr() const { return reinterpret_cast<VkBindImageMemoryDeviceGroupInfoKHX const *>(this); }
 };
 
 struct safe_VkDeviceGroupPresentCapabilitiesKHX {
@@ -2649,6 +3007,7 @@ struct safe_VkDeviceGroupPresentCapabilitiesKHX {
     VkDeviceGroupPresentModeFlagsKHX modes;
     safe_VkDeviceGroupPresentCapabilitiesKHX(const VkDeviceGroupPresentCapabilitiesKHX* in_struct);
     safe_VkDeviceGroupPresentCapabilitiesKHX(const safe_VkDeviceGroupPresentCapabilitiesKHX& src);
+    safe_VkDeviceGroupPresentCapabilitiesKHX& operator=(const safe_VkDeviceGroupPresentCapabilitiesKHX& src);
     safe_VkDeviceGroupPresentCapabilitiesKHX();
     ~safe_VkDeviceGroupPresentCapabilitiesKHX();
     void initialize(const VkDeviceGroupPresentCapabilitiesKHX* in_struct);
@@ -2663,6 +3022,7 @@ struct safe_VkImageSwapchainCreateInfoKHX {
     VkSwapchainKHR swapchain;
     safe_VkImageSwapchainCreateInfoKHX(const VkImageSwapchainCreateInfoKHX* in_struct);
     safe_VkImageSwapchainCreateInfoKHX(const safe_VkImageSwapchainCreateInfoKHX& src);
+    safe_VkImageSwapchainCreateInfoKHX& operator=(const safe_VkImageSwapchainCreateInfoKHX& src);
     safe_VkImageSwapchainCreateInfoKHX();
     ~safe_VkImageSwapchainCreateInfoKHX();
     void initialize(const VkImageSwapchainCreateInfoKHX* in_struct);
@@ -2678,6 +3038,7 @@ struct safe_VkBindImageMemorySwapchainInfoKHX {
     uint32_t imageIndex;
     safe_VkBindImageMemorySwapchainInfoKHX(const VkBindImageMemorySwapchainInfoKHX* in_struct);
     safe_VkBindImageMemorySwapchainInfoKHX(const safe_VkBindImageMemorySwapchainInfoKHX& src);
+    safe_VkBindImageMemorySwapchainInfoKHX& operator=(const safe_VkBindImageMemorySwapchainInfoKHX& src);
     safe_VkBindImageMemorySwapchainInfoKHX();
     ~safe_VkBindImageMemorySwapchainInfoKHX();
     void initialize(const VkBindImageMemorySwapchainInfoKHX* in_struct);
@@ -2696,6 +3057,7 @@ struct safe_VkAcquireNextImageInfoKHX {
     uint32_t deviceMask;
     safe_VkAcquireNextImageInfoKHX(const VkAcquireNextImageInfoKHX* in_struct);
     safe_VkAcquireNextImageInfoKHX(const safe_VkAcquireNextImageInfoKHX& src);
+    safe_VkAcquireNextImageInfoKHX& operator=(const safe_VkAcquireNextImageInfoKHX& src);
     safe_VkAcquireNextImageInfoKHX();
     ~safe_VkAcquireNextImageInfoKHX();
     void initialize(const VkAcquireNextImageInfoKHX* in_struct);
@@ -2712,6 +3074,7 @@ struct safe_VkDeviceGroupPresentInfoKHX {
     VkDeviceGroupPresentModeFlagBitsKHX mode;
     safe_VkDeviceGroupPresentInfoKHX(const VkDeviceGroupPresentInfoKHX* in_struct);
     safe_VkDeviceGroupPresentInfoKHX(const safe_VkDeviceGroupPresentInfoKHX& src);
+    safe_VkDeviceGroupPresentInfoKHX& operator=(const safe_VkDeviceGroupPresentInfoKHX& src);
     safe_VkDeviceGroupPresentInfoKHX();
     ~safe_VkDeviceGroupPresentInfoKHX();
     void initialize(const VkDeviceGroupPresentInfoKHX* in_struct);
@@ -2726,6 +3089,7 @@ struct safe_VkDeviceGroupSwapchainCreateInfoKHX {
     VkDeviceGroupPresentModeFlagsKHX modes;
     safe_VkDeviceGroupSwapchainCreateInfoKHX(const VkDeviceGroupSwapchainCreateInfoKHX* in_struct);
     safe_VkDeviceGroupSwapchainCreateInfoKHX(const safe_VkDeviceGroupSwapchainCreateInfoKHX& src);
+    safe_VkDeviceGroupSwapchainCreateInfoKHX& operator=(const safe_VkDeviceGroupSwapchainCreateInfoKHX& src);
     safe_VkDeviceGroupSwapchainCreateInfoKHX();
     ~safe_VkDeviceGroupSwapchainCreateInfoKHX();
     void initialize(const VkDeviceGroupSwapchainCreateInfoKHX* in_struct);
@@ -2741,6 +3105,7 @@ struct safe_VkValidationFlagsEXT {
     VkValidationCheckEXT* pDisabledValidationChecks;
     safe_VkValidationFlagsEXT(const VkValidationFlagsEXT* in_struct);
     safe_VkValidationFlagsEXT(const safe_VkValidationFlagsEXT& src);
+    safe_VkValidationFlagsEXT& operator=(const safe_VkValidationFlagsEXT& src);
     safe_VkValidationFlagsEXT();
     ~safe_VkValidationFlagsEXT();
     void initialize(const VkValidationFlagsEXT* in_struct);
@@ -2757,6 +3122,7 @@ struct safe_VkViSurfaceCreateInfoNN {
     void* window;
     safe_VkViSurfaceCreateInfoNN(const VkViSurfaceCreateInfoNN* in_struct);
     safe_VkViSurfaceCreateInfoNN(const safe_VkViSurfaceCreateInfoNN& src);
+    safe_VkViSurfaceCreateInfoNN& operator=(const safe_VkViSurfaceCreateInfoNN& src);
     safe_VkViSurfaceCreateInfoNN();
     ~safe_VkViSurfaceCreateInfoNN();
     void initialize(const VkViSurfaceCreateInfoNN* in_struct);
@@ -2774,6 +3140,7 @@ struct safe_VkPhysicalDeviceGroupPropertiesKHX {
     VkBool32 subsetAllocation;
     safe_VkPhysicalDeviceGroupPropertiesKHX(const VkPhysicalDeviceGroupPropertiesKHX* in_struct);
     safe_VkPhysicalDeviceGroupPropertiesKHX(const safe_VkPhysicalDeviceGroupPropertiesKHX& src);
+    safe_VkPhysicalDeviceGroupPropertiesKHX& operator=(const safe_VkPhysicalDeviceGroupPropertiesKHX& src);
     safe_VkPhysicalDeviceGroupPropertiesKHX();
     ~safe_VkPhysicalDeviceGroupPropertiesKHX();
     void initialize(const VkPhysicalDeviceGroupPropertiesKHX* in_struct);
@@ -2789,6 +3156,7 @@ struct safe_VkDeviceGroupDeviceCreateInfoKHX {
     VkPhysicalDevice* pPhysicalDevices;
     safe_VkDeviceGroupDeviceCreateInfoKHX(const VkDeviceGroupDeviceCreateInfoKHX* in_struct);
     safe_VkDeviceGroupDeviceCreateInfoKHX(const safe_VkDeviceGroupDeviceCreateInfoKHX& src);
+    safe_VkDeviceGroupDeviceCreateInfoKHX& operator=(const safe_VkDeviceGroupDeviceCreateInfoKHX& src);
     safe_VkDeviceGroupDeviceCreateInfoKHX();
     ~safe_VkDeviceGroupDeviceCreateInfoKHX();
     void initialize(const VkDeviceGroupDeviceCreateInfoKHX* in_struct);
@@ -2803,6 +3171,7 @@ struct safe_VkDeviceGeneratedCommandsFeaturesNVX {
     VkBool32 computeBindingPointSupport;
     safe_VkDeviceGeneratedCommandsFeaturesNVX(const VkDeviceGeneratedCommandsFeaturesNVX* in_struct);
     safe_VkDeviceGeneratedCommandsFeaturesNVX(const safe_VkDeviceGeneratedCommandsFeaturesNVX& src);
+    safe_VkDeviceGeneratedCommandsFeaturesNVX& operator=(const safe_VkDeviceGeneratedCommandsFeaturesNVX& src);
     safe_VkDeviceGeneratedCommandsFeaturesNVX();
     ~safe_VkDeviceGeneratedCommandsFeaturesNVX();
     void initialize(const VkDeviceGeneratedCommandsFeaturesNVX* in_struct);
@@ -2821,6 +3190,7 @@ struct safe_VkDeviceGeneratedCommandsLimitsNVX {
     uint32_t minCommandsTokenBufferOffsetAlignment;
     safe_VkDeviceGeneratedCommandsLimitsNVX(const VkDeviceGeneratedCommandsLimitsNVX* in_struct);
     safe_VkDeviceGeneratedCommandsLimitsNVX(const safe_VkDeviceGeneratedCommandsLimitsNVX& src);
+    safe_VkDeviceGeneratedCommandsLimitsNVX& operator=(const safe_VkDeviceGeneratedCommandsLimitsNVX& src);
     safe_VkDeviceGeneratedCommandsLimitsNVX();
     ~safe_VkDeviceGeneratedCommandsLimitsNVX();
     void initialize(const VkDeviceGeneratedCommandsLimitsNVX* in_struct);
@@ -2838,6 +3208,7 @@ struct safe_VkIndirectCommandsLayoutCreateInfoNVX {
     const VkIndirectCommandsLayoutTokenNVX* pTokens;
     safe_VkIndirectCommandsLayoutCreateInfoNVX(const VkIndirectCommandsLayoutCreateInfoNVX* in_struct);
     safe_VkIndirectCommandsLayoutCreateInfoNVX(const safe_VkIndirectCommandsLayoutCreateInfoNVX& src);
+    safe_VkIndirectCommandsLayoutCreateInfoNVX& operator=(const safe_VkIndirectCommandsLayoutCreateInfoNVX& src);
     safe_VkIndirectCommandsLayoutCreateInfoNVX();
     ~safe_VkIndirectCommandsLayoutCreateInfoNVX();
     void initialize(const VkIndirectCommandsLayoutCreateInfoNVX* in_struct);
@@ -2861,6 +3232,7 @@ struct safe_VkCmdProcessCommandsInfoNVX {
     VkDeviceSize sequencesIndexOffset;
     safe_VkCmdProcessCommandsInfoNVX(const VkCmdProcessCommandsInfoNVX* in_struct);
     safe_VkCmdProcessCommandsInfoNVX(const safe_VkCmdProcessCommandsInfoNVX& src);
+    safe_VkCmdProcessCommandsInfoNVX& operator=(const safe_VkCmdProcessCommandsInfoNVX& src);
     safe_VkCmdProcessCommandsInfoNVX();
     ~safe_VkCmdProcessCommandsInfoNVX();
     void initialize(const VkCmdProcessCommandsInfoNVX* in_struct);
@@ -2877,6 +3249,7 @@ struct safe_VkCmdReserveSpaceForCommandsInfoNVX {
     uint32_t maxSequencesCount;
     safe_VkCmdReserveSpaceForCommandsInfoNVX(const VkCmdReserveSpaceForCommandsInfoNVX* in_struct);
     safe_VkCmdReserveSpaceForCommandsInfoNVX(const safe_VkCmdReserveSpaceForCommandsInfoNVX& src);
+    safe_VkCmdReserveSpaceForCommandsInfoNVX& operator=(const safe_VkCmdReserveSpaceForCommandsInfoNVX& src);
     safe_VkCmdReserveSpaceForCommandsInfoNVX();
     ~safe_VkCmdReserveSpaceForCommandsInfoNVX();
     void initialize(const VkCmdReserveSpaceForCommandsInfoNVX* in_struct);
@@ -2899,6 +3272,7 @@ struct safe_VkObjectTableCreateInfoNVX {
     uint32_t maxPipelineLayouts;
     safe_VkObjectTableCreateInfoNVX(const VkObjectTableCreateInfoNVX* in_struct);
     safe_VkObjectTableCreateInfoNVX(const safe_VkObjectTableCreateInfoNVX& src);
+    safe_VkObjectTableCreateInfoNVX& operator=(const safe_VkObjectTableCreateInfoNVX& src);
     safe_VkObjectTableCreateInfoNVX();
     ~safe_VkObjectTableCreateInfoNVX();
     void initialize(const VkObjectTableCreateInfoNVX* in_struct);
@@ -2915,6 +3289,7 @@ struct safe_VkPipelineViewportWScalingStateCreateInfoNV {
     const VkViewportWScalingNV* pViewportWScalings;
     safe_VkPipelineViewportWScalingStateCreateInfoNV(const VkPipelineViewportWScalingStateCreateInfoNV* in_struct);
     safe_VkPipelineViewportWScalingStateCreateInfoNV(const safe_VkPipelineViewportWScalingStateCreateInfoNV& src);
+    safe_VkPipelineViewportWScalingStateCreateInfoNV& operator=(const safe_VkPipelineViewportWScalingStateCreateInfoNV& src);
     safe_VkPipelineViewportWScalingStateCreateInfoNV();
     ~safe_VkPipelineViewportWScalingStateCreateInfoNV();
     void initialize(const VkPipelineViewportWScalingStateCreateInfoNV* in_struct);
@@ -2939,6 +3314,7 @@ struct safe_VkSurfaceCapabilities2EXT {
     VkSurfaceCounterFlagsEXT supportedSurfaceCounters;
     safe_VkSurfaceCapabilities2EXT(const VkSurfaceCapabilities2EXT* in_struct);
     safe_VkSurfaceCapabilities2EXT(const safe_VkSurfaceCapabilities2EXT& src);
+    safe_VkSurfaceCapabilities2EXT& operator=(const safe_VkSurfaceCapabilities2EXT& src);
     safe_VkSurfaceCapabilities2EXT();
     ~safe_VkSurfaceCapabilities2EXT();
     void initialize(const VkSurfaceCapabilities2EXT* in_struct);
@@ -2953,6 +3329,7 @@ struct safe_VkDisplayPowerInfoEXT {
     VkDisplayPowerStateEXT powerState;
     safe_VkDisplayPowerInfoEXT(const VkDisplayPowerInfoEXT* in_struct);
     safe_VkDisplayPowerInfoEXT(const safe_VkDisplayPowerInfoEXT& src);
+    safe_VkDisplayPowerInfoEXT& operator=(const safe_VkDisplayPowerInfoEXT& src);
     safe_VkDisplayPowerInfoEXT();
     ~safe_VkDisplayPowerInfoEXT();
     void initialize(const VkDisplayPowerInfoEXT* in_struct);
@@ -2967,6 +3344,7 @@ struct safe_VkDeviceEventInfoEXT {
     VkDeviceEventTypeEXT deviceEvent;
     safe_VkDeviceEventInfoEXT(const VkDeviceEventInfoEXT* in_struct);
     safe_VkDeviceEventInfoEXT(const safe_VkDeviceEventInfoEXT& src);
+    safe_VkDeviceEventInfoEXT& operator=(const safe_VkDeviceEventInfoEXT& src);
     safe_VkDeviceEventInfoEXT();
     ~safe_VkDeviceEventInfoEXT();
     void initialize(const VkDeviceEventInfoEXT* in_struct);
@@ -2981,6 +3359,7 @@ struct safe_VkDisplayEventInfoEXT {
     VkDisplayEventTypeEXT displayEvent;
     safe_VkDisplayEventInfoEXT(const VkDisplayEventInfoEXT* in_struct);
     safe_VkDisplayEventInfoEXT(const safe_VkDisplayEventInfoEXT& src);
+    safe_VkDisplayEventInfoEXT& operator=(const safe_VkDisplayEventInfoEXT& src);
     safe_VkDisplayEventInfoEXT();
     ~safe_VkDisplayEventInfoEXT();
     void initialize(const VkDisplayEventInfoEXT* in_struct);
@@ -2995,6 +3374,7 @@ struct safe_VkSwapchainCounterCreateInfoEXT {
     VkSurfaceCounterFlagsEXT surfaceCounters;
     safe_VkSwapchainCounterCreateInfoEXT(const VkSwapchainCounterCreateInfoEXT* in_struct);
     safe_VkSwapchainCounterCreateInfoEXT(const safe_VkSwapchainCounterCreateInfoEXT& src);
+    safe_VkSwapchainCounterCreateInfoEXT& operator=(const safe_VkSwapchainCounterCreateInfoEXT& src);
     safe_VkSwapchainCounterCreateInfoEXT();
     ~safe_VkSwapchainCounterCreateInfoEXT();
     void initialize(const VkSwapchainCounterCreateInfoEXT* in_struct);
@@ -3010,6 +3390,7 @@ struct safe_VkPresentTimesInfoGOOGLE {
     const VkPresentTimeGOOGLE* pTimes;
     safe_VkPresentTimesInfoGOOGLE(const VkPresentTimesInfoGOOGLE* in_struct);
     safe_VkPresentTimesInfoGOOGLE(const safe_VkPresentTimesInfoGOOGLE& src);
+    safe_VkPresentTimesInfoGOOGLE& operator=(const safe_VkPresentTimesInfoGOOGLE& src);
     safe_VkPresentTimesInfoGOOGLE();
     ~safe_VkPresentTimesInfoGOOGLE();
     void initialize(const VkPresentTimesInfoGOOGLE* in_struct);
@@ -3024,6 +3405,7 @@ struct safe_VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX {
     VkBool32 perViewPositionAllComponents;
     safe_VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX(const VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX* in_struct);
     safe_VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX(const safe_VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX& src);
+    safe_VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX& operator=(const safe_VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX& src);
     safe_VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX();
     ~safe_VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX();
     void initialize(const VkPhysicalDeviceMultiviewPerViewAttributesPropertiesNVX* in_struct);
@@ -3040,6 +3422,7 @@ struct safe_VkPipelineViewportSwizzleStateCreateInfoNV {
     const VkViewportSwizzleNV* pViewportSwizzles;
     safe_VkPipelineViewportSwizzleStateCreateInfoNV(const VkPipelineViewportSwizzleStateCreateInfoNV* in_struct);
     safe_VkPipelineViewportSwizzleStateCreateInfoNV(const safe_VkPipelineViewportSwizzleStateCreateInfoNV& src);
+    safe_VkPipelineViewportSwizzleStateCreateInfoNV& operator=(const safe_VkPipelineViewportSwizzleStateCreateInfoNV& src);
     safe_VkPipelineViewportSwizzleStateCreateInfoNV();
     ~safe_VkPipelineViewportSwizzleStateCreateInfoNV();
     void initialize(const VkPipelineViewportSwizzleStateCreateInfoNV* in_struct);
@@ -3054,6 +3437,7 @@ struct safe_VkPhysicalDeviceDiscardRectanglePropertiesEXT {
     uint32_t maxDiscardRectangles;
     safe_VkPhysicalDeviceDiscardRectanglePropertiesEXT(const VkPhysicalDeviceDiscardRectanglePropertiesEXT* in_struct);
     safe_VkPhysicalDeviceDiscardRectanglePropertiesEXT(const safe_VkPhysicalDeviceDiscardRectanglePropertiesEXT& src);
+    safe_VkPhysicalDeviceDiscardRectanglePropertiesEXT& operator=(const safe_VkPhysicalDeviceDiscardRectanglePropertiesEXT& src);
     safe_VkPhysicalDeviceDiscardRectanglePropertiesEXT();
     ~safe_VkPhysicalDeviceDiscardRectanglePropertiesEXT();
     void initialize(const VkPhysicalDeviceDiscardRectanglePropertiesEXT* in_struct);
@@ -3071,12 +3455,53 @@ struct safe_VkPipelineDiscardRectangleStateCreateInfoEXT {
     const VkRect2D* pDiscardRectangles;
     safe_VkPipelineDiscardRectangleStateCreateInfoEXT(const VkPipelineDiscardRectangleStateCreateInfoEXT* in_struct);
     safe_VkPipelineDiscardRectangleStateCreateInfoEXT(const safe_VkPipelineDiscardRectangleStateCreateInfoEXT& src);
+    safe_VkPipelineDiscardRectangleStateCreateInfoEXT& operator=(const safe_VkPipelineDiscardRectangleStateCreateInfoEXT& src);
     safe_VkPipelineDiscardRectangleStateCreateInfoEXT();
     ~safe_VkPipelineDiscardRectangleStateCreateInfoEXT();
     void initialize(const VkPipelineDiscardRectangleStateCreateInfoEXT* in_struct);
     void initialize(const safe_VkPipelineDiscardRectangleStateCreateInfoEXT* src);
     VkPipelineDiscardRectangleStateCreateInfoEXT *ptr() { return reinterpret_cast<VkPipelineDiscardRectangleStateCreateInfoEXT *>(this); }
     VkPipelineDiscardRectangleStateCreateInfoEXT const *ptr() const { return reinterpret_cast<VkPipelineDiscardRectangleStateCreateInfoEXT const *>(this); }
+};
+
+struct safe_VkPhysicalDeviceConservativeRasterizationPropertiesEXT {
+    VkStructureType sType;
+    void* pNext;
+    float primitiveOverestimationSize;
+    float maxExtraPrimitiveOverestimationSize;
+    float extraPrimitiveOverestimationSizeGranularity;
+    VkBool32 primitiveUnderestimation;
+    VkBool32 conservativePointAndLineRasterization;
+    VkBool32 degenerateTrianglesRasterized;
+    VkBool32 degenerateLinesRasterized;
+    VkBool32 fullyCoveredFragmentShaderInputVariable;
+    VkBool32 conservativeRasterizationPostDepthCoverage;
+    safe_VkPhysicalDeviceConservativeRasterizationPropertiesEXT(const VkPhysicalDeviceConservativeRasterizationPropertiesEXT* in_struct);
+    safe_VkPhysicalDeviceConservativeRasterizationPropertiesEXT(const safe_VkPhysicalDeviceConservativeRasterizationPropertiesEXT& src);
+    safe_VkPhysicalDeviceConservativeRasterizationPropertiesEXT& operator=(const safe_VkPhysicalDeviceConservativeRasterizationPropertiesEXT& src);
+    safe_VkPhysicalDeviceConservativeRasterizationPropertiesEXT();
+    ~safe_VkPhysicalDeviceConservativeRasterizationPropertiesEXT();
+    void initialize(const VkPhysicalDeviceConservativeRasterizationPropertiesEXT* in_struct);
+    void initialize(const safe_VkPhysicalDeviceConservativeRasterizationPropertiesEXT* src);
+    VkPhysicalDeviceConservativeRasterizationPropertiesEXT *ptr() { return reinterpret_cast<VkPhysicalDeviceConservativeRasterizationPropertiesEXT *>(this); }
+    VkPhysicalDeviceConservativeRasterizationPropertiesEXT const *ptr() const { return reinterpret_cast<VkPhysicalDeviceConservativeRasterizationPropertiesEXT const *>(this); }
+};
+
+struct safe_VkPipelineRasterizationConservativeStateCreateInfoEXT {
+    VkStructureType sType;
+    const void* pNext;
+    VkPipelineRasterizationConservativeStateCreateFlagsEXT flags;
+    VkConservativeRasterizationModeEXT conservativeRasterizationMode;
+    float extraPrimitiveOverestimationSize;
+    safe_VkPipelineRasterizationConservativeStateCreateInfoEXT(const VkPipelineRasterizationConservativeStateCreateInfoEXT* in_struct);
+    safe_VkPipelineRasterizationConservativeStateCreateInfoEXT(const safe_VkPipelineRasterizationConservativeStateCreateInfoEXT& src);
+    safe_VkPipelineRasterizationConservativeStateCreateInfoEXT& operator=(const safe_VkPipelineRasterizationConservativeStateCreateInfoEXT& src);
+    safe_VkPipelineRasterizationConservativeStateCreateInfoEXT();
+    ~safe_VkPipelineRasterizationConservativeStateCreateInfoEXT();
+    void initialize(const VkPipelineRasterizationConservativeStateCreateInfoEXT* in_struct);
+    void initialize(const safe_VkPipelineRasterizationConservativeStateCreateInfoEXT* src);
+    VkPipelineRasterizationConservativeStateCreateInfoEXT *ptr() { return reinterpret_cast<VkPipelineRasterizationConservativeStateCreateInfoEXT *>(this); }
+    VkPipelineRasterizationConservativeStateCreateInfoEXT const *ptr() const { return reinterpret_cast<VkPipelineRasterizationConservativeStateCreateInfoEXT const *>(this); }
 };
 
 struct safe_VkHdrMetadataEXT {
@@ -3092,6 +3517,7 @@ struct safe_VkHdrMetadataEXT {
     float maxFrameAverageLightLevel;
     safe_VkHdrMetadataEXT(const VkHdrMetadataEXT* in_struct);
     safe_VkHdrMetadataEXT(const safe_VkHdrMetadataEXT& src);
+    safe_VkHdrMetadataEXT& operator=(const safe_VkHdrMetadataEXT& src);
     safe_VkHdrMetadataEXT();
     ~safe_VkHdrMetadataEXT();
     void initialize(const VkHdrMetadataEXT* in_struct);
@@ -3108,6 +3534,7 @@ struct safe_VkIOSSurfaceCreateInfoMVK {
     const void* pView;
     safe_VkIOSSurfaceCreateInfoMVK(const VkIOSSurfaceCreateInfoMVK* in_struct);
     safe_VkIOSSurfaceCreateInfoMVK(const safe_VkIOSSurfaceCreateInfoMVK& src);
+    safe_VkIOSSurfaceCreateInfoMVK& operator=(const safe_VkIOSSurfaceCreateInfoMVK& src);
     safe_VkIOSSurfaceCreateInfoMVK();
     ~safe_VkIOSSurfaceCreateInfoMVK();
     void initialize(const VkIOSSurfaceCreateInfoMVK* in_struct);
@@ -3125,6 +3552,7 @@ struct safe_VkMacOSSurfaceCreateInfoMVK {
     const void* pView;
     safe_VkMacOSSurfaceCreateInfoMVK(const VkMacOSSurfaceCreateInfoMVK* in_struct);
     safe_VkMacOSSurfaceCreateInfoMVK(const safe_VkMacOSSurfaceCreateInfoMVK& src);
+    safe_VkMacOSSurfaceCreateInfoMVK& operator=(const safe_VkMacOSSurfaceCreateInfoMVK& src);
     safe_VkMacOSSurfaceCreateInfoMVK();
     ~safe_VkMacOSSurfaceCreateInfoMVK();
     void initialize(const VkMacOSSurfaceCreateInfoMVK* in_struct);
@@ -3140,6 +3568,7 @@ struct safe_VkSamplerReductionModeCreateInfoEXT {
     VkSamplerReductionModeEXT reductionMode;
     safe_VkSamplerReductionModeCreateInfoEXT(const VkSamplerReductionModeCreateInfoEXT* in_struct);
     safe_VkSamplerReductionModeCreateInfoEXT(const safe_VkSamplerReductionModeCreateInfoEXT& src);
+    safe_VkSamplerReductionModeCreateInfoEXT& operator=(const safe_VkSamplerReductionModeCreateInfoEXT& src);
     safe_VkSamplerReductionModeCreateInfoEXT();
     ~safe_VkSamplerReductionModeCreateInfoEXT();
     void initialize(const VkSamplerReductionModeCreateInfoEXT* in_struct);
@@ -3155,6 +3584,7 @@ struct safe_VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT {
     VkBool32 filterMinmaxImageComponentMapping;
     safe_VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT(const VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT* in_struct);
     safe_VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT(const safe_VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT& src);
+    safe_VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT& operator=(const safe_VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT& src);
     safe_VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT();
     ~safe_VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT();
     void initialize(const VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT* in_struct);
@@ -3163,12 +3593,99 @@ struct safe_VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT {
     VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT const *ptr() const { return reinterpret_cast<VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT const *>(this); }
 };
 
+struct safe_VkSampleLocationsInfoEXT {
+    VkStructureType sType;
+    const void* pNext;
+    VkSampleCountFlagBits sampleLocationsPerPixel;
+    VkExtent2D sampleLocationGridSize;
+    uint32_t sampleLocationsCount;
+    const VkSampleLocationEXT* pSampleLocations;
+    safe_VkSampleLocationsInfoEXT(const VkSampleLocationsInfoEXT* in_struct);
+    safe_VkSampleLocationsInfoEXT(const safe_VkSampleLocationsInfoEXT& src);
+    safe_VkSampleLocationsInfoEXT& operator=(const safe_VkSampleLocationsInfoEXT& src);
+    safe_VkSampleLocationsInfoEXT();
+    ~safe_VkSampleLocationsInfoEXT();
+    void initialize(const VkSampleLocationsInfoEXT* in_struct);
+    void initialize(const safe_VkSampleLocationsInfoEXT* src);
+    VkSampleLocationsInfoEXT *ptr() { return reinterpret_cast<VkSampleLocationsInfoEXT *>(this); }
+    VkSampleLocationsInfoEXT const *ptr() const { return reinterpret_cast<VkSampleLocationsInfoEXT const *>(this); }
+};
+
+struct safe_VkRenderPassSampleLocationsBeginInfoEXT {
+    VkStructureType sType;
+    const void* pNext;
+    uint32_t attachmentInitialSampleLocationsCount;
+    const VkAttachmentSampleLocationsEXT* pAttachmentInitialSampleLocations;
+    uint32_t postSubpassSampleLocationsCount;
+    const VkSubpassSampleLocationsEXT* pPostSubpassSampleLocations;
+    safe_VkRenderPassSampleLocationsBeginInfoEXT(const VkRenderPassSampleLocationsBeginInfoEXT* in_struct);
+    safe_VkRenderPassSampleLocationsBeginInfoEXT(const safe_VkRenderPassSampleLocationsBeginInfoEXT& src);
+    safe_VkRenderPassSampleLocationsBeginInfoEXT& operator=(const safe_VkRenderPassSampleLocationsBeginInfoEXT& src);
+    safe_VkRenderPassSampleLocationsBeginInfoEXT();
+    ~safe_VkRenderPassSampleLocationsBeginInfoEXT();
+    void initialize(const VkRenderPassSampleLocationsBeginInfoEXT* in_struct);
+    void initialize(const safe_VkRenderPassSampleLocationsBeginInfoEXT* src);
+    VkRenderPassSampleLocationsBeginInfoEXT *ptr() { return reinterpret_cast<VkRenderPassSampleLocationsBeginInfoEXT *>(this); }
+    VkRenderPassSampleLocationsBeginInfoEXT const *ptr() const { return reinterpret_cast<VkRenderPassSampleLocationsBeginInfoEXT const *>(this); }
+};
+
+struct safe_VkPipelineSampleLocationsStateCreateInfoEXT {
+    VkStructureType sType;
+    const void* pNext;
+    VkBool32 sampleLocationsEnable;
+    safe_VkSampleLocationsInfoEXT sampleLocationsInfo;
+    safe_VkPipelineSampleLocationsStateCreateInfoEXT(const VkPipelineSampleLocationsStateCreateInfoEXT* in_struct);
+    safe_VkPipelineSampleLocationsStateCreateInfoEXT(const safe_VkPipelineSampleLocationsStateCreateInfoEXT& src);
+    safe_VkPipelineSampleLocationsStateCreateInfoEXT& operator=(const safe_VkPipelineSampleLocationsStateCreateInfoEXT& src);
+    safe_VkPipelineSampleLocationsStateCreateInfoEXT();
+    ~safe_VkPipelineSampleLocationsStateCreateInfoEXT();
+    void initialize(const VkPipelineSampleLocationsStateCreateInfoEXT* in_struct);
+    void initialize(const safe_VkPipelineSampleLocationsStateCreateInfoEXT* src);
+    VkPipelineSampleLocationsStateCreateInfoEXT *ptr() { return reinterpret_cast<VkPipelineSampleLocationsStateCreateInfoEXT *>(this); }
+    VkPipelineSampleLocationsStateCreateInfoEXT const *ptr() const { return reinterpret_cast<VkPipelineSampleLocationsStateCreateInfoEXT const *>(this); }
+};
+
+struct safe_VkPhysicalDeviceSampleLocationsPropertiesEXT {
+    VkStructureType sType;
+    void* pNext;
+    VkSampleCountFlags sampleLocationSampleCounts;
+    VkExtent2D maxSampleLocationGridSize;
+    float sampleLocationCoordinateRange[2];
+    uint32_t sampleLocationSubPixelBits;
+    VkBool32 variableSampleLocations;
+    safe_VkPhysicalDeviceSampleLocationsPropertiesEXT(const VkPhysicalDeviceSampleLocationsPropertiesEXT* in_struct);
+    safe_VkPhysicalDeviceSampleLocationsPropertiesEXT(const safe_VkPhysicalDeviceSampleLocationsPropertiesEXT& src);
+    safe_VkPhysicalDeviceSampleLocationsPropertiesEXT& operator=(const safe_VkPhysicalDeviceSampleLocationsPropertiesEXT& src);
+    safe_VkPhysicalDeviceSampleLocationsPropertiesEXT();
+    ~safe_VkPhysicalDeviceSampleLocationsPropertiesEXT();
+    void initialize(const VkPhysicalDeviceSampleLocationsPropertiesEXT* in_struct);
+    void initialize(const safe_VkPhysicalDeviceSampleLocationsPropertiesEXT* src);
+    VkPhysicalDeviceSampleLocationsPropertiesEXT *ptr() { return reinterpret_cast<VkPhysicalDeviceSampleLocationsPropertiesEXT *>(this); }
+    VkPhysicalDeviceSampleLocationsPropertiesEXT const *ptr() const { return reinterpret_cast<VkPhysicalDeviceSampleLocationsPropertiesEXT const *>(this); }
+};
+
+struct safe_VkMultisamplePropertiesEXT {
+    VkStructureType sType;
+    void* pNext;
+    VkExtent2D maxSampleLocationGridSize;
+    safe_VkMultisamplePropertiesEXT(const VkMultisamplePropertiesEXT* in_struct);
+    safe_VkMultisamplePropertiesEXT(const safe_VkMultisamplePropertiesEXT& src);
+    safe_VkMultisamplePropertiesEXT& operator=(const safe_VkMultisamplePropertiesEXT& src);
+    safe_VkMultisamplePropertiesEXT();
+    ~safe_VkMultisamplePropertiesEXT();
+    void initialize(const VkMultisamplePropertiesEXT* in_struct);
+    void initialize(const safe_VkMultisamplePropertiesEXT* src);
+    VkMultisamplePropertiesEXT *ptr() { return reinterpret_cast<VkMultisamplePropertiesEXT *>(this); }
+    VkMultisamplePropertiesEXT const *ptr() const { return reinterpret_cast<VkMultisamplePropertiesEXT const *>(this); }
+};
+
 struct safe_VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT {
     VkStructureType sType;
     void* pNext;
     VkBool32 advancedBlendCoherentOperations;
     safe_VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT(const VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT* in_struct);
     safe_VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT(const safe_VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT& src);
+    safe_VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT& operator=(const safe_VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT& src);
     safe_VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT();
     ~safe_VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT();
     void initialize(const VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT* in_struct);
@@ -3188,6 +3705,7 @@ struct safe_VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT {
     VkBool32 advancedBlendAllOperations;
     safe_VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT(const VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT* in_struct);
     safe_VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT(const safe_VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT& src);
+    safe_VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT& operator=(const safe_VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT& src);
     safe_VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT();
     ~safe_VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT();
     void initialize(const VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT* in_struct);
@@ -3204,6 +3722,7 @@ struct safe_VkPipelineColorBlendAdvancedStateCreateInfoEXT {
     VkBlendOverlapEXT blendOverlap;
     safe_VkPipelineColorBlendAdvancedStateCreateInfoEXT(const VkPipelineColorBlendAdvancedStateCreateInfoEXT* in_struct);
     safe_VkPipelineColorBlendAdvancedStateCreateInfoEXT(const safe_VkPipelineColorBlendAdvancedStateCreateInfoEXT& src);
+    safe_VkPipelineColorBlendAdvancedStateCreateInfoEXT& operator=(const safe_VkPipelineColorBlendAdvancedStateCreateInfoEXT& src);
     safe_VkPipelineColorBlendAdvancedStateCreateInfoEXT();
     ~safe_VkPipelineColorBlendAdvancedStateCreateInfoEXT();
     void initialize(const VkPipelineColorBlendAdvancedStateCreateInfoEXT* in_struct);
@@ -3220,6 +3739,7 @@ struct safe_VkPipelineCoverageToColorStateCreateInfoNV {
     uint32_t coverageToColorLocation;
     safe_VkPipelineCoverageToColorStateCreateInfoNV(const VkPipelineCoverageToColorStateCreateInfoNV* in_struct);
     safe_VkPipelineCoverageToColorStateCreateInfoNV(const safe_VkPipelineCoverageToColorStateCreateInfoNV& src);
+    safe_VkPipelineCoverageToColorStateCreateInfoNV& operator=(const safe_VkPipelineCoverageToColorStateCreateInfoNV& src);
     safe_VkPipelineCoverageToColorStateCreateInfoNV();
     ~safe_VkPipelineCoverageToColorStateCreateInfoNV();
     void initialize(const VkPipelineCoverageToColorStateCreateInfoNV* in_struct);
@@ -3238,10 +3758,104 @@ struct safe_VkPipelineCoverageModulationStateCreateInfoNV {
     const float* pCoverageModulationTable;
     safe_VkPipelineCoverageModulationStateCreateInfoNV(const VkPipelineCoverageModulationStateCreateInfoNV* in_struct);
     safe_VkPipelineCoverageModulationStateCreateInfoNV(const safe_VkPipelineCoverageModulationStateCreateInfoNV& src);
+    safe_VkPipelineCoverageModulationStateCreateInfoNV& operator=(const safe_VkPipelineCoverageModulationStateCreateInfoNV& src);
     safe_VkPipelineCoverageModulationStateCreateInfoNV();
     ~safe_VkPipelineCoverageModulationStateCreateInfoNV();
     void initialize(const VkPipelineCoverageModulationStateCreateInfoNV* in_struct);
     void initialize(const safe_VkPipelineCoverageModulationStateCreateInfoNV* src);
     VkPipelineCoverageModulationStateCreateInfoNV *ptr() { return reinterpret_cast<VkPipelineCoverageModulationStateCreateInfoNV *>(this); }
     VkPipelineCoverageModulationStateCreateInfoNV const *ptr() const { return reinterpret_cast<VkPipelineCoverageModulationStateCreateInfoNV const *>(this); }
+};
+
+struct safe_VkValidationCacheCreateInfoEXT {
+    VkStructureType sType;
+    const void* pNext;
+    VkValidationCacheCreateFlagsEXT flags;
+    size_t initialDataSize;
+    const void* pInitialData;
+    safe_VkValidationCacheCreateInfoEXT(const VkValidationCacheCreateInfoEXT* in_struct);
+    safe_VkValidationCacheCreateInfoEXT(const safe_VkValidationCacheCreateInfoEXT& src);
+    safe_VkValidationCacheCreateInfoEXT& operator=(const safe_VkValidationCacheCreateInfoEXT& src);
+    safe_VkValidationCacheCreateInfoEXT();
+    ~safe_VkValidationCacheCreateInfoEXT();
+    void initialize(const VkValidationCacheCreateInfoEXT* in_struct);
+    void initialize(const safe_VkValidationCacheCreateInfoEXT* src);
+    VkValidationCacheCreateInfoEXT *ptr() { return reinterpret_cast<VkValidationCacheCreateInfoEXT *>(this); }
+    VkValidationCacheCreateInfoEXT const *ptr() const { return reinterpret_cast<VkValidationCacheCreateInfoEXT const *>(this); }
+};
+
+struct safe_VkShaderModuleValidationCacheCreateInfoEXT {
+    VkStructureType sType;
+    const void* pNext;
+    VkValidationCacheEXT validationCache;
+    safe_VkShaderModuleValidationCacheCreateInfoEXT(const VkShaderModuleValidationCacheCreateInfoEXT* in_struct);
+    safe_VkShaderModuleValidationCacheCreateInfoEXT(const safe_VkShaderModuleValidationCacheCreateInfoEXT& src);
+    safe_VkShaderModuleValidationCacheCreateInfoEXT& operator=(const safe_VkShaderModuleValidationCacheCreateInfoEXT& src);
+    safe_VkShaderModuleValidationCacheCreateInfoEXT();
+    ~safe_VkShaderModuleValidationCacheCreateInfoEXT();
+    void initialize(const VkShaderModuleValidationCacheCreateInfoEXT* in_struct);
+    void initialize(const safe_VkShaderModuleValidationCacheCreateInfoEXT* src);
+    VkShaderModuleValidationCacheCreateInfoEXT *ptr() { return reinterpret_cast<VkShaderModuleValidationCacheCreateInfoEXT *>(this); }
+    VkShaderModuleValidationCacheCreateInfoEXT const *ptr() const { return reinterpret_cast<VkShaderModuleValidationCacheCreateInfoEXT const *>(this); }
+};
+
+struct safe_VkDeviceQueueGlobalPriorityCreateInfoEXT {
+    VkStructureType sType;
+    const void* pNext;
+    VkQueueGlobalPriorityEXT globalPriority;
+    safe_VkDeviceQueueGlobalPriorityCreateInfoEXT(const VkDeviceQueueGlobalPriorityCreateInfoEXT* in_struct);
+    safe_VkDeviceQueueGlobalPriorityCreateInfoEXT(const safe_VkDeviceQueueGlobalPriorityCreateInfoEXT& src);
+    safe_VkDeviceQueueGlobalPriorityCreateInfoEXT& operator=(const safe_VkDeviceQueueGlobalPriorityCreateInfoEXT& src);
+    safe_VkDeviceQueueGlobalPriorityCreateInfoEXT();
+    ~safe_VkDeviceQueueGlobalPriorityCreateInfoEXT();
+    void initialize(const VkDeviceQueueGlobalPriorityCreateInfoEXT* in_struct);
+    void initialize(const safe_VkDeviceQueueGlobalPriorityCreateInfoEXT* src);
+    VkDeviceQueueGlobalPriorityCreateInfoEXT *ptr() { return reinterpret_cast<VkDeviceQueueGlobalPriorityCreateInfoEXT *>(this); }
+    VkDeviceQueueGlobalPriorityCreateInfoEXT const *ptr() const { return reinterpret_cast<VkDeviceQueueGlobalPriorityCreateInfoEXT const *>(this); }
+};
+
+struct safe_VkImportMemoryHostPointerInfoEXT {
+    VkStructureType sType;
+    const void* pNext;
+    VkExternalMemoryHandleTypeFlagBitsKHR handleType;
+    void* pHostPointer;
+    safe_VkImportMemoryHostPointerInfoEXT(const VkImportMemoryHostPointerInfoEXT* in_struct);
+    safe_VkImportMemoryHostPointerInfoEXT(const safe_VkImportMemoryHostPointerInfoEXT& src);
+    safe_VkImportMemoryHostPointerInfoEXT& operator=(const safe_VkImportMemoryHostPointerInfoEXT& src);
+    safe_VkImportMemoryHostPointerInfoEXT();
+    ~safe_VkImportMemoryHostPointerInfoEXT();
+    void initialize(const VkImportMemoryHostPointerInfoEXT* in_struct);
+    void initialize(const safe_VkImportMemoryHostPointerInfoEXT* src);
+    VkImportMemoryHostPointerInfoEXT *ptr() { return reinterpret_cast<VkImportMemoryHostPointerInfoEXT *>(this); }
+    VkImportMemoryHostPointerInfoEXT const *ptr() const { return reinterpret_cast<VkImportMemoryHostPointerInfoEXT const *>(this); }
+};
+
+struct safe_VkMemoryHostPointerPropertiesEXT {
+    VkStructureType sType;
+    void* pNext;
+    uint32_t memoryTypeBits;
+    safe_VkMemoryHostPointerPropertiesEXT(const VkMemoryHostPointerPropertiesEXT* in_struct);
+    safe_VkMemoryHostPointerPropertiesEXT(const safe_VkMemoryHostPointerPropertiesEXT& src);
+    safe_VkMemoryHostPointerPropertiesEXT& operator=(const safe_VkMemoryHostPointerPropertiesEXT& src);
+    safe_VkMemoryHostPointerPropertiesEXT();
+    ~safe_VkMemoryHostPointerPropertiesEXT();
+    void initialize(const VkMemoryHostPointerPropertiesEXT* in_struct);
+    void initialize(const safe_VkMemoryHostPointerPropertiesEXT* src);
+    VkMemoryHostPointerPropertiesEXT *ptr() { return reinterpret_cast<VkMemoryHostPointerPropertiesEXT *>(this); }
+    VkMemoryHostPointerPropertiesEXT const *ptr() const { return reinterpret_cast<VkMemoryHostPointerPropertiesEXT const *>(this); }
+};
+
+struct safe_VkPhysicalDeviceExternalMemoryHostPropertiesEXT {
+    VkStructureType sType;
+    void* pNext;
+    VkDeviceSize minImportedHostPointerAlignment;
+    safe_VkPhysicalDeviceExternalMemoryHostPropertiesEXT(const VkPhysicalDeviceExternalMemoryHostPropertiesEXT* in_struct);
+    safe_VkPhysicalDeviceExternalMemoryHostPropertiesEXT(const safe_VkPhysicalDeviceExternalMemoryHostPropertiesEXT& src);
+    safe_VkPhysicalDeviceExternalMemoryHostPropertiesEXT& operator=(const safe_VkPhysicalDeviceExternalMemoryHostPropertiesEXT& src);
+    safe_VkPhysicalDeviceExternalMemoryHostPropertiesEXT();
+    ~safe_VkPhysicalDeviceExternalMemoryHostPropertiesEXT();
+    void initialize(const VkPhysicalDeviceExternalMemoryHostPropertiesEXT* in_struct);
+    void initialize(const safe_VkPhysicalDeviceExternalMemoryHostPropertiesEXT* src);
+    VkPhysicalDeviceExternalMemoryHostPropertiesEXT *ptr() { return reinterpret_cast<VkPhysicalDeviceExternalMemoryHostPropertiesEXT *>(this); }
+    VkPhysicalDeviceExternalMemoryHostPropertiesEXT const *ptr() const { return reinterpret_cast<VkPhysicalDeviceExternalMemoryHostPropertiesEXT const *>(this); }
 };

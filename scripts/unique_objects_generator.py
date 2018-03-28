@@ -150,6 +150,8 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
             'vkGetPhysicalDeviceDisplayProperties2KHR',
             'vkGetPhysicalDeviceDisplayPlaneProperties2KHR',
             'vkGetDisplayModeProperties2KHR',
+            'vkCreateRenderPass',
+            'vkDestroyRenderPass',
             ]
         # Commands shadowed by interface functions and are not implemented
         self.interface_functions = [
@@ -242,23 +244,6 @@ class UniqueObjectsOutputGenerator(OutputGenerator):
                 write('\n#endif //', self.featureExtraProtect, file=self.outFile)
             else:
                 self.newline()
-
-        # Write out device extension white list
-        self.newline()
-        write('// Layer Device Extension Whitelist', file=self.outFile)
-        write('static const char *kUniqueObjectsSupportedDeviceExtensions =', file=self.outFile)
-        for line in self.device_extensions:
-            write('%s' % line, file=self.outFile)
-        write(';\n', file=self.outFile)
-
-        # Write out instance extension white list
-        self.newline()
-        write('// Layer Instance Extension Whitelist', file=self.outFile)
-        write('static const char *kUniqueObjectsSupportedInstanceExtensions =', file=self.outFile)
-        for line in self.instance_extensions:
-            write('%s' % line, file=self.outFile)
-        write(';\n', file=self.outFile)
-        self.newline()
 
         # Record intercepted procedures
         write('// Map of all APIs to be intercepted by this layer', file=self.outFile)

@@ -21,29 +21,6 @@
  * Author: Mark Lobodzinski <mark@lunarg.com>
  */
 
-#ifndef NOEXCEPT
-// Check for noexcept support
-#if defined(__clang__)
-#if __has_feature(cxx_noexcept)
-#define HAS_NOEXCEPT
-#endif
-#else
-#if defined(__GXX_EXPERIMENTAL_CXX0X__) && __GNUC__ * 10 + __GNUC_MINOR__ >= 46
-#define HAS_NOEXCEPT
-#else
-#if defined(_MSC_FULL_VER) && _MSC_FULL_VER >= 190023026 && defined(_HAS_EXCEPTIONS) && _HAS_EXCEPTIONS
-#define HAS_NOEXCEPT
-#endif
-#endif
-#endif
-
-#ifdef HAS_NOEXCEPT
-#define NOEXCEPT noexcept
-#else
-#define NOEXCEPT
-#endif
-#endif
-
 #pragma once
 #include "core_validation_error_enums.h"
 #include "vk_validation_error_messages.h"
@@ -98,6 +75,12 @@ struct GENERIC_HEADER {
     const void *pNext;
 };
 
+enum SyncScope {
+    kSyncScopeInternal,
+    kSyncScopeExternalTemporary,
+    kSyncScopeExternalPermanent,
+};
+
 enum FENCE_STATE { FENCE_UNSIGNALED, FENCE_INFLIGHT, FENCE_RETIRED };
 
 class FENCE_NODE {
@@ -106,15 +89,17 @@ class FENCE_NODE {
     VkFenceCreateInfo createInfo;
     std::pair<VkQueue, uint64_t> signaler;
     FENCE_STATE state;
+    SyncScope scope;
 
     // Default constructor
-    FENCE_NODE() : state(FENCE_UNSIGNALED) {}
+    FENCE_NODE() : state(FENCE_UNSIGNALED), scope(kSyncScopeInternal) {}
 };
 
 class SEMAPHORE_NODE : public BASE_NODE {
    public:
     std::pair<VkQueue, uint64_t> signaler;
     bool signaled;
+    SyncScope scope;
 };
 
 class EVENT_STATE : public BASE_NODE {

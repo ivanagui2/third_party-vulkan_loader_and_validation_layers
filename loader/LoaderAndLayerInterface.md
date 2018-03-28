@@ -26,6 +26,7 @@
     * [Example Code for CreateInstance](#example-code-for-createinstance)
     * [Example Code for CreateDevice](#example-code-for-createdevice)
     * [Meta-layers](#meta-layers)
+    * [Pre-Instance Functions](#pre-instance-functions)
     * [Special Considerations](#special-considerations)
     * [Layer Manifest File Format](#layer-manifest-file-format)
     * [Layer Library Versions](#layer-library-versions)
@@ -771,6 +772,7 @@ In this section we'll discuss how the loader interacts with layers, including:
   * [Example Code for CreateInstance](#example-code-for-createinstance)
   * [Example Code for CreateDevice](#example-code-for-createdevice)
   * [Meta-layers](#meta-layers)
+  * [Pre-Instance Functions](#pre-instance-functions)
   * [Special Considerations](#special-considerations)
     * [Associating Private Data with Vulkan Objects Within a Layer](#associating-private-data-with-vulkan-objects-within-a-layer)
       * [Wrapping](#wrapping)
@@ -851,7 +853,48 @@ values in the following Windows registry keys:
 
 For each value in these keys which has DWORD data set to 0, the loader opens
 the JSON manifest file specified by the name of the value. Each name must be a
-full pathname to the manifest file.  The Vulkan loader will open each info file
+full pathname to the manifest file.
+
+Additionally, the loader will scan through registry keys specific to Display
+Adapters and all Software Components associated with these adapters for the
+locations of JSON manifest files. These keys are located in device keys
+created during driver installation and contain configuration information
+for base settings, including Vulkan, OpenGL, and Direct3D ICD location.
+
+The Device Adapter and Software Component key paths should be obtained through the PnP
+Configuration Manager API. The `000X` key will be a numbered key, where each
+device is assigned a different number.
+
+```
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{Adapter GUID}\000X\VulkanExplicitLayers
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{Adapter GUID}\000X\VulkanImplicitLayers
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{Software Component GUID}\000X\VulkanExplicitLayers
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{Software Component GUID}\000X\VulkanImplicitLayers
+```
+
+In addition, on 64-bit systems there may be another set of registry values, listed
+below. These values record the locations of 32-bit layers on 64-bit operating systems,
+in the same way as the Windows-on-Windows functionality.
+
+```
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{Adapter GUID}\000X\VulkanExplicitLayersWow
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{Adapter GUID}\000X\VulkanImplicitLayersWow
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{Software Component GUID}\000X\VulkanExplicitLayersWow
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{Software Component GUID}\000X\VulkanImplicitLayersWow
+```
+
+If any of the above values exist and is of type `REG_SZ`, the loader will open the JSON
+manifest file specified by the key value. Each value must be a full absolute
+path to a JSON manifest file. A key value may also be of type `REG_MULTI_SZ`, in
+which case the value will be interpreted as a list of paths to JSON manifest files.
+
+In general, applications should install layers into the `SOFTWARE\Khrosos\Vulkan`
+paths. The PnP registry locations are intended specifically for layers that are
+distrubuted as part of a driver installation. An application installer should not
+modify the device-specific registries, while a device driver should not modify
+the system wide registries.
+
+The Vulkan loader will open each manifest file that is given
 to obtain information about the layer, including the name or pathname of a
 shared library (".dll") file.  However, if VK\_LAYER\_PATH is defined, then the
 loader will instead look at the paths defined by that variable instead of using
@@ -1237,15 +1280,15 @@ function.
 - A layer initializes its device dispatch table within its `vkCreateDevice`
 function.
 - The loader passes a linked list of initialization structures to layers via
-the "pNext" field in the VkInstanceCreateInfo and `VkDeviceCreateInfo`
+the "pNext" field in the `VkInstanceCreateInfo` and `VkDeviceCreateInfo`
 structures for `vkCreateInstance` and `VkCreateDevice` respectively.
 - The head node in this linked list is of type `VkLayerInstanceCreateInfo` for
 instance and VkLayerDeviceCreateInfo for device. See file
 `include/vulkan/vk_layer.h` for details.
 - A VK_STRUCTURE_TYPE_LOADER_INSTANCE_CREATE_INFO is used by the loader for the
-"sType" field in VkLayerInstanceCreateInfo.
+"sType" field in `VkLayerInstanceCreateInfo`.
 - A VK_STRUCTURE_TYPE_LOADER_DEVICE_CREATE_INFO is used by the loader for the
-"sType" field in VkLayerDeviceCreateInfo.
+"sType" field in `VkLayerDeviceCreateInfo`.
 - The "function" field indicates how the union field "u" should be interpreted
 within `VkLayer*CreateInfo`. The loader will set the "function" field to
 VK_LAYER_LINK_INFO. This indicates "u" field should be `VkLayerInstanceLink` or
@@ -1259,7 +1302,7 @@ used by a layer.
 - Given the above structures set up by the loader, layer must initialize their
 dispatch table as follows:
   - Find the `VkLayerInstanceCreateInfo`/`VkLayerDeviceCreateInfo` structure in
-the VkInstanceCreateInfo/VkDeviceCreateInfo structure.
+the `VkInstanceCreateInfo`/`VkDeviceCreateInfo` structure.
   - Get the next entity's vkGet*ProcAddr from the "pLayerInfo" field.
   - For CreateInstance get the next entity's `vkCreateInstance` by calling the
 "pfnNextGetInstanceProcAddr":
@@ -1411,6 +1454,83 @@ instantiation of the layer name would be ignored.
 The
 Manifest file formatting necessary to define a meta-layer can be found in the
 [Layer Manifest File Format](#layer-manifest-file-format) section.
+
+#### Pre-Instance Functions
+
+Vulkan includes a small number of functions which are called without any dispatchable object.
+Most layers do not intercept these functions, as layers are enabled when an instance is created.
+However, under certain conditions it is possible for a layer to intercept these functions.
+
+In order to intercept the pre-instance functions, several conditions must be met:
+* The layer must be implicit
+* The layer manifest version must be 1.1.2 or later
+* The layer must export the entry point symbols for each intercepted function
+* The layer manifest must specify the name of each intercepted function in a `pre_instance_functions` JSON object
+
+The functions that may be intercepted in this way are:
+* `vkEnumerateInstanceExtensionProperties`
+* `vkEnumerateInstanceLayerProperties`
+
+Pre-instance functions work differently from all other layer intercept functions.
+Other intercept functions have a function prototype identical to that of the function they are intercepting.
+They then rely on data that was passed to the layer at instance or device creation so that layers can call down the chain.
+Because there is no need to create an instance before calling the pre-instance functions, these functions must use a separate mechanism for constructing the call chain.
+This mechanism consists of an extra parameter that will be passed to the layer intercept function when it is called.
+This parameter will be a pointer to a struct, defined as follows:
+
+```
+typedef struct Vk...Chain
+{
+    struct {
+        VkChainType type;
+        uint32_t version;
+        uint32_t size;
+    } header;
+    PFN_vkVoidFunction pfnNextLayer;
+    const struct Vk...Chain* pNextLink;
+} Vk...Chain;
+```
+
+These structs are defined in the `vk_layer.h` file so that it is not necessary to redefine the chain structs in any external code.
+The name of each struct is be similar to the name of the function it corresponds to, but the leading "V" is capitalized, and the word "Chain" is added to the end.
+For example, the struct for `vkEnumerateInstanceExtensionProperties` is called `VkEnumerateInstanceExtensionPropertiesChain`.
+Furthermore, the `pfnNextLayer` struct member is not actually a void function pointer &mdash; its type will be the actual type of each function in the call chain.
+
+Each layer intercept function must have a prototype that is the same as the prototype of the function being intercepted, except that the first parameter must be that function's chain struct (passed as a const pointer).
+For example, a function that wishes to intercept `vkEnumerateInstanceExtensionProperties` would have the prototype:
+
+```
+VkResult InterceptFunctionName(const VkEnumerateInstanceExtensionProperties* pChain,
+    const char* pLayerName, uint32_t* pPropertyCount, VkExtensionProperties* pProperties);
+```
+
+The name of the function is arbitrary; it can be anything provided that it is given in the layer manifest file (see [Layer Manifest File Format](#layer-manifest-file-format)).
+The implementation of each intercept functions is responsible for calling the next item in the call chain, using the chain parameter.
+This is done by calling the `pfnNextLayer` member of the chain struct, passing `pNextLink` as the first argument, and passing the remaining function arguments after that.
+For example, a simple implementation for `vkEnumerateInstanceExtensionProperties` that does nothing but call down the chain would look like:
+
+```
+VkResult InterceptFunctionName(const VkEnumerateInstanceExtensionProperties* pChain,
+    const char* pLayerName, uint32_t* pPropertyCount, VkExtensionProperties* pProperties)
+{
+    return pChain->pfnNextLayer(pChain->pNextLink, pLayerName, pPropertyCount, pProperties);
+}
+```
+
+When using a C++ compiler, each chain type also defines a function named `CallDown` which can be used to automatically handle the first argument.
+Implementing the above function using this method would look like:
+
+```
+VkResult InterceptFunctionName(const VkEnumerateInstanceExtensionProperties* pChain,
+    const char* pLayerName, uint32_t* pPropertyCount, VkExtensionProperties* pProperties)
+{
+    return pChain->CallDown(pLayerName, pPropertyCount, pProperties);
+}
+```
+
+Unlike with other functions in layers, the layer may not save any global data between these function calls.
+Because Vulkan does not store any state until an instance has been created, all layer libraries are released at the end of each pre-instance call.
+This means that implicit layers can use pre-instance intercepts to modify data that is returned by the functions, but they cannot be used to record that data.
 
 #### Special Considerations
 
@@ -1602,7 +1722,7 @@ Here is an example layer JSON Manifest file with a single layer:
        ],
        "enable_environment": {
            "ENABLE_LAYER_OVERLAY_1": "1"
-       }
+       },
        "disable_environment": {
            "DISABLE_LAYER_OVERLAY_1": ""
        }
@@ -1653,7 +1773,7 @@ Here's an example of a meta-layer manifest file:
 | JSON Node | Description and Notes | Introspection Query |
 |:----------------:|--------------------|:----------------:
 | "file\_format\_version" | Manifest format major.minor.patch version number. | N/A |
-| | Supported versions are: 1.0.0, 1.0.1, and 1.1.0. | |
+| | Supported versions are: 1.0.0, 1.0.1, 1.1.0, 1.1.1, and 1.1.2. | |
 | "layer" | The identifier used to group a single layer's information together. | vkEnumerateInstanceLayerProperties |
 | "layers" | The identifier used to group multiple layers' information together.  This requires a minimum Manifest file format version of 1.0.1.| vkEnumerateInstanceLayerProperties |
 | "name" | The string used to uniquely identify this layer to applications. | vkEnumerateInstanceLayerProperties |
@@ -1669,11 +1789,21 @@ Here's an example of a meta-layer manifest file:
 | "enable\_environment" | **Implicit Layers Only** - **OPTIONAL:** Indicates an environment variable used to enable the Implicit Layer (w/ value of 1).  This environment variable (which should vary with each "version" of the layer) must be set to the given value or else the implicit layer is not loaded. This is for application environments (e.g. Steam) which want to enable a layer(s) only for applications that they launch, and allows for applications run outside of an application environment to not get that implicit layer(s).| N/A |
 | "disable\_environment" | **Implicit Layers Only** - **REQUIRED:**Indicates an environment variable used to disable the Implicit Layer (w/ value of 1). In rare cases of an application not working with an implicit layer, the application can set this environment variable (before calling Vulkan functions) in order to "blacklist" the layer. This environment variable (which should vary with each "version" of the layer) must be set (not particularly to any value). If both the "enable_environment" and "disable_environment" variables are set, the implicit layer is disabled. | N/A |
 | "component_layers" | **Meta-layers Only** - Indicates the component layer names that are part of a meta-layer.  The names listed must be the "name" identified in each of the component layer's Mainfest file "name" tag (this is the same as the name of the layer that is passed to the `vkCreateInstance` command).  All component layers must be present on the system and found by the loader in order for this meta-layer to be available and activated. **This field must not be present if "library\_path" is defined** | N/A |
+| "pre_instance_functions" | **Implicit Layers Only** - **OPTIONAL:** Indicates which functions the layer wishes to intercept, that do not require that an instance has been created. This should be an object where each function to be intercepted is defined as a string entry where the key is the Vulkan function name and the value is the name of the intercept function in the layer's dynamic library. Available in layer manifest versions 1.1.2 and up. See [Pre-Instance Functions](#pre-instance-functions) for more information. | vkEnumerateInstance*Properties |
 
 ##### Layer Manifest File Version History
 
-The current highest supported Layer Manifest file format supported is 1.1.0.
+The current highest supported Layer Manifest file format supported is 1.1.2.
 Information about each version is detailed in the following sub-sections:
+
+###### Layer Manifest File Version 1.1.2
+
+Version 1.1.2 introduced the ability of layers to intercept function calls that do not have an instance.
+
+###### Layer Manifest File Version 1.1.1
+
+The ability to define custom metalayers was added.
+To support metalayers, the "component_layers" section was added, and the requirement for a "library_path" section to be present was removed when the "component_layers" section is present.
 
 ###### Layer Manifest File Version 1.1.0
 
@@ -1886,8 +2016,36 @@ for more details.
 
 #### ICD Discovery on Windows
 
-In order to find installed ICDs, the Vulkan loader will scan the
-values in the following Windows registry key:
+In order to find installed ICDs, the loader scans through registry keys specific to Display
+Adapters and all Software Components associated with these adapters for the
+locations of JSON manifest files. These keys are located in device keys
+created during driver installation and contain configuration information
+for base settings, including OpenGL and Direct3D ICD location.
+
+The Device Adapter and Software Component key paths should be obtained through the PnP
+Configuration Manager API. The `000X` key will be a numbered key, where each
+device is assigned a different number.
+
+```
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{Adapter GUID}\000X\VulkanDriverName
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{SoftwareComponent GUID}\000X\VulkanDriverName
+```
+
+In addition, on 64-bit systems there may be another set of registry values, listed
+below. These values record the locations of 32-bit layers on 64-bit operating systems,
+in the same way as the Windows-on-Windows functionality.
+
+```
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{Adapter GUID}\000X\VulkanDriverNameWow
+   HKEY_LOCAL_MACHINE\System\CurrentControlSet\Control\Class\{SoftwareComponent GUID}\000X\VulkanDriverNameWow
+```
+
+If any of the above values exist and is of type `REG_SZ`, the loader will open the JSON
+manifest file specified by the key value. Each value must be a full absolute
+path to a JSON manifest file. The values may also be of type `REG_MULTI_SZ`, in
+which case the value will be interpreted as a list of paths to JSON manifest files.
+
+Additionally, the Vulkan loader will scan the values in the following Windows registry key:
 
 ```
    HKEY_LOCAL_MACHINE\SOFTWARE\Khronos\Vulkan\Drivers
@@ -1900,12 +2058,10 @@ registry location:
    HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Khronos\Vulkan\Drivers
 ```
 
-The loader will look at the appropriate registry location and check each value
-listed.  If the key is of type DWORD, and it has a value of 0, the loader will
-open the JSON manifest file specified by the name.  Each name must be a full
-pathname to a text manifest file.  The Vulkan loader will attempt to open each
-manifest file to obtain the information about an ICD's shared library (".dll")
-file. 
+Every ICD in these locations should be given as a DWORD, with value 0, where
+the name of the value is the full path to a JSON manifest file. The Vulkan loader
+will attempt to open each manifest file to obtain the information about an ICD's
+shared library (".dll") file.
 
 For example, let us assume the registry contains the following data:
 
@@ -1945,6 +2101,11 @@ path to a JSON manifest file.
 
 The Vulkan loader will open each enabled manifest file found to obtain the name
 or pathname of an ICD shared library (".DLL") file.
+
+ICDs should use the registry locations from the PnP Configuration Manager wherever
+practical. That location clearly ties the ICD to a given device. The
+`SOFTWARE\Khronos\Vulkan\Drivers` location is the older method for locating ICDs,
+and is retained for backwards compatibility.
 
 See the [ICD Manifest File Format](#icd-manifest-file-format) section for more
 details.
@@ -2027,7 +2188,7 @@ The following section discusses the details of the ICD Manifest JSON file
 format.  The JSON file itself does not have any requirements for naming.  The
 only requirement is that the extension suffix of the file ends with ".json".
 
-Here is an example layer JSON Manifest file:
+Here is an example ICD JSON Manifest file:
 
 ```
 {
@@ -2350,7 +2511,7 @@ corresponding ICD only supports either interface version 0 or 1.
 
 From the other side of the interface, if an ICD sees a call to
 `vk_icdGetInstanceProcAddr` before a call to
-`vk_icdGetLoaderICDInterfaceVersion`, then it knows that loader making the calls
+`vk_icdNegotiateLoaderICDInterfaceVersion`, then it knows that loader making the calls
 is a legacy loader supporting version 0 or 1.  If the loader calls
 `vk_icdGetInstanceProcAddr` first, it supports at least version 1.  Otherwise,
 the loader only supports version 0.

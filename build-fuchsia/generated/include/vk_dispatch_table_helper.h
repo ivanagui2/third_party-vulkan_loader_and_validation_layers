@@ -194,6 +194,10 @@ static inline void layer_init_device_dispatch_table(VkDevice device, VkLayerDisp
     table->GetImageMemoryRequirements2KHR = (PFN_vkGetImageMemoryRequirements2KHR) gpa(device, "vkGetImageMemoryRequirements2KHR");
     table->GetBufferMemoryRequirements2KHR = (PFN_vkGetBufferMemoryRequirements2KHR) gpa(device, "vkGetBufferMemoryRequirements2KHR");
     table->GetImageSparseMemoryRequirements2KHR = (PFN_vkGetImageSparseMemoryRequirements2KHR) gpa(device, "vkGetImageSparseMemoryRequirements2KHR");
+    table->CreateSamplerYcbcrConversionKHR = (PFN_vkCreateSamplerYcbcrConversionKHR) gpa(device, "vkCreateSamplerYcbcrConversionKHR");
+    table->DestroySamplerYcbcrConversionKHR = (PFN_vkDestroySamplerYcbcrConversionKHR) gpa(device, "vkDestroySamplerYcbcrConversionKHR");
+    table->BindBufferMemory2KHR = (PFN_vkBindBufferMemory2KHR) gpa(device, "vkBindBufferMemory2KHR");
+    table->BindImageMemory2KHR = (PFN_vkBindImageMemory2KHR) gpa(device, "vkBindImageMemory2KHR");
     table->GetMemoryFuchsiaHandleKHR = (PFN_vkGetMemoryFuchsiaHandleKHR) gpa(device, "vkGetMemoryFuchsiaHandleKHR");
     table->GetMemoryFuchsiaHandlePropertiesKHR = (PFN_vkGetMemoryFuchsiaHandlePropertiesKHR) gpa(device, "vkGetMemoryFuchsiaHandlePropertiesKHR");
     table->ImportSemaphoreFuchsiaHandleKHR = (PFN_vkImportSemaphoreFuchsiaHandleKHR) gpa(device, "vkImportSemaphoreFuchsiaHandleKHR");
@@ -205,17 +209,16 @@ static inline void layer_init_device_dispatch_table(VkDevice device, VkLayerDisp
     table->CmdDebugMarkerInsertEXT = (PFN_vkCmdDebugMarkerInsertEXT) gpa(device, "vkCmdDebugMarkerInsertEXT");
     table->CmdDrawIndirectCountAMD = (PFN_vkCmdDrawIndirectCountAMD) gpa(device, "vkCmdDrawIndirectCountAMD");
     table->CmdDrawIndexedIndirectCountAMD = (PFN_vkCmdDrawIndexedIndirectCountAMD) gpa(device, "vkCmdDrawIndexedIndirectCountAMD");
+    table->GetShaderInfoAMD = (PFN_vkGetShaderInfoAMD) gpa(device, "vkGetShaderInfoAMD");
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     table->GetMemoryWin32HandleNV = (PFN_vkGetMemoryWin32HandleNV) gpa(device, "vkGetMemoryWin32HandleNV");
 #endif // VK_USE_PLATFORM_WIN32_KHR
     table->GetDeviceGroupPeerMemoryFeaturesKHX = (PFN_vkGetDeviceGroupPeerMemoryFeaturesKHX) gpa(device, "vkGetDeviceGroupPeerMemoryFeaturesKHX");
-    table->BindBufferMemory2KHX = (PFN_vkBindBufferMemory2KHX) gpa(device, "vkBindBufferMemory2KHX");
-    table->BindImageMemory2KHX = (PFN_vkBindImageMemory2KHX) gpa(device, "vkBindImageMemory2KHX");
     table->CmdSetDeviceMaskKHX = (PFN_vkCmdSetDeviceMaskKHX) gpa(device, "vkCmdSetDeviceMaskKHX");
+    table->CmdDispatchBaseKHX = (PFN_vkCmdDispatchBaseKHX) gpa(device, "vkCmdDispatchBaseKHX");
     table->GetDeviceGroupPresentCapabilitiesKHX = (PFN_vkGetDeviceGroupPresentCapabilitiesKHX) gpa(device, "vkGetDeviceGroupPresentCapabilitiesKHX");
     table->GetDeviceGroupSurfacePresentModesKHX = (PFN_vkGetDeviceGroupSurfacePresentModesKHX) gpa(device, "vkGetDeviceGroupSurfacePresentModesKHX");
     table->AcquireNextImage2KHX = (PFN_vkAcquireNextImage2KHX) gpa(device, "vkAcquireNextImage2KHX");
-    table->CmdDispatchBaseKHX = (PFN_vkCmdDispatchBaseKHX) gpa(device, "vkCmdDispatchBaseKHX");
     table->CmdProcessCommandsNVX = (PFN_vkCmdProcessCommandsNVX) gpa(device, "vkCmdProcessCommandsNVX");
     table->CmdReserveSpaceForCommandsNVX = (PFN_vkCmdReserveSpaceForCommandsNVX) gpa(device, "vkCmdReserveSpaceForCommandsNVX");
     table->CreateIndirectCommandsLayoutNVX = (PFN_vkCreateIndirectCommandsLayoutNVX) gpa(device, "vkCreateIndirectCommandsLayoutNVX");
@@ -233,6 +236,12 @@ static inline void layer_init_device_dispatch_table(VkDevice device, VkLayerDisp
     table->GetPastPresentationTimingGOOGLE = (PFN_vkGetPastPresentationTimingGOOGLE) gpa(device, "vkGetPastPresentationTimingGOOGLE");
     table->CmdSetDiscardRectangleEXT = (PFN_vkCmdSetDiscardRectangleEXT) gpa(device, "vkCmdSetDiscardRectangleEXT");
     table->SetHdrMetadataEXT = (PFN_vkSetHdrMetadataEXT) gpa(device, "vkSetHdrMetadataEXT");
+    table->CmdSetSampleLocationsEXT = (PFN_vkCmdSetSampleLocationsEXT) gpa(device, "vkCmdSetSampleLocationsEXT");
+    table->CreateValidationCacheEXT = (PFN_vkCreateValidationCacheEXT) gpa(device, "vkCreateValidationCacheEXT");
+    table->DestroyValidationCacheEXT = (PFN_vkDestroyValidationCacheEXT) gpa(device, "vkDestroyValidationCacheEXT");
+    table->MergeValidationCachesEXT = (PFN_vkMergeValidationCachesEXT) gpa(device, "vkMergeValidationCachesEXT");
+    table->GetValidationCacheDataEXT = (PFN_vkGetValidationCacheDataEXT) gpa(device, "vkGetValidationCacheDataEXT");
+    table->GetMemoryHostPointerPropertiesEXT = (PFN_vkGetMemoryHostPointerPropertiesEXT) gpa(device, "vkGetMemoryHostPointerPropertiesEXT");
 }
 
 
@@ -296,12 +305,6 @@ static inline void layer_init_instance_dispatch_table(VkInstance instance, VkLay
 #ifdef VK_USE_PLATFORM_WIN32_KHR
     table->GetPhysicalDeviceWin32PresentationSupportKHR = (PFN_vkGetPhysicalDeviceWin32PresentationSupportKHR) gpa(instance, "vkGetPhysicalDeviceWin32PresentationSupportKHR");
 #endif // VK_USE_PLATFORM_WIN32_KHR
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-    table->CreateMagmaSurfaceKHR = (PFN_vkCreateMagmaSurfaceKHR) gpa(instance, "vkCreateMagmaSurfaceKHR");
-#endif // VK_USE_PLATFORM_MAGMA_KHR
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-    table->GetPhysicalDeviceMagmaPresentationSupportKHR = (PFN_vkGetPhysicalDeviceMagmaPresentationSupportKHR) gpa(instance, "vkGetPhysicalDeviceMagmaPresentationSupportKHR");
-#endif // VK_USE_PLATFORM_MAGMA_KHR
     table->GetPhysicalDeviceFeatures2KHR = (PFN_vkGetPhysicalDeviceFeatures2KHR) gpa(instance, "vkGetPhysicalDeviceFeatures2KHR");
     table->GetPhysicalDeviceProperties2KHR = (PFN_vkGetPhysicalDeviceProperties2KHR) gpa(instance, "vkGetPhysicalDeviceProperties2KHR");
     table->GetPhysicalDeviceFormatProperties2KHR = (PFN_vkGetPhysicalDeviceFormatProperties2KHR) gpa(instance, "vkGetPhysicalDeviceFormatProperties2KHR");
@@ -314,6 +317,12 @@ static inline void layer_init_instance_dispatch_table(VkInstance instance, VkLay
     table->GetPhysicalDeviceExternalFencePropertiesKHR = (PFN_vkGetPhysicalDeviceExternalFencePropertiesKHR) gpa(instance, "vkGetPhysicalDeviceExternalFencePropertiesKHR");
     table->GetPhysicalDeviceSurfaceCapabilities2KHR = (PFN_vkGetPhysicalDeviceSurfaceCapabilities2KHR) gpa(instance, "vkGetPhysicalDeviceSurfaceCapabilities2KHR");
     table->GetPhysicalDeviceSurfaceFormats2KHR = (PFN_vkGetPhysicalDeviceSurfaceFormats2KHR) gpa(instance, "vkGetPhysicalDeviceSurfaceFormats2KHR");
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    table->CreateMagmaSurfaceKHR = (PFN_vkCreateMagmaSurfaceKHR) gpa(instance, "vkCreateMagmaSurfaceKHR");
+#endif // VK_USE_PLATFORM_MAGMA_KHR
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    table->GetPhysicalDeviceMagmaPresentationSupportKHR = (PFN_vkGetPhysicalDeviceMagmaPresentationSupportKHR) gpa(instance, "vkGetPhysicalDeviceMagmaPresentationSupportKHR");
+#endif // VK_USE_PLATFORM_MAGMA_KHR
     table->CreateDebugReportCallbackEXT = (PFN_vkCreateDebugReportCallbackEXT) gpa(instance, "vkCreateDebugReportCallbackEXT");
     table->DestroyDebugReportCallbackEXT = (PFN_vkDestroyDebugReportCallbackEXT) gpa(instance, "vkDestroyDebugReportCallbackEXT");
     table->DebugReportMessageEXT = (PFN_vkDebugReportMessageEXT) gpa(instance, "vkDebugReportMessageEXT");
@@ -338,6 +347,7 @@ static inline void layer_init_instance_dispatch_table(VkInstance instance, VkLay
 #ifdef VK_USE_PLATFORM_MACOS_MVK
     table->CreateMacOSSurfaceMVK = (PFN_vkCreateMacOSSurfaceMVK) gpa(instance, "vkCreateMacOSSurfaceMVK");
 #endif // VK_USE_PLATFORM_MACOS_MVK
+    table->GetPhysicalDeviceMultisamplePropertiesEXT = (PFN_vkGetPhysicalDeviceMultisamplePropertiesEXT) gpa(instance, "vkGetPhysicalDeviceMultisamplePropertiesEXT");
 }
 
 #endif

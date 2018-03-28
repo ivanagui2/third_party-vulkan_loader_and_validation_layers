@@ -25,6 +25,7 @@
  * Author: Courtney Goeltzenleuchter <courtneygo@google.com>
  * Author: Tobin Ehlis <tobine@google.com>
  * Author: Chris Forbes <chrisforbes@google.com>
+ * Author: John Zulauf<jzulauf@lunarg.com>
  *
  ****************************************************************************/
 
@@ -39,6 +40,7 @@ extern "C" {
 
 // Function Prototypes
 size_t get_struct_chain_size(const void* struct_ptr);
+size_t get_struct_size(const void* struct_ptr);
 size_t vk_size_vkapplicationinfo(const VkApplicationInfo* struct_ptr);
 size_t vk_size_vkinstancecreateinfo(const VkInstanceCreateInfo* struct_ptr);
 size_t vk_size_vkallocationcallbacks(const VkAllocationCallbacks* struct_ptr);
@@ -176,9 +178,6 @@ size_t vk_size_vkandroidsurfacecreateinfokhr(const VkAndroidSurfaceCreateInfoKHR
 #ifdef VK_USE_PLATFORM_WIN32_KHR
 size_t vk_size_vkwin32surfacecreateinfokhr(const VkWin32SurfaceCreateInfoKHR* struct_ptr);
 #endif // VK_USE_PLATFORM_WIN32_KHR
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-size_t vk_size_vkmagmasurfacecreateinfokhr(const VkMagmaSurfaceCreateInfoKHR* struct_ptr);
-#endif // VK_USE_PLATFORM_MAGMA_KHR
 size_t vk_size_vkphysicaldevicefeatures2khr(const VkPhysicalDeviceFeatures2KHR* struct_ptr);
 size_t vk_size_vkphysicaldeviceproperties2khr(const VkPhysicalDeviceProperties2KHR* struct_ptr);
 size_t vk_size_vkformatproperties2khr(const VkFormatProperties2KHR* struct_ptr);
@@ -254,6 +253,11 @@ size_t vk_size_vkfencegetwin32handleinfokhr(const VkFenceGetWin32HandleInfoKHR* 
 #endif // VK_USE_PLATFORM_WIN32_KHR
 size_t vk_size_vkimportfencefdinfokhr(const VkImportFenceFdInfoKHR* struct_ptr);
 size_t vk_size_vkfencegetfdinfokhr(const VkFenceGetFdInfoKHR* struct_ptr);
+size_t vk_size_vkphysicaldevicepointclippingpropertieskhr(const VkPhysicalDevicePointClippingPropertiesKHR* struct_ptr);
+size_t vk_size_vkinputattachmentaspectreferencekhr(const VkInputAttachmentAspectReferenceKHR* struct_ptr);
+size_t vk_size_vkrenderpassinputattachmentaspectcreateinfokhr(const VkRenderPassInputAttachmentAspectCreateInfoKHR* struct_ptr);
+size_t vk_size_vkimageviewusagecreateinfokhr(const VkImageViewUsageCreateInfoKHR* struct_ptr);
+size_t vk_size_vkpipelinetessellationdomainoriginstatecreateinfokhr(const VkPipelineTessellationDomainOriginStateCreateInfoKHR* struct_ptr);
 size_t vk_size_vkphysicaldevicesurfaceinfo2khr(const VkPhysicalDeviceSurfaceInfo2KHR* struct_ptr);
 size_t vk_size_vksurfacecapabilities2khr(const VkSurfaceCapabilities2KHR* struct_ptr);
 size_t vk_size_vksurfaceformat2khr(const VkSurfaceFormat2KHR* struct_ptr);
@@ -265,11 +269,23 @@ size_t vk_size_vkimagememoryrequirementsinfo2khr(const VkImageMemoryRequirements
 size_t vk_size_vkimagesparsememoryrequirementsinfo2khr(const VkImageSparseMemoryRequirementsInfo2KHR* struct_ptr);
 size_t vk_size_vkmemoryrequirements2khr(const VkMemoryRequirements2KHR* struct_ptr);
 size_t vk_size_vksparseimagememoryrequirements2khr(const VkSparseImageMemoryRequirements2KHR* struct_ptr);
+size_t vk_size_vkimageformatlistcreateinfokhr(const VkImageFormatListCreateInfoKHR* struct_ptr);
+size_t vk_size_vksamplerycbcrconversioncreateinfokhr(const VkSamplerYcbcrConversionCreateInfoKHR* struct_ptr);
+size_t vk_size_vksamplerycbcrconversioninfokhr(const VkSamplerYcbcrConversionInfoKHR* struct_ptr);
+size_t vk_size_vkbindimageplanememoryinfokhr(const VkBindImagePlaneMemoryInfoKHR* struct_ptr);
+size_t vk_size_vkimageplanememoryrequirementsinfokhr(const VkImagePlaneMemoryRequirementsInfoKHR* struct_ptr);
+size_t vk_size_vkphysicaldevicesamplerycbcrconversionfeatureskhr(const VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR* struct_ptr);
+size_t vk_size_vksamplerycbcrconversionimageformatpropertieskhr(const VkSamplerYcbcrConversionImageFormatPropertiesKHR* struct_ptr);
+size_t vk_size_vkbindbuffermemoryinfokhr(const VkBindBufferMemoryInfoKHR* struct_ptr);
+size_t vk_size_vkbindimagememoryinfokhr(const VkBindImageMemoryInfoKHR* struct_ptr);
 size_t vk_size_vkimportmemoryfuchsiahandleinfokhr(const VkImportMemoryFuchsiaHandleInfoKHR* struct_ptr);
 size_t vk_size_vkmemoryfuchsiahandlepropertieskhr(const VkMemoryFuchsiaHandlePropertiesKHR* struct_ptr);
 size_t vk_size_vkmemorygetfuchsiahandleinfokhr(const VkMemoryGetFuchsiaHandleInfoKHR* struct_ptr);
 size_t vk_size_vkimportsemaphorefuchsiahandleinfokhr(const VkImportSemaphoreFuchsiaHandleInfoKHR* struct_ptr);
 size_t vk_size_vksemaphoregetfuchsiahandleinfokhr(const VkSemaphoreGetFuchsiaHandleInfoKHR* struct_ptr);
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+size_t vk_size_vkmagmasurfacecreateinfokhr(const VkMagmaSurfaceCreateInfoKHR* struct_ptr);
+#endif // VK_USE_PLATFORM_MAGMA_KHR
 size_t vk_size_vkdebugreportcallbackcreateinfoext(const VkDebugReportCallbackCreateInfoEXT* struct_ptr);
 size_t vk_size_vkpipelinerasterizationstaterasterizationorderamd(const VkPipelineRasterizationStateRasterizationOrderAMD* struct_ptr);
 size_t vk_size_vkdebugmarkerobjectnameinfoext(const VkDebugMarkerObjectNameInfoEXT* struct_ptr);
@@ -279,6 +295,8 @@ size_t vk_size_vkdedicatedallocationimagecreateinfonv(const VkDedicatedAllocatio
 size_t vk_size_vkdedicatedallocationbuffercreateinfonv(const VkDedicatedAllocationBufferCreateInfoNV* struct_ptr);
 size_t vk_size_vkdedicatedallocationmemoryallocateinfonv(const VkDedicatedAllocationMemoryAllocateInfoNV* struct_ptr);
 size_t vk_size_vktexturelodgatherformatpropertiesamd(const VkTextureLODGatherFormatPropertiesAMD* struct_ptr);
+size_t vk_size_vkshaderresourceusageamd(const VkShaderResourceUsageAMD* struct_ptr);
+size_t vk_size_vkshaderstatisticsinfoamd(const VkShaderStatisticsInfoAMD* struct_ptr);
 size_t vk_size_vkrenderpassmultiviewcreateinfokhx(const VkRenderPassMultiviewCreateInfoKHX* struct_ptr);
 size_t vk_size_vkphysicaldevicemultiviewfeatureskhx(const VkPhysicalDeviceMultiviewFeaturesKHX* struct_ptr);
 size_t vk_size_vkphysicaldevicemultiviewpropertieskhx(const VkPhysicalDeviceMultiviewPropertiesKHX* struct_ptr);
@@ -295,12 +313,12 @@ size_t vk_size_vkexportmemorywin32handleinfonv(const VkExportMemoryWin32HandleIn
 size_t vk_size_vkwin32keyedmutexacquirereleaseinfonv(const VkWin32KeyedMutexAcquireReleaseInfoNV* struct_ptr);
 #endif // VK_USE_PLATFORM_WIN32_KHR
 size_t vk_size_vkmemoryallocateflagsinfokhx(const VkMemoryAllocateFlagsInfoKHX* struct_ptr);
-size_t vk_size_vkbindbuffermemoryinfokhx(const VkBindBufferMemoryInfoKHX* struct_ptr);
-size_t vk_size_vkbindimagememoryinfokhx(const VkBindImageMemoryInfoKHX* struct_ptr);
 size_t vk_size_vkdevicegrouprenderpassbegininfokhx(const VkDeviceGroupRenderPassBeginInfoKHX* struct_ptr);
 size_t vk_size_vkdevicegroupcommandbufferbegininfokhx(const VkDeviceGroupCommandBufferBeginInfoKHX* struct_ptr);
 size_t vk_size_vkdevicegroupsubmitinfokhx(const VkDeviceGroupSubmitInfoKHX* struct_ptr);
 size_t vk_size_vkdevicegroupbindsparseinfokhx(const VkDeviceGroupBindSparseInfoKHX* struct_ptr);
+size_t vk_size_vkbindbuffermemorydevicegroupinfokhx(const VkBindBufferMemoryDeviceGroupInfoKHX* struct_ptr);
+size_t vk_size_vkbindimagememorydevicegroupinfokhx(const VkBindImageMemoryDeviceGroupInfoKHX* struct_ptr);
 size_t vk_size_vkdevicegrouppresentcapabilitieskhx(const VkDeviceGroupPresentCapabilitiesKHX* struct_ptr);
 size_t vk_size_vkimageswapchaincreateinfokhx(const VkImageSwapchainCreateInfoKHX* struct_ptr);
 size_t vk_size_vkbindimagememoryswapchaininfokhx(const VkBindImageMemorySwapchainInfoKHX* struct_ptr);
@@ -343,6 +361,8 @@ size_t vk_size_vkviewportswizzlenv(const VkViewportSwizzleNV* struct_ptr);
 size_t vk_size_vkpipelineviewportswizzlestatecreateinfonv(const VkPipelineViewportSwizzleStateCreateInfoNV* struct_ptr);
 size_t vk_size_vkphysicaldevicediscardrectanglepropertiesext(const VkPhysicalDeviceDiscardRectanglePropertiesEXT* struct_ptr);
 size_t vk_size_vkpipelinediscardrectanglestatecreateinfoext(const VkPipelineDiscardRectangleStateCreateInfoEXT* struct_ptr);
+size_t vk_size_vkphysicaldeviceconservativerasterizationpropertiesext(const VkPhysicalDeviceConservativeRasterizationPropertiesEXT* struct_ptr);
+size_t vk_size_vkpipelinerasterizationconservativestatecreateinfoext(const VkPipelineRasterizationConservativeStateCreateInfoEXT* struct_ptr);
 size_t vk_size_vkxycolorext(const VkXYColorEXT* struct_ptr);
 size_t vk_size_vkhdrmetadataext(const VkHdrMetadataEXT* struct_ptr);
 #ifdef VK_USE_PLATFORM_IOS_MVK
@@ -353,11 +373,25 @@ size_t vk_size_vkmacossurfacecreateinfomvk(const VkMacOSSurfaceCreateInfoMVK* st
 #endif // VK_USE_PLATFORM_MACOS_MVK
 size_t vk_size_vksamplerreductionmodecreateinfoext(const VkSamplerReductionModeCreateInfoEXT* struct_ptr);
 size_t vk_size_vkphysicaldevicesamplerfilterminmaxpropertiesext(const VkPhysicalDeviceSamplerFilterMinmaxPropertiesEXT* struct_ptr);
+size_t vk_size_vksamplelocationext(const VkSampleLocationEXT* struct_ptr);
+size_t vk_size_vksamplelocationsinfoext(const VkSampleLocationsInfoEXT* struct_ptr);
+size_t vk_size_vkattachmentsamplelocationsext(const VkAttachmentSampleLocationsEXT* struct_ptr);
+size_t vk_size_vksubpasssamplelocationsext(const VkSubpassSampleLocationsEXT* struct_ptr);
+size_t vk_size_vkrenderpasssamplelocationsbegininfoext(const VkRenderPassSampleLocationsBeginInfoEXT* struct_ptr);
+size_t vk_size_vkpipelinesamplelocationsstatecreateinfoext(const VkPipelineSampleLocationsStateCreateInfoEXT* struct_ptr);
+size_t vk_size_vkphysicaldevicesamplelocationspropertiesext(const VkPhysicalDeviceSampleLocationsPropertiesEXT* struct_ptr);
+size_t vk_size_vkmultisamplepropertiesext(const VkMultisamplePropertiesEXT* struct_ptr);
 size_t vk_size_vkphysicaldeviceblendoperationadvancedfeaturesext(const VkPhysicalDeviceBlendOperationAdvancedFeaturesEXT* struct_ptr);
 size_t vk_size_vkphysicaldeviceblendoperationadvancedpropertiesext(const VkPhysicalDeviceBlendOperationAdvancedPropertiesEXT* struct_ptr);
 size_t vk_size_vkpipelinecolorblendadvancedstatecreateinfoext(const VkPipelineColorBlendAdvancedStateCreateInfoEXT* struct_ptr);
 size_t vk_size_vkpipelinecoveragetocolorstatecreateinfonv(const VkPipelineCoverageToColorStateCreateInfoNV* struct_ptr);
 size_t vk_size_vkpipelinecoveragemodulationstatecreateinfonv(const VkPipelineCoverageModulationStateCreateInfoNV* struct_ptr);
+size_t vk_size_vkvalidationcachecreateinfoext(const VkValidationCacheCreateInfoEXT* struct_ptr);
+size_t vk_size_vkshadermodulevalidationcachecreateinfoext(const VkShaderModuleValidationCacheCreateInfoEXT* struct_ptr);
+size_t vk_size_vkdevicequeueglobalprioritycreateinfoext(const VkDeviceQueueGlobalPriorityCreateInfoEXT* struct_ptr);
+size_t vk_size_vkimportmemoryhostpointerinfoext(const VkImportMemoryHostPointerInfoEXT* struct_ptr);
+size_t vk_size_vkmemoryhostpointerpropertiesext(const VkMemoryHostPointerPropertiesEXT* struct_ptr);
+size_t vk_size_vkphysicaldeviceexternalmemoryhostpropertiesext(const VkPhysicalDeviceExternalMemoryHostPropertiesEXT* struct_ptr);
 #ifdef __cplusplus
 }
 #endif

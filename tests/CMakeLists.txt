@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 2.8.11)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     add_definitions(-DVK_USE_PLATFORM_WIN32_KHR -DWIN32_LEAN_AND_MEAN)
+    # Workaround for TR1 deprecation in Visual Studio 15.5 until Google Test is updated
+    add_definitions(-D_SILENCE_TR1_NAMESPACE_DEPRECATION_WARNING)
     set(DisplayServer Win32)
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Android")
     add_definitions(-DVK_USE_PLATFORM_ANDROID_KHR)
@@ -63,14 +65,15 @@ set(COMMON_CPP
    )
 
 include_directories(
-    "${PROJECT_SOURCE_DIR}/tests"
-    "${PROJECT_SOURCE_DIR}/tests/gtest-1.7.0/include"
-    "${PROJECT_SOURCE_DIR}/icd/common"
-    "${PROJECT_SOURCE_DIR}/layers"
+    ${PROJECT_SOURCE_DIR}/tests
+    ${PROJECT_SOURCE_DIR}/tests/gtest-1.7.0/include
+    ${PROJECT_SOURCE_DIR}/icd/common
+    ${PROJECT_SOURCE_DIR}/layers
     ${GLSLANG_SPIRV_INCLUDE_DIR}
     ${LIBGLM_INCLUDE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_BINARY_DIR}
+    ${PROJECT_BINARY_DIR}
     )
 
 if (NOT WIN32)
@@ -94,6 +97,7 @@ else()
             COMMAND ${CMAKE_COMMAND} -E copy_if_different ${VALIDATE_DOC} vkvalidatelayerdoc.ps1
             VERBATIM
             )
+        set_target_properties(binary-dir-symlinks PROPERTIES FOLDER ${LVL_TARGET_FOLDER})
     endif()
 endif()
 

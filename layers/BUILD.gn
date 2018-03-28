@@ -139,6 +139,7 @@ shared_library("VkLayer_core_validation") {
     "descriptor_sets.cpp",
     "shader_validation.cpp",
     "vk_format_utils.cpp",
+    "xxhash.c",
   ]
   deps = [
     ":layer_common",
@@ -147,9 +148,15 @@ shared_library("VkLayer_core_validation") {
   ]
 }
 
+config("VkLayer_parameter_validation_config") {
+  cflags_cc = [ "-Wno-unused-const-variable" ]
+}
+
 shared_library("VkLayer_parameter_validation") {
+  configs += [ ":VkLayer_parameter_validation_config" ]
   sources = [
-    "parameter_validation.cpp",
+    "../build-fuchsia/generated/include/parameter_validation.cpp",
+    "parameter_validation_utils.cpp",
     "vk_format_utils.cpp",
   ]
   deps = [

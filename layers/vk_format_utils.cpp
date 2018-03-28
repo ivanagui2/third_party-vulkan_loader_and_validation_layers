@@ -471,7 +471,7 @@ VK_LAYER_EXPORT bool FormatIsNorm(VkFormat format) {
     }
 
     return is_norm;
-};
+}
 
 // Return true if format is of type UNORM
 VK_LAYER_EXPORT bool FormatIsUNorm(VkFormat format) {
@@ -529,7 +529,7 @@ VK_LAYER_EXPORT bool FormatIsUNorm(VkFormat format) {
     }
 
     return is_unorm;
-};
+}
 
 // Return true if format is of type SNORM
 VK_LAYER_EXPORT bool FormatIsSNorm(VkFormat format) {
@@ -560,7 +560,7 @@ VK_LAYER_EXPORT bool FormatIsSNorm(VkFormat format) {
     }
 
     return is_snorm;
-};
+}
 
 // Return true if format is an integer format
 VK_LAYER_EXPORT bool FormatIsInt(VkFormat format) { return (FormatIsSInt(format) || FormatIsUInt(format)); }
@@ -866,6 +866,38 @@ VK_LAYER_EXPORT VkExtent3D FormatCompressedTexelBlockExtent(VkFormat format) {
     return block_size;
 }
 
+VK_LAYER_EXPORT uint32_t FormatPlaneCount(VkFormat format) {
+    switch (format) {
+        case VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM_KHR:
+        case VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM_KHR:
+        case VK_FORMAT_G8_B8_R8_3PLANE_444_UNORM_KHR:
+        case VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_420_UNORM_3PACK16_KHR:
+        case VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_422_UNORM_3PACK16_KHR:
+        case VK_FORMAT_G10X6_B10X6_R10X6_3PLANE_444_UNORM_3PACK16_KHR:
+        case VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_420_UNORM_3PACK16_KHR:
+        case VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_422_UNORM_3PACK16_KHR:
+        case VK_FORMAT_G12X4_B12X4_R12X4_3PLANE_444_UNORM_3PACK16_KHR:
+        case VK_FORMAT_G16_B16_R16_3PLANE_420_UNORM_KHR:
+        case VK_FORMAT_G16_B16_R16_3PLANE_422_UNORM_KHR:
+        case VK_FORMAT_G16_B16_R16_3PLANE_444_UNORM_KHR:
+            return 3u;
+            break;
+        case VK_FORMAT_G8_B8R8_2PLANE_420_UNORM_KHR:
+        case VK_FORMAT_G8_B8R8_2PLANE_422_UNORM_KHR:
+        case VK_FORMAT_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16_KHR:
+        case VK_FORMAT_G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16_KHR:
+        case VK_FORMAT_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16_KHR:
+        case VK_FORMAT_G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16_KHR:
+        case VK_FORMAT_G16_B16R16_2PLANE_420_UNORM_KHR:
+        case VK_FORMAT_G16_B16R16_2PLANE_422_UNORM_KHR:
+            return 2u;
+            break;
+        default:
+            return 1u;
+            break;
+    }
+}
+
 // Return format class of the specified format
 VK_LAYER_EXPORT VkFormatCompatibilityClass FormatCompatibilityClass(VkFormat format) {
     auto item = vk_format_table.find(format);
@@ -885,7 +917,7 @@ VK_LAYER_EXPORT size_t FormatSize(VkFormat format) {
 }
 
 // Return the number of channels for a given format
-unsigned int FormatChannelCount(VkFormat format) {
+uint32_t FormatChannelCount(VkFormat format) {
     auto item = vk_format_table.find(format);
     if (item != vk_format_table.end()) {
         return item->second.channel_count;

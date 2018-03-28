@@ -1,7 +1,7 @@
 include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}
-    ${CMAKE_PROJECT_BINARY_DIR}
+    ${PROJECT_BINARY_DIR}
     ${CMAKE_BINARY_DIR}
 )
 
@@ -23,6 +23,13 @@ endif()
 if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     add_definitions(-DVK_USE_PLATFORM_WIN32_KHR -DWIN32_LEAN_AND_MEAN)
     set(DisplayServer Win32)
+    if (NOT MSVC_VERSION LESS 1900)
+        # Enable control flow guard
+        message(STATUS "Building loader with control flow guard")
+        add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/guard:cf>")
+        set(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} /guard:cf")
+        set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /guard:cf")
+    endif()
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Android")
     add_definitions(-DVK_USE_PLATFORM_ANDROID_KHR)
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Linux")
@@ -80,8 +87,6 @@ set(OPT_LOADER_SRCS
     phys_dev_ext.c
 )
 
-add_definitions(-DAPI_NAME="${API_NAME}")
-
 # Check for assembler support
 set(ASM_FAILURE_MSG "The build will fall back on building with C code\n")
 set(ASM_FAILURE_MSG "${ASM_FAILURE_MSG}Note that this may be unsafe, as the C code requires tail-call optimizations to remove")
@@ -99,6 +104,7 @@ if (WIN32)
         add_dependencies(asm_offset generate_helper_files loader_gen_files)
         add_custom_command(OUTPUT gen_defines.asm DEPENDS asm_offset COMMAND asm_offset MASM)
         add_custom_target(loader_asm_gen_files DEPENDS gen_defines.asm)
+        set_target_properties(loader_asm_gen_files PROPERTIES FOLDER ${LVL_TARGET_FOLDER})
     else()
         message(WARNING "Could not find working MASM assebler\n${ASM_FAILURE_MSG}")
         set(OPT_LOADER_SRCS ${OPT_LOADER_SRCS} unknown_ext_chain.c)
@@ -106,13 +112,14 @@ if (WIN32)
     endif()
 else()
     enable_language(ASM-ATT)
-    set(CMAKE_ASM-ATT_FLAGS "${CMAKE_ASM-ATT_FLAGS} $ENV{ASFLAGS}")
-    set(CMAKE_ASM-ATT_FLAGS "${CMAKE_ASM-ATT_FLAGS} -I\"${CMAKE_CURRENT_BINARY_DIR}\"")
+    set(CMAKE_ASM-ATT_COMPILE_FLAGS "${CMAKE_ASM-ATT_COMPILE_FLAGS} $ENV{ASFLAGS}")
+    set(CMAKE_ASM-ATT_COMPILE_FLAGS "${CMAKE_ASM-ATT_COMPILE_FLAGS} -I\"${CMAKE_CURRENT_BINARY_DIR}\"")
 
     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/asm_test.asm ".intel_syntax noprefix\n.text\n.global sample\nsample:\nmov ecx, [eax + 16]\n")
     try_compile(ASSEMBLER_WORKS ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/asm_test.asm)
     file(REMOVE ${CMAKE_CURRENT_BINARY_DIR}/asm_test.asm)
     if (ASSEMBLER_WORKS)
+        set(CMAKE_ASM-ATT_FLAGS "$ENV{ASFLAGS} -I\"${CMAKE_CURRENT_BINARY_DIR}\"")
         set(OPT_LOADER_SRCS ${OPT_LOADER_SRCS} unknown_ext_chain_gas.asm)
         add_executable(asm_offset asm_offset.c)
         add_dependencies(asm_offset generate_helper_files loader_gen_files)
@@ -131,6 +138,7 @@ add_custom_target(loader_gen_files DEPENDS
         vk_loader_extensions.h
         vk_loader_extensions.c
     )
+set_target_properties(loader_gen_files PROPERTIES FOLDER ${LVL_TARGET_FOLDER})
 
 if (WIN32)
     # Use static MSVCRT libraries
@@ -149,16 +157,26 @@ if (WIN32)
     set(CMAKE_C_FLAGS_DEBUG " ")
     separate_arguments(LOCAL_C_FLAGS_REL WINDOWS_COMMAND ${CMAKE_C_FLAGS_RELEASE})
 
-    add_library(loader-norm OBJECT ${NORMAL_LOADER_SRCS} dirent_on_windows.c)
-    add_dependencies(loader-norm generate_helper_files loader_gen_files)
+    add_library(loader-norm-dy OBJECT ${NORMAL_LOADER_SRCS} dirent_on_windows.c)
+    add_dependencies(loader-norm-dy generate_helper_files loader_gen_files)
+    target_compile_definitions(loader-norm-dy PUBLIC LOADER_DYNAMIC_LIB)
+    target_compile_options(loader-norm-dy PUBLIC "$<$<CONFIG:DEBUG>:${LOCAL_C_FLAGS_DBG}>")
 
-    target_compile_options(loader-norm PUBLIC "$<$<CONFIG:DEBUG>:${LOCAL_C_FLAGS_DBG}>")
-    add_library(loader-opt OBJECT ${OPT_LOADER_SRCS})
-    add_dependencies(loader-opt generate_helper_files loader_gen_files loader_asm_gen_files)
+    add_library(loader-opt-dy OBJECT ${OPT_LOADER_SRCS})
+    add_dependencies(loader-opt-dy generate_helper_files loader_gen_files loader_asm_gen_files)
+    target_compile_definitions(loader-opt-dy PUBLIC LOADER_DYNAMIC_LIB)
+    target_compile_options(loader-opt-dy PUBLIC "$<$<CONFIG:DEBUG>:${LOCAL_C_FLAGS_REL}>")
 
-    target_compile_options(loader-opt PUBLIC "$<$<CONFIG:DEBUG>:${LOCAL_C_FLAGS_REL}>")
-    add_library(${API_LOWERCASE}-${MAJOR} SHARED $<TARGET_OBJECTS:loader-opt> $<TARGET_OBJECTS:loader-norm> ${CMAKE_CURRENT_BINARY_DIR}/${API_LOWERCASE}-${MAJOR}.def ${CMAKE_CURRENT_SOURCE_DIR}/loader.rc)
-    add_library(VKstatic.${MAJOR} STATIC $<TARGET_OBJECTS:loader-opt> $<TARGET_OBJECTS:loader-norm>)
+    add_library(loader-norm-st OBJECT ${NORMAL_LOADER_SRCS} dirent_on_windows.c)
+    add_dependencies(loader-norm-st generate_helper_files loader_gen_files)
+    target_compile_options(loader-norm-st PUBLIC "$<$<CONFIG:DEBUG>:${LOCAL_C_FLAGS_DBG}>")
+
+    add_library(loader-opt-st OBJECT ${OPT_LOADER_SRCS})
+    add_dependencies(loader-opt-st generate_helper_files loader_gen_files loader_asm_gen_files)
+    target_compile_options(loader-opt-st PUBLIC "$<$<CONFIG:DEBUG>:${LOCAL_C_FLAGS_REL}>")
+
+    add_library(${API_LOWERCASE}-${MAJOR} SHARED $<TARGET_OBJECTS:loader-opt-dy> $<TARGET_OBJECTS:loader-norm-dy> ${CMAKE_CURRENT_BINARY_DIR}/${API_LOWERCASE}-${MAJOR}.def ${CMAKE_CURRENT_SOURCE_DIR}/loader.rc)
+    add_library(VKstatic.${MAJOR} STATIC $<TARGET_OBJECTS:loader-opt-st> $<TARGET_OBJECTS:loader-norm-st>)
     # Suppress conflicting libs warning for debug builds.
     set_target_properties(${API_LOWERCASE}-${MAJOR} PROPERTIES LINK_FLAGS_DEBUG /ignore:4098)
     set_target_properties(VKstatic.${MAJOR} PROPERTIES OUTPUT_NAME VKstatic.${MAJOR})
@@ -183,8 +201,15 @@ if (WIN32)
 else()
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wpointer-arith")
 
+    # Clang (and not gcc) warns about redefining a typedef with the same types, so disable that warning.
+    # Note that it will still throw an error if a typedef is redefined with a different type.
+    if (CMAKE_C_COMPILER_ID MATCHES "Clang")
+        set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wno-typedef-redefinition")
+    endif()
+
     add_library(${API_LOWERCASE} SHARED ${NORMAL_LOADER_SRCS} ${OPT_LOADER_SRCS})
     add_dependencies(${API_LOWERCASE} generate_helper_files loader_gen_files loader_asm_gen_files)
+    target_compile_definitions(${API_LOWERCASE} PUBLIC -DLOADER_DYNAMIC_LIB)
     set_target_properties(${API_LOWERCASE} PROPERTIES SOVERSION "1" VERSION "1.0.${vk_header_version}")
     target_link_libraries(${API_LOWERCASE} -ldl -lpthread -lm)
 

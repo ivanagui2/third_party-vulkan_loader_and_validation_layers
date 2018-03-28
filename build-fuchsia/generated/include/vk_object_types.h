@@ -25,6 +25,7 @@
  * Author: Courtney Goeltzenleuchter <courtneygo@google.com>
  * Author: Tobin Ehlis <tobine@google.com>
  * Author: Chris Forbes <chrisforbes@google.com>
+ * Author: John Zulauf<jzulauf@lunarg.com>
  *
  ****************************************************************************/
 
@@ -66,10 +67,12 @@ typedef enum VulkanObjectType {
     kVulkanObjectTypeDisplayKHR = 28,
     kVulkanObjectTypeDisplayModeKHR = 29,
     kVulkanObjectTypeDescriptorUpdateTemplateKHR = 30,
-    kVulkanObjectTypeDebugReportCallbackEXT = 31,
-    kVulkanObjectTypeObjectTableNVX = 32,
-    kVulkanObjectTypeIndirectCommandsLayoutNVX = 33,
-    kVulkanObjectTypeMax = 34,
+    kVulkanObjectTypeSamplerYcbcrConversionKHR = 31,
+    kVulkanObjectTypeDebugReportCallbackEXT = 32,
+    kVulkanObjectTypeObjectTableNVX = 33,
+    kVulkanObjectTypeIndirectCommandsLayoutNVX = 34,
+    kVulkanObjectTypeValidationCacheEXT = 35,
+    kVulkanObjectTypeMax = 36,
 } VulkanObjectType;
 
 // Array of object name strings for OBJECT_TYPE enum conversion
@@ -105,13 +108,16 @@ static const char * const object_string[kVulkanObjectTypeMax] = {
     "DisplayKHR",
     "DisplayModeKHR",
     "DescriptorUpdateTemplateKHR",
+    "SamplerYcbcrConversionKHR",
     "DebugReportCallbackEXT",
     "ObjectTableNVX",
     "IndirectCommandsLayoutNVX",
+    "ValidationCacheEXT",
 };
 
 // Helper array to get Vulkan VK_EXT_debug_report object type enum from the internal layers version
 const VkDebugReportObjectTypeEXT get_debug_report_enum[] = {
+    VK_DEBUG_REPORT_OBJECT_TYPE_UNKNOWN_EXT, // No Match
     VK_DEBUG_REPORT_OBJECT_TYPE_INSTANCE_EXT,   // kVulkanObjectTypeInstance
     VK_DEBUG_REPORT_OBJECT_TYPE_PHYSICAL_DEVICE_EXT,   // kVulkanObjectTypePhysicalDevice
     VK_DEBUG_REPORT_OBJECT_TYPE_DEVICE_EXT,   // kVulkanObjectTypeDevice
@@ -142,13 +148,16 @@ const VkDebugReportObjectTypeEXT get_debug_report_enum[] = {
     VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_KHR_EXT,   // kVulkanObjectTypeDisplayKHR
     VK_DEBUG_REPORT_OBJECT_TYPE_DISPLAY_MODE_KHR_EXT,   // kVulkanObjectTypeDisplayModeKHR
     VK_DEBUG_REPORT_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR_EXT,   // kVulkanObjectTypeDescriptorUpdateTemplateKHR
+    VK_DEBUG_REPORT_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR_EXT,   // kVulkanObjectTypeSamplerYcbcrConversionKHR
     VK_DEBUG_REPORT_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT_EXT,   // kVulkanObjectTypeDebugReportCallbackEXT
     VK_DEBUG_REPORT_OBJECT_TYPE_OBJECT_TABLE_NVX_EXT,   // kVulkanObjectTypeObjectTableNVX
     VK_DEBUG_REPORT_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX_EXT,   // kVulkanObjectTypeIndirectCommandsLayoutNVX
+    VK_DEBUG_REPORT_OBJECT_TYPE_VALIDATION_CACHE_EXT_EXT,   // kVulkanObjectTypeValidationCacheEXT
 };
 
 // Helper array to get Official Vulkan VkObjectType enum from the internal layers version
 const VkObjectType get_object_type_enum[] = {
+    VK_OBJECT_TYPE_UNKNOWN, // No Match
     VK_OBJECT_TYPE_INSTANCE,   // kVulkanObjectTypeInstance
     VK_OBJECT_TYPE_PHYSICAL_DEVICE,   // kVulkanObjectTypePhysicalDevice
     VK_OBJECT_TYPE_DEVICE,   // kVulkanObjectTypeDevice
@@ -179,7 +188,9 @@ const VkObjectType get_object_type_enum[] = {
     VK_OBJECT_TYPE_DISPLAY_KHR,   // kVulkanObjectTypeDisplayKHR
     VK_OBJECT_TYPE_DISPLAY_MODE_KHR,   // kVulkanObjectTypeDisplayModeKHR
     VK_OBJECT_TYPE_DESCRIPTOR_UPDATE_TEMPLATE_KHR,   // kVulkanObjectTypeDescriptorUpdateTemplateKHR
+    VK_OBJECT_TYPE_SAMPLER_YCBCR_CONVERSION_KHR,   // kVulkanObjectTypeSamplerYcbcrConversionKHR
     VK_OBJECT_TYPE_DEBUG_REPORT_CALLBACK_EXT,   // kVulkanObjectTypeDebugReportCallbackEXT
     VK_OBJECT_TYPE_OBJECT_TABLE_NVX,   // kVulkanObjectTypeObjectTableNVX
     VK_OBJECT_TYPE_INDIRECT_COMMANDS_LAYOUT_NVX,   // kVulkanObjectTypeIndirectCommandsLayoutNVX
+    VK_OBJECT_TYPE_VALIDATION_CACHE_EXT,   // kVulkanObjectTypeValidationCacheEXT
 };

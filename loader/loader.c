@@ -417,17 +417,17 @@ VKAPI_ATTR VkResult VKAPI_CALL vkSetDeviceDispatch(VkDevice device, void *object
     return VK_SUCCESS;
 }
 
-#if defined(WIN32)
+#if defined(_WIN32)
 // Find the list of registry files (names VulkanDriverName/VulkanDriverNameWow) in hkr.
 //
 // This function looks for filename in given device handle, filename is then added to return list
 // function return true if filename was appended to reg_data list
 // If error occures result is updated with failure reason
-bool loaderGetDeviceRegistryEntry(const struct loader_instance *inst, char **reg_data,PDWORD total_size, DEVINST devID, VkResult *result)
+bool loaderGetDeviceRegistryEntry(const struct loader_instance *inst, char **reg_data, PDWORD total_size, DEVINST dev_id, LPCTSTR value_name, VkResult *result)
 {
     HKEY hkrKey = INVALID_HANDLE_VALUE;
-    DWORD requiredSize, dataType;
-    char *pVkDriverPath = NULL;
+    DWORD requiredSize, data_type;
+    char *manifest_path = NULL;
     bool found = false;
 
     if (NULL == total_size || NULL == reg_data) {
@@ -435,10 +435,10 @@ bool loaderGetDeviceRegistryEntry(const struct loader_instance *inst, char **reg
         return false;
     }
 
-    CONFIGRET status = CM_Open_DevNode_Key(devID, KEY_QUERY_VALUE, 0, RegDisposition_OpenExisting, &hkrKey, CM_REGISTRY_SOFTWARE);
+    CONFIGRET status = CM_Open_DevNode_Key(dev_id, KEY_QUERY_VALUE, 0, RegDisposition_OpenExisting, &hkrKey, CM_REGISTRY_SOFTWARE);
     if (status != CR_SUCCESS) {
         loader_log(inst, VK_DEBUG_REPORT_WARNING_BIT_EXT, 0,
-            "loaderGetDeviceRegistryEntry: Failed to open registry key for DeviceID(%d)", devID);
+            "loaderGetDeviceRegistryEntry: Failed to open registry key for DeviceID(%d)", dev_id);
         *result = VK_ERROR_INITIALIZATION_FAILED;
         return false;
     }
@@ -446,20 +446,25 @@ bool loaderGetDeviceRegistryEntry(const struct loader_instance *inst, char **reg
     // query value
     LSTATUS ret = RegQueryValueEx(
         hkrKey,
-        HKR_VK_DRIVER_NAME,
+        value_name,
         NULL,
         NULL,
         NULL,
         &requiredSize);
 
     if (ret != ERROR_SUCCESS) {
-        loader_log(inst, VK_DEBUG_REPORT_INFORMATION_BIT_EXT, 0,
-            "loaderGetDeviceRegistryEntry: DeviceID(%d) Failed to obtain VulkanDriverName size", devID);
+        if (ret == ERROR_FILE_NOT_FOUND) {
+            loader_log(inst, VK_DEBUG_REPORT_INFORMATION_BIT_EXT, 0,
+                "loaderGetDeviceRegistryEntry: Device ID(%d) Does not contain a value for \"%s\"", dev_id, value_name);
+        } else {
+            loader_log(inst, VK_DEBUG_REPORT_INFORMATION_BIT_EXT, 0,
+                "loaderGetDeviceRegistryEntry: DeviceID(%d) Failed to obtain %s size", dev_id, value_name);
+        }
         goto out;
     }
 
-    pVkDriverPath = loader_instance_heap_alloc(inst, requiredSize, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE);
-    if (pVkDriverPath == NULL) {
+    manifest_path = loader_instance_heap_alloc(inst, requiredSize, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE);
+    if (manifest_path == NULL) {
         loader_log(inst, VK_DEBUG_REPORT_ERROR_BIT_EXT, 0,
             "loaderGetDeviceRegistryEntry: Failed to allocate space for DriverName.");
         *result = VK_ERROR_OUT_OF_HOST_MEMORY;
@@ -468,24 +473,24 @@ bool loaderGetDeviceRegistryEntry(const struct loader_instance *inst, char **reg
 
     ret = RegQueryValueEx(
         hkrKey,
-        HKR_VK_DRIVER_NAME,
+        value_name,
         NULL,
-        &dataType,
-        pVkDriverPath,
+        &data_type,
+        (BYTE *)manifest_path,
         &requiredSize
     );
 
     if (ret != ERROR_SUCCESS) {
         loader_log(inst, VK_DEBUG_REPORT_ERROR_BIT_EXT, 0,
-            "loaderGetDeviceRegistryEntry: DeviceID(%d) Failed to obtain VulkanDriverName");
+            "loaderGetDeviceRegistryEntry: DeviceID(%d) Failed to obtain %s", value_name);
 
         *result = VK_ERROR_INITIALIZATION_FAILED;
         goto out;
     }
 
-    if (dataType != REG_SZ) {
+    if (data_type != REG_SZ && data_type != REG_MULTI_SZ) {
         loader_log(inst, VK_DEBUG_REPORT_ERROR_BIT_EXT, 0,
-            "loaderGetDeviceRegistryEntry: Invalid VulkanDriverName data type. Expected REG_SZ.");
+            "loaderGetDeviceRegistryEntry: Invalid %s data type. Expected REG_SZ or REG_MULTI_SZ.", value_name);
         *result = VK_ERROR_INITIALIZATION_FAILED;
         goto out;
     }
@@ -494,7 +499,7 @@ bool loaderGetDeviceRegistryEntry(const struct loader_instance *inst, char **reg
         *reg_data = loader_instance_heap_alloc(inst, *total_size, VK_SYSTEM_ALLOCATION_SCOPE_INSTANCE);
         if (NULL == *reg_data) {
             loader_log(inst, VK_DEBUG_REPORT_ERROR_BIT_EXT, 0,
-                "loaderGetDeviceRegistryEntry: Failed to allocate space for registry data for key %s", pVkDriverPath);
+                "loaderGetDeviceRegistryEntry: Failed to allocate space for registry data for key %s", manifest_path);
             *result = VK_ERROR_OUT_OF_HOST_MEMORY;
             goto out;
         }
@@ -506,7 +511,7 @@ bool loaderGetDeviceRegistryEntry(const struct loader_instance *inst, char **reg
             loader_log(
                 inst, VK_DEBUG_REPORT_ERROR_BIT_EXT, 0,
                 "loaderGetDeviceRegistryEntry: Failed to reallocate space for registry value of size %d for key %s",
-                *total_size * 2, pVkDriverPath);
+                *total_size * 2, manifest_path);
             *result = VK_ERROR_OUT_OF_HOST_MEMORY;
             goto out;
         }
@@ -514,16 +519,23 @@ bool loaderGetDeviceRegistryEntry(const struct loader_instance *inst, char **reg
         *total_size *= 2;
     }
 
-    if (strlen(*reg_data) == 0) {
-        (void)snprintf(*reg_data, requiredSize + 1, "%s", pVkDriverPath);
-    } else {
-        (void)snprintf(*reg_data + strlen(*reg_data), requiredSize + 2, "%c%s", PATH_SEPARATOR, pVkDriverPath);
+    for (char *curr_filename = manifest_path; curr_filename[0] != '\0'; curr_filename += strlen(curr_filename) + 1) {
+        if (strlen(*reg_data) == 0) {
+            (void)snprintf(*reg_data, requiredSize + 1, "%s", curr_filename);
+        } else {
+            (void)snprintf(*reg_data + strlen(*reg_data), requiredSize + 2, "%c%s", PATH_SEPARATOR, curr_filename);
+        }
+        loader_log(inst, VK_DEBUG_REPORT_INFORMATION_BIT_EXT, 0, "%s: Located json file \"%s\" from PnP registry: %s", __FUNCTION__, curr_filename, value_name);
+
+        if (data_type == REG_SZ) {
+            break;
+        }
     }
     found = true;
 
 out:
-    if (pVkDriverPath != NULL) {
-        loader_instance_heap_free(inst, pVkDriverPath);
+    if (manifest_path != NULL) {
+        loader_instance_heap_free(inst, manifest_path);
     }
     RegCloseKey(hkrKey);
     return found;
@@ -540,7 +552,7 @@ out:
 //
 // *reg_data contains a string list of filenames as pointer.
 // When done using the returned string list, the caller should free the pointer.
-VkResult loaderGetDeviceRegistryFiles(const struct loader_instance *inst, char **reg_data, PDWORD reg_data_size) {
+VkResult loaderGetDeviceRegistryFiles(const struct loader_instance *inst, char **reg_data, PDWORD reg_data_size, LPCTSTR value_name) {
     static const char* softwareComponentGUID = "{5c4c3332-344d-483c-8739-259e934c9cc8}";
     static const char* displayGUID = "{4d36e968-e325-11ce-bfc1-08002be10318}";
     const ULONG flags = CM_GETIDLIST_FILTER_CLASS | CM_GETIDLIST_FILTER_PRESENT;
@@ -572,7 +584,7 @@ VkResult loaderGetDeviceRegistryFiles(const struct loader_instance *inst, char *
             loader_log(inst, VK_DEBUG_REPORT_ERROR_BIT_EXT, 0,
                 "loaderGetDeviceRegistryFiles: Failed to allocate space for display device names.");
             result = VK_ERROR_OUT_OF_HOST_MEMORY;
-            return false;
+            return result;
         }
     } while (CM_Get_Device_ID_List(displayGUID, pDeviceNames, deviceNamesSize, flags) == CR_BUFFER_SMALL); 
     
@@ -604,9 +616,12 @@ VkResult loaderGetDeviceRegistryFiles(const struct loader_instance *inst, char *
             loader_log(inst, VK_DEBUG_REPORT_INFORMATION_BIT_EXT, 0,
                 "loaderGetRegistryFiles: opening device %s", deviceName);
 
-            if (loaderGetDeviceRegistryEntry(inst, reg_data, reg_data_size, devID, &result)) {
+            if (loaderGetDeviceRegistryEntry(inst, reg_data, reg_data_size, devID, value_name, &result)) {
                 found = true;
                 continue;
+            }
+            else if (result == VK_ERROR_OUT_OF_HOST_MEMORY) {
+                break;
             }
 
             status = CM_Get_Child(&childID, devID, 0);
@@ -638,7 +653,7 @@ VkResult loaderGetDeviceRegistryFiles(const struct loader_instance *inst, char *
                     continue;
                 }
 
-                if (loaderGetDeviceRegistryEntry(inst, reg_data, reg_data_size, childID, &result)) {
+                if (loaderGetDeviceRegistryEntry(inst, reg_data, reg_data_size, childID, value_name, &result)) {
                     found = true;
                     break; // check next-display-device
                 }
@@ -704,6 +719,7 @@ VkResult loaderGetRegistryFiles(const struct loader_instance *inst, char *locati
                         if (NULL == *reg_data) {
                             loader_log(inst, VK_DEBUG_REPORT_ERROR_BIT_EXT, 0,
                                        "loaderGetRegistryFiles: Failed to allocate space for registry data for key %s", name);
+                            RegCloseKey(key);
                             result = VK_ERROR_OUT_OF_HOST_MEMORY;
                             goto out;
                         }
@@ -716,6 +732,7 @@ VkResult loaderGetRegistryFiles(const struct loader_instance *inst, char *locati
                                 inst, VK_DEBUG_REPORT_ERROR_BIT_EXT, 0,
                                 "loaderGetRegistryFiles: Failed to reallocate space for registry value of size %d for key %s",
                                 *reg_data_size * 2, name);
+                            RegCloseKey(key);
                             result = VK_ERROR_OUT_OF_HOST_MEMORY;
                             goto out;
                         }
@@ -734,6 +751,7 @@ VkResult loaderGetRegistryFiles(const struct loader_instance *inst, char *locati
                 }
                 name_size = 2048;
             }
+            RegCloseKey(key);
         }
 
         // Advance the location - if the next location is in the secondary hive, then reset the locations and advance the hive
@@ -897,8 +915,9 @@ static struct loader_layer_properties *loader_get_next_layer_property(const stru
 
 // Remove all layer properties entries from the list
 void loader_delete_layer_properties(const struct loader_instance *inst, struct loader_layer_list *layer_list) {
-    uint32_t i, j;
+    uint32_t i, j, k;
     struct loader_device_extension_list *dev_ext_list;
+    struct loader_dev_ext_props *ext_props;
     if (!layer_list) return;
 
     for (i = 0; i < layer_list->count; i++) {
@@ -908,11 +927,16 @@ void loader_delete_layer_properties(const struct loader_instance *inst, struct l
         }
         loader_destroy_generic_list(inst, (struct loader_generic_list *)&layer_list->list[i].instance_extension_list);
         dev_ext_list = &layer_list->list[i].device_extension_list;
-        if (dev_ext_list->capacity > 0 && NULL != dev_ext_list->list && dev_ext_list->list->entrypoint_count > 0) {
-            for (j = 0; j < dev_ext_list->list->entrypoint_count; j++) {
-                loader_instance_heap_free(inst, dev_ext_list->list->entrypoints[j]);
+        if (dev_ext_list->capacity > 0 && NULL != dev_ext_list->list) {
+            for (j = 0; j < dev_ext_list->count; j++) {
+                ext_props = &dev_ext_list->list[j];
+                if (ext_props->entrypoint_count > 0) {
+                    for (k = 0; k < ext_props->entrypoint_count; k++) {
+                        loader_instance_heap_free(inst, ext_props->entrypoints[k]);
+                    }
+                    loader_instance_heap_free(inst, ext_props->entrypoints);
+                }
             }
-            loader_instance_heap_free(inst, dev_ext_list->list->entrypoints);
         }
         loader_destroy_generic_list(inst, (struct loader_generic_list *)dev_ext_list);
     }
@@ -1913,6 +1937,12 @@ struct loader_manifest_files {
     char **filename_list;
 };
 
+void loader_release() {
+    // release mutexs
+    loader_platform_thread_delete_mutex(&loader_lock);
+    loader_platform_thread_delete_mutex(&loader_json_lock);
+}
+
 // Get next file or dirname given a string list or registry key path
 //
 // \returns
@@ -2295,6 +2325,28 @@ typedef struct {
     uint16_t patch;
 } layer_json_version;
 
+static inline bool is_valid_layer_json_version(const layer_json_version *layer_json) {
+    // Supported versions are: 1.0.0, 1.0.1, 1.1.0, 1.1.1, and 1.1.2.
+    if ((layer_json->major == 1 && layer_json->minor == 1 && layer_json->patch < 3) ||
+        (layer_json->major == 1 && layer_json->minor == 0 && layer_json->patch < 2)) {
+        return true;
+    }
+    return false;
+}
+
+static inline bool layer_json_supports_layers_tag(const layer_json_version *layer_json) {
+    // Supported versions started in 1.0.1, so anything newer
+    if ((layer_json->major > 1 || layer_json->minor > 0 || layer_json->patch > 1)) {
+        return true;
+    }
+    return false;
+}
+
+static inline bool layer_json_supports_pre_instance_tag(const layer_json_version *layer_json) {
+    // Supported versions started in 1.1.2, so anything newer
+    return layer_json->major > 1 || layer_json->minor > 1 || (layer_json->minor == 1 && layer_json->patch > 1);
+}
+
 static VkResult loader_read_json_layer(const struct loader_instance *inst, struct loader_layer_list *layer_instance_list,
                                        cJSON *layer_node, layer_json_version version, cJSON *item, cJSON *disable_environment,
                                        bool is_implicit, char *filename) {
@@ -2670,6 +2722,40 @@ static VkResult loader_read_json_layer(const struct loader_instance *inst, struc
         }
     }
 
+    // Read in the pre-instance stuff
+    cJSON *pre_instance = cJSON_GetObjectItem(layer_node, "pre_instance_functions");
+    if (pre_instance) {
+        if (!layer_json_supports_pre_instance_tag(&version)) {
+            loader_log(inst, VK_DEBUG_REPORT_ERROR_BIT_EXT, 0,
+                       "Found pre_instance_functions section in layer from \"%s\". "
+                       "This section is only valid in manifest version 1.1.2 or later. The section will be ignored",
+                       filename);
+        } else if (!is_implicit) {
+            loader_log(inst, VK_DEBUG_REPORT_WARNING_BIT_EXT, 0,
+                       "Found pre_instance_functions section in explicit layer from "
+                       "\"%s\". This section is only valid in implicit layers. The section will be ignored",
+                       filename);
+        } else {
+            cJSON *inst_ext_json = cJSON_GetObjectItem(pre_instance, "vkEnumerateInstanceExtensionProperties");
+            if (inst_ext_json) {
+                char *inst_ext_name = cJSON_Print(inst_ext_json);
+                size_t len = strlen(inst_ext_name) >= MAX_STRING_SIZE ? MAX_STRING_SIZE - 3 : strlen(inst_ext_name) - 2;
+                strncpy(props->pre_instance_functions.enumerate_instance_extension_properties, inst_ext_name + 1, len);
+                props->pre_instance_functions.enumerate_instance_extension_properties[len] = '\0';
+                cJSON_Free(inst_ext_name);
+            }
+
+            cJSON *inst_layer_json = cJSON_GetObjectItem(pre_instance, "vkEnumerateInstanceLayerProperties");
+            if (inst_layer_json) {
+                char *inst_layer_name = cJSON_Print(inst_layer_json);
+                size_t len = strlen(inst_layer_name) >= MAX_STRING_SIZE ? MAX_STRING_SIZE - 3 : strlen(inst_layer_name) - 2;
+                strncpy(props->pre_instance_functions.enumerate_instance_layer_properties, inst_layer_name + 1, len);
+                props->pre_instance_functions.enumerate_instance_layer_properties[len] = '\0';
+                cJSON_Free(inst_layer_name);
+            }
+        }
+    }
+
     result = VK_SUCCESS;
 
 out:
@@ -2686,23 +2772,6 @@ out:
     }
 
     return result;
-}
-
-static inline bool is_valid_layer_json_version(const layer_json_version *layer_json) {
-    // Supported versions are: 1.0.0, 1.0.1, and 1.1.0.
-    if ((layer_json->major == 1 && layer_json->minor == 1 && layer_json->patch < 2) ||
-        (layer_json->major == 1 && layer_json->minor == 0 && layer_json->patch < 2)) {
-        return true;
-    }
-    return false;
-}
-
-static inline bool layer_json_supports_layers_tag(const layer_json_version *layer_json) {
-    // Supported versions started in 1.0.1, so anything newer
-    if ((layer_json->major > 1 || layer_json->minor > 0 || layer_json->patch > 1)) {
-        return true;
-    }
-    return false;
 }
 
 // Given a cJSON struct (json) of the top level JSON object from layer manifest
@@ -3014,9 +3083,12 @@ static VkResult loader_get_manifest_files(const struct loader_instance *inst, co
 
         DWORD reg_size = 4096;
 
-        if (!strncmp(loc, DEFAULT_VK_DRIVERS_INFO, sizeof(DEFAULT_VK_DRIVERS_INFO)))
-        {
-            regHKR_result = loaderGetDeviceRegistryFiles(inst, &reg, &reg_size);
+        if (!strncmp(loc, DEFAULT_VK_DRIVERS_INFO, sizeof(DEFAULT_VK_DRIVERS_INFO))) {
+            regHKR_result = loaderGetDeviceRegistryFiles(inst, &reg, &reg_size, LoaderPnpDriverRegistry());
+        } else if (!strncmp(loc, DEFAULT_VK_ELAYERS_INFO, sizeof(DEFAULT_VK_ELAYERS_INFO))) {
+            regHKR_result = loaderGetDeviceRegistryFiles(inst, &reg, &reg_size, LoaderPnpELayerRegistry());
+        } else if (!strncmp(loc, DEFAULT_VK_ILAYERS_INFO, sizeof(DEFAULT_VK_ILAYERS_INFO))) {
+            regHKR_result = loaderGetDeviceRegistryFiles(inst, &reg, &reg_size, LoaderPnpILayerRegistry());
         }
 
         VkResult reg_result = loaderGetRegistryFiles(inst, loc, is_layer, &reg, &reg_size);
@@ -3997,7 +4069,7 @@ void *loader_dev_ext_gpa(struct loader_instance *inst, const char *funcName) {
 
     // Check if funcName is supported in either ICDs or a layer library
     if (!loader_check_icds_for_dev_ext_address(inst, funcName) &&
-        !loader_check_layer_list_for_dev_ext_address(&inst->instance_layer_list, funcName)) {
+        !loader_check_layer_list_for_dev_ext_address(&inst->app_activated_layer_list, funcName)) {
         // if support found in layers continue on
         return NULL;
     }
@@ -4721,7 +4793,7 @@ VkResult loader_create_device_chain(const struct loader_physical_device_tramp *p
             nextGIPA = fpGIPA;
             nextGDPA = fpGDPA;
 
-            loader_log(inst, VK_DEBUG_REPORT_INFORMATION_BIT_EXT, 0, "Insert device layer %s (%s)", layer_prop->info.layerName,
+            loader_log(inst, VK_DEBUG_REPORT_INFORMATION_BIT_EXT, 0, "Inserted device layer %s (%s)", layer_prop->info.layerName,
                        layer_prop->lib_name);
 
             activated_layers++;
@@ -4966,6 +5038,9 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateInstance(const VkInstanceCreateI
             goto out;
         }
 
+        // If any error happens after here, we need to remove the ICD from the list,
+        // because we've already added it, but haven't validated it
+
         icd_create_info.enabledExtensionCount = 0;
         struct loader_extension_list icd_exts;
 
@@ -5032,6 +5107,9 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateInstance(const VkInstanceCreateI
             loader_log(ptr_instance, VK_DEBUG_REPORT_WARNING_BIT_EXT, 0,
                        "terminator_CreateInstance: Failed to CreateInstance and find "
                        "entrypoints with ICD.  Skipping ICD.");
+            ptr_instance->icd_terms = icd_term->next;
+            icd_term->next = NULL;
+            loader_icd_destroy(ptr_instance, icd_term, pAllocator);
             continue;
         }
 
@@ -5126,6 +5204,9 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateDevice(VkPhysicalDevice physical
     PFN_vkCreateDevice fpCreateDevice = icd_term->dispatch.CreateDevice;
     struct loader_extension_list icd_exts;
 
+    struct VkStructureHeader *caller_dgci_container = NULL;
+    VkDeviceGroupDeviceCreateInfoKHX *caller_dgci = NULL;
+
     dev->phys_dev_term = phys_dev_term;
 
     icd_exts.list = NULL;
@@ -5182,7 +5263,7 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateDevice(VkPhysicalDevice physical
             filtered_extension_names[localCreateInfo.enabledExtensionCount] = (char *)extension_name;
             localCreateInfo.enabledExtensionCount++;
         } else {
-            loader_log(icd_term->this_instance, VK_DEBUG_REPORT_WARNING_BIT_EXT, 0,
+            loader_log(icd_term->this_instance, VK_DEBUG_REPORT_DEBUG_BIT_EXT, 0,
                        "vkCreateDevice extension %s not available for "
                        "devices associated with ICD %s",
                        extension_name, icd_term->scanned_icd->lib_name);
@@ -5218,6 +5299,10 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateDevice(VkPhysicalDevice physical
                         phys_dev_array[phys_dev] = cur_term->phys_dev;
                     }
                     temp_struct->pPhysicalDevices = phys_dev_array;
+
+                    // Keep track of pointers to restore pNext chain before returning
+                    caller_dgci_container = pPrev;
+                    caller_dgci = cur_struct;
 
                     // Replace the old struct in the pNext chain with this one.
                     pPrev->pNext = (const void *)temp_struct;
@@ -5308,6 +5393,12 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateDevice(VkPhysicalDevice physical
 out:
     if (NULL != icd_exts.list) {
         loader_destroy_generic_list(icd_term->this_instance, (struct loader_generic_list *)&icd_exts);
+    }
+
+    // Restore pNext pointer to old VkDeviceGroupDeviceCreateInfoKHX
+    // in the chain to maintain consistency for the caller.
+    if (caller_dgci_container != NULL) {
+        caller_dgci_container->pNext = caller_dgci;
     }
 
     return res;
@@ -5848,3 +5939,151 @@ VkStringErrorFlags vk_string_validate(const int max_length, const char *utf8) {
     }
     return result;
 }
+
+VKAPI_ATTR VkResult VKAPI_CALL
+terminator_EnumerateInstanceExtensionProperties(const VkEnumerateInstanceExtensionPropertiesChain *chain, const char *pLayerName,
+                                                uint32_t *pPropertyCount, VkExtensionProperties *pProperties) {
+    struct loader_extension_list *global_ext_list = NULL;
+    struct loader_layer_list instance_layers;
+    struct loader_extension_list local_ext_list;
+    struct loader_icd_tramp_list icd_tramp_list;
+    uint32_t copy_size;
+    VkResult res = VK_SUCCESS;
+
+    // tls_instance = NULL;
+    memset(&local_ext_list, 0, sizeof(local_ext_list));
+    memset(&instance_layers, 0, sizeof(instance_layers));
+
+    // Get layer libraries if needed
+    if (pLayerName && strlen(pLayerName) != 0) {
+        if (vk_string_validate(MaxLoaderStringLength, pLayerName) != VK_STRING_ERROR_NONE) {
+            assert(VK_FALSE &&
+                   "vkEnumerateInstanceExtensionProperties:  "
+                   "pLayerName is too long or is badly formed");
+            res = VK_ERROR_EXTENSION_NOT_PRESENT;
+            goto out;
+        }
+
+        loader_layer_scan(NULL, &instance_layers);
+        for (uint32_t i = 0; i < instance_layers.count; i++) {
+            struct loader_layer_properties *props = &instance_layers.list[i];
+            if (strcmp(props->info.layerName, pLayerName) == 0) {
+                global_ext_list = &props->instance_extension_list;
+                break;
+            }
+        }
+    } else {
+        // Scan/discover all ICD libraries
+        memset(&icd_tramp_list, 0, sizeof(icd_tramp_list));
+        res = loader_icd_scan(NULL, &icd_tramp_list);
+        if (VK_SUCCESS != res) {
+            goto out;
+        }
+        // Get extensions from all ICD's, merge so no duplicates
+        res = loader_get_icd_loader_instance_extensions(NULL, &icd_tramp_list, &local_ext_list);
+        if (VK_SUCCESS != res) {
+            goto out;
+        }
+        loader_scanned_icd_clear(NULL, &icd_tramp_list);
+
+        // Append enabled implicit layers.
+        loader_implicit_layer_scan(NULL, &instance_layers);
+        for (uint32_t i = 0; i < instance_layers.count; i++) {
+            if (!loader_is_implicit_layer_enabled(NULL, &instance_layers.list[i])) {
+                continue;
+            }
+            struct loader_extension_list *ext_list = &instance_layers.list[i].instance_extension_list;
+            loader_add_to_ext_list(NULL, &local_ext_list, ext_list->count, ext_list->list);
+        }
+
+        global_ext_list = &local_ext_list;
+    }
+
+    if (global_ext_list == NULL) {
+        res = VK_ERROR_LAYER_NOT_PRESENT;
+        goto out;
+    }
+
+    if (pProperties == NULL) {
+        *pPropertyCount = global_ext_list->count;
+        goto out;
+    }
+
+    copy_size = *pPropertyCount < global_ext_list->count ? *pPropertyCount : global_ext_list->count;
+    for (uint32_t i = 0; i < copy_size; i++) {
+        memcpy(&pProperties[i], &global_ext_list->list[i], sizeof(VkExtensionProperties));
+    }
+    *pPropertyCount = copy_size;
+
+    if (copy_size < global_ext_list->count) {
+        res = VK_INCOMPLETE;
+        goto out;
+    }
+
+out:
+
+    loader_destroy_generic_list(NULL, (struct loader_generic_list *)&local_ext_list);
+    loader_delete_layer_properties(NULL, &instance_layers);
+    return res;
+}
+
+VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateInstanceLayerProperties(const VkEnumerateInstanceLayerPropertiesChain *chain,
+                                                                           uint32_t *pPropertyCount,
+                                                                           VkLayerProperties *pProperties) {
+    VkResult result = VK_SUCCESS;
+    struct loader_layer_list instance_layer_list;
+    tls_instance = NULL;
+
+    LOADER_PLATFORM_THREAD_ONCE(&once_init, loader_initialize);
+
+    uint32_t copy_size;
+
+    // Get layer libraries
+    memset(&instance_layer_list, 0, sizeof(instance_layer_list));
+    loader_layer_scan(NULL, &instance_layer_list);
+
+    if (pProperties == NULL) {
+        *pPropertyCount = instance_layer_list.count;
+        goto out;
+    }
+
+    copy_size = (*pPropertyCount < instance_layer_list.count) ? *pPropertyCount : instance_layer_list.count;
+    for (uint32_t i = 0; i < copy_size; i++) {
+        memcpy(&pProperties[i], &instance_layer_list.list[i].info, sizeof(VkLayerProperties));
+    }
+
+    *pPropertyCount = copy_size;
+
+    if (copy_size < instance_layer_list.count) {
+        result = VK_INCOMPLETE;
+        goto out;
+    }
+
+out:
+
+    loader_delete_layer_properties(NULL, &instance_layer_list);
+    return result;
+}
+
+#if defined(_WIN32) && defined(LOADER_DYNAMIC_LIB)
+BOOL WINAPI DllMain(HINSTANCE hinst, DWORD reason, LPVOID reserved) {
+    switch (reason) {
+        case DLL_PROCESS_ATTACH:
+            loader_initialize();
+            break;
+        case DLL_PROCESS_DETACH:
+            if (NULL == reserved) {
+                loader_release();
+            }
+            break;
+        default:
+            // Do nothing
+            break;
+    }
+    return TRUE;
+}
+#elif !defined(_WIN32)
+__attribute__((constructor)) void loader_init_library() { loader_initialize(); }
+
+__attribute__((destructor)) void loader_free_library() { loader_release(); }
+#endif

@@ -59,8 +59,8 @@ func_struct_id_map = {
 'VkApplicationInfo' : 3,
 'VkAttachmentDescription' : 4,
 'VkAttachmentReference' : 5,
-'VkBindBufferMemoryInfoKHX' : 6,
-'VkBindImageMemoryInfoKHX' : 7,
+'VkBindBufferMemoryInfoKHR' : 6,
+'VkBindImageMemoryInfoKHR' : 7,
 'VkBindImageMemorySwapchainInfoKHX' : 8,
 'VkBindSparseInfo' : 9,
 'VkBufferCreateInfo' : 10,
@@ -238,9 +238,9 @@ func_struct_id_map = {
 'vkAllocateMemory' : 182,
 'vkBeginCommandBuffer' : 183,
 'vkBindBufferMemory' : 184,
-'vkBindBufferMemory2KHX' : 185,
+'vkBindBufferMemory2KHR' : 185,
 'vkBindImageMemory' : 186,
-'vkBindImageMemory2KHX' : 187,
+'vkBindImageMemory2KHR' : 187,
 'vkCmdBeginQuery' : 188,
 'vkCmdBeginRenderPass' : 189,
 'vkCmdBindDescriptorSets' : 190,
@@ -540,17 +540,58 @@ func_struct_id_map = {
 'vkGetImageSparseMemoryRequirements2KHR' : 484,
 'VkPhysicalDevice16BitStorageFeaturesKHR' : 485,
 'VkPhysicalDeviceVariablePointerFeaturesKHR' : 486,
-'VkMagmaSurfaceCreateInfoKHR' : 487,
-'vkCreateMagmaSurfaceKHR' : 488,
-'VkImportMemoryFuchsiaHandleInfoKHR' : 489,
-'VkMemoryFuchsiaHandlePropertiesKHR' : 490,
-'VkMemoryGetFuchsiaHandleInfoKHR' : 491,
-'vkGetMemoryFuchsiaHandleKHR' : 492,
-'vkGetMemoryFuchsiaHandlePropertiesKHR': 493,
-'VkImportSemaphoreFuchsiaHandleInfoKHR' : 494,
-'vkImportSemaphoreFuchsiaHandleKHR' : 495,
-'VkSemaphoreGetFuchsiaHandleInfoKHR' : 496,
-'vkGetSemaphoreFuchsiaHandleKHR' : 497,
+'VkSampleLocationsInfoEXT' : 487,
+'VkRenderPassSampleLocationsBeginInfoEXT' : 488,
+'VkPipelineSampleLocationsStateCreateInfoEXT' : 489,
+'VkPhysicalDeviceSampleLocationsPropertiesEXT' : 490,
+'VkMultisamplePropertiesEXT' : 491,
+'vkGetPhysicalDeviceMultisamplePropertiesEXT' : 492,
+'VkValidationCacheCreateInfoEXT' : 493,
+'VkShaderModuleValidationCacheCreateInfoEXT' : 494,
+'vkCreateValidationCacheEXT' : 495,
+'vkGetValidationCacheDataEXT' : 496,
+'vkCmdSetSampleLocationsEXT' : 497,
+'vkDestroyValidationCacheEXT' : 498,
+'vkMergeValidationCachesEXT' : 499,
+'VkAttachmentSampleLocationsEXT' : 500,
+'VkSubpassSampleLocationsEXT' : 501,
+'VkPhysicalDevicePointClippingPropertiesKHR' : 502,
+'VkInputAttachmentAspectReferenceKHR' : 503,
+'VkRenderPassInputAttachmentAspectCreateInfoKHR' : 504,
+'VkImageViewUsageCreateInfoKHR' : 505,
+'VkPipelineTessellationDomainOriginStateCreateInfoKHR' : 506,
+'VkImageFormatListCreateInfoKHR' : 507,
+'VkSamplerYcbcrConversionCreateInfoKHR' : 508,
+'VkBindImagePlaneMemoryInfoKHR' : 509,
+'VkImagePlaneMemoryRequirementsInfoKHR' : 510,
+'vkCreateSamplerYcbcrConversionKHR' : 511,
+'VkBindBufferMemoryDeviceGroupInfoKHX' : 512,
+'VkBindImageMemoryDeviceGroupInfoKHX' : 513,
+'vkDestroySamplerYcbcrConversionKHR' : 514,
+'VkPhysicalDeviceSamplerYcbcrConversionFeaturesKHR' : 515,
+'VkSamplerYcbcrConversionImageFormatPropertiesKHR' : 516,
+'VkSamplerYcbcrConversionInfoKHR' : 517,
+'VkDeviceQueueGlobalPriorityCreateInfoEXT' : 518,
+'vkGetShaderInfoAMD' : 519,
+'VkShaderStatisticsInfoAMD' : 520,
+'VkImportMemoryHostPointerInfoEXT' : 521,
+'VkMemoryHostPointerPropertiesEXT' : 522,
+'VkPhysicalDeviceExternalMemoryHostPropertiesEXT' : 523,
+'vkGetMemoryHostPointerPropertiesEXT' : 524,
+'VkPhysicalDeviceConservativeRasterizationPropertiesEXT' : 525,
+'VkPipelineRasterizationConservativeStateCreateInfoEXT' : 526,
+'VkMagmaSurfaceCreateInfoKHR' : 527,
+'vkCreateMagmaSurfaceKHR' : 528,
+'VkImportMemoryFuchsiaHandleInfoKHR' : 529,
+'VkMemoryFuchsiaHandlePropertiesKHR' : 530,
+'VkMemoryGetFuchsiaHandleInfoKHR' : 531,
+'vkGetMemoryFuchsiaHandleKHR' : 532,
+'vkGetMemoryFuchsiaHandlePropertiesKHR': 533,
+'VkImportSemaphoreFuchsiaHandleInfoKHR' : 534,
+'vkImportSemaphoreFuchsiaHandleKHR' : 535,
+'VkSemaphoreGetFuchsiaHandleInfoKHR' : 536,
+'vkGetSemaphoreFuchsiaHandleKHR' : 537,
+'vkGetPhysicalDeviceMagmaPresentationSupportKHR' : 538,
 ### ADD New func/struct mappings above this line
 }
 # Mapping of params to unique IDs
@@ -1028,7 +1069,45 @@ implicit_param_map = {
 'basePipelineHandle' : 470,
 'pImmutableSamplers' : 471,
 'pTexelBufferView' : 472,
-'pFuchsiaHandle' : 473,
+'sampleLocationsPerPixel' : 473,
+'sampleLocationsCount' : 474,
+'pSampleLocations' : 475,
+'attachmentInitialSampleLocationsCount' : 476,
+'pAttachmentInitialSampleLocations' : 477,
+'postSubpassSampleLocationsCount' : 478,
+'pSubpassSampleLocations' : 479,
+'sampleLocationSampleCounts' : 480,
+'pValidationCache' : 481,
+'validationCache' : 482,
+'sampleLocationsInfo' : 483,
+'pSampleLocationsInfo' : 484,
+'pMultisampleProperties' : 485,
+'pointClippingBehavior' : 486,
+'aspectReferenceCount' : 487,
+'pAspectReferences' : 488,
+'domainOrigin' : 489,
+'ycbcrModel' : 490,
+'ycbcrRange' : 491,
+'xChromaOffset' : 492,
+'yChromaOffset' : 493,
+'chromaFilter' : 494,
+'planeAspect' : 495,
+'pYcbcrConversion' : 496,
+'ycbcrConversion' : 497,
+'pViewFormats' : 498,
+'conversion' : 499,
+'pPostSubpassSampleLocations' : 500,
+'globalPriority' : 501,
+'shaderStage' : 502,
+'infoType' : 503,
+'pInfoSize' : 504,
+'shaderStageMask' : 505,
+'pMemoryHostPointerProperties' : 506,
+'pHostPointer' : 507,
+'conservativeRasterizationMode' : 508,
+'pViewports' : 509,
+'pViewportWScalings' : 510,
+'pFuchsiaHandle' : 511,
 ### ADD New implicit param mappings above this line
 }
 
@@ -1049,7 +1128,7 @@ def convertVUID(vuid_string):
         print ("   replace '### ADD New func/struct mappings above this line' line with \"'%s' : %d,\"" % (vuid_parts[1], len(func_struct_id_map)))
         func_struct_id_map[vuid_parts[1]] = len(func_struct_id_map)
         #func_struct_update = True
-        sys.exit()
+        sys.exit(1)
     uniqueid = func_struct_id_map[vuid_parts[1]] << FUNC_STRUCT_SHIFT
     if vuid_parts[-1].isdigit(): # explit VUID has int on the end
         explicit_id = int(vuid_parts[-1])
@@ -1058,7 +1137,7 @@ def convertVUID(vuid_string):
     else: # implicit case
         if vuid_parts[-1] not in implicit_type_map:
             print("ERROR: Missing mapping for implicit type '%s'!\nTODO: Please add new mapping." % (vuid_parts[-1]))
-            sys.exit()
+            sys.exit(1)
         else:
             param_id = 0 # Default when no param is available
             if vuid_parts[-2] != vuid_parts[1]: # we have a parameter
@@ -1069,7 +1148,7 @@ def convertVUID(vuid_string):
                     print ("   replace '### ADD New implicit param mappings above this line' line with \"'%s' : %d,\"" % (vuid_parts[-2], len(implicit_param_map)))
                     implicit_param_map[vuid_parts[-2]] = len(implicit_param_map)
                     #imp_param_update = True
-                    sys.exit()
+                    sys.exit(1)
                 uniqueid = uniqueid + (param_id << IMPLICIT_PARAM_SHIFT) + (implicit_type_map[vuid_parts[-1]] << IMPLICIT_TYPE_SHIFT) + implicit_bit0
             else: # No parameter so that field is 0
                 uniqueid = uniqueid + (implicit_type_map[vuid_parts[-1]] << IMPLICIT_TYPE_SHIFT) + implicit_bit0

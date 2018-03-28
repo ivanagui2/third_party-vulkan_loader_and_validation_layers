@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Copyright 2017 Google Inc.
 # Copyright 2015 The Android Open Source Project
 # Copyright (C) 2015 Valve Corporation
 
@@ -16,33 +15,63 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if [ -z "$1" ]
-  then
-    echo "Usage: fuchsia-generate.sh TARGET_GEN_DIR"
-    exit 1
-fi
+fuchsia_root=`pwd`/../..
 
-function realpath { echo $(cd -P $(dirname $1); pwd)/$(basename $1); }
-# Get full path for the parent of this script
-SOURCE_DIR=$(realpath $(dirname $0))
-# Get full path for our gen directory
-OUTPUT_DIR=$(realpath $1)
-OUTPUT_INCLUDE_DIR=$OUTPUT_DIR/generated/include
+dir=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+cd $dir
 
-rm -rf $OUTPUT_DIR/generated
-mkdir -p $OUTPUT_INCLUDE_DIR
+rm -rf generated
+mkdir -p generated/include generated/common
 
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_safe_struct.h 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_safe_struct.cpp 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_struct_size_helper.h 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_struct_size_helper.c 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_enum_string_helper.h 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_object_types.h 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_dispatch_table_helper.h 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR thread_check.h 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR parameter_validation.h 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR unique_objects_wrappers.h 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_loader_extensions.h 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_loader_extensions.c 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_layer_dispatch_table.h 2> /dev/null )
-( cd $SOURCE_DIR; python $SOURCE_DIR/../scripts/lvl_genvk.py -registry $SOURCE_DIR/../scripts/vk.xml -o $OUTPUT_INCLUDE_DIR vk_extension_helper.h 2> /dev/null )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_safe_struct.h )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_safe_struct.cpp )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_struct_size_helper.h )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_struct_size_helper.c )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_enum_string_helper.h )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_object_types.h )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_dispatch_table_helper.h )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml thread_check.h )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml parameter_validation.cpp )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml unique_objects_wrappers.h )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_loader_extensions.h )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_loader_extensions.c )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_layer_dispatch_table.h )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_extension_helper.h )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml object_tracker.cpp )
+( cd generated/include; python3 ../../../scripts/lvl_genvk.py -registry ../../../scripts/vk.xml vk_typemap_helper.h )
+
+SPIRV_TOOLS_PATH=$fuchsia_root/third_party/shaderc/third_party/spirv-tools
+SPIRV_TOOLS_UUID=spirv_tools_uuid.txt
+
+set -e
+
+( cd generated/include;
+
+  if [[ -d $SPIRV_TOOLS_PATH ]]; then
+
+    echo Found spirv-tools, using git_dir for external_revision_generator.py
+
+    python3 ../../../scripts/external_revision_generator.py \
+      --git_dir $SPIRV_TOOLS_PATH \
+      -s SPIRV_TOOLS_COMMIT_ID \
+      -o spirv_tools_commit_id.h
+
+  else
+
+    echo No spirv-tools git_dir found, generating UUID for external_revision_generator.py
+
+    # Ensure uuidgen is installed, this should error if not found
+    uuidgen --v
+
+    uuidgen > $SPIRV_TOOLS_UUID;
+    cat $SPIRV_TOOLS_UUID;
+    python3 ../../../scripts/external_revision_generator.py \
+      --rev_file $SPIRV_TOOLS_UUID \
+      -s SPIRV_TOOLS_COMMIT_ID \
+      -o spirv_tools_commit_id.h
+
+  fi
+)
+
+
+exit 0

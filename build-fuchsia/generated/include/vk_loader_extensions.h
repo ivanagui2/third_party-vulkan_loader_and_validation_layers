@@ -128,6 +128,7 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_CreateDevice(
     const VkAllocationCallbacks*                pAllocator,
     VkDevice*                                   pDevice);
 VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateInstanceExtensionProperties(
+    const VkEnumerateInstanceExtensionPropertiesChain* chain,
     const char*                                 pLayerName,
     uint32_t*                                   pPropertyCount,
     VkExtensionProperties*                      pProperties);
@@ -137,6 +138,7 @@ VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateDeviceExtensionProperties(
     uint32_t*                                   pPropertyCount,
     VkExtensionProperties*                      pProperties);
 VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateInstanceLayerProperties(
+    const VkEnumerateInstanceLayerPropertiesChain* chain,
     uint32_t*                                   pPropertyCount,
     VkLayerProperties*                          pProperties);
 VKAPI_ATTR VkResult VKAPI_CALL terminator_EnumerateDeviceLayerProperties(
@@ -240,14 +242,6 @@ struct loader_icd_term_dispatch {
     PFN_vkGetPhysicalDeviceWin32PresentationSupportKHR GetPhysicalDeviceWin32PresentationSupportKHR;
 #endif // VK_USE_PLATFORM_WIN32_KHR
 
-    // ---- VK_KHR_magma_surface extension commands
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-    PFN_vkCreateMagmaSurfaceKHR CreateMagmaSurfaceKHR;
-#endif // VK_USE_PLATFORM_MAGMA_KHR
-#ifdef VK_USE_PLATFORM_MAGMA_KHR
-    PFN_vkGetPhysicalDeviceMagmaPresentationSupportKHR GetPhysicalDeviceMagmaPresentationSupportKHR;
-#endif // VK_USE_PLATFORM_MAGMA_KHR
-
     // ---- VK_KHR_get_physical_device_properties2 extension commands
     PFN_vkGetPhysicalDeviceFeatures2KHR GetPhysicalDeviceFeatures2KHR;
     PFN_vkGetPhysicalDeviceProperties2KHR GetPhysicalDeviceProperties2KHR;
@@ -269,6 +263,14 @@ struct loader_icd_term_dispatch {
     // ---- VK_KHR_get_surface_capabilities2 extension commands
     PFN_vkGetPhysicalDeviceSurfaceCapabilities2KHR GetPhysicalDeviceSurfaceCapabilities2KHR;
     PFN_vkGetPhysicalDeviceSurfaceFormats2KHR GetPhysicalDeviceSurfaceFormats2KHR;
+
+    // ---- VK_KHR_magma_surface extension commands
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    PFN_vkCreateMagmaSurfaceKHR CreateMagmaSurfaceKHR;
+#endif // VK_USE_PLATFORM_MAGMA_KHR
+#ifdef VK_USE_PLATFORM_MAGMA_KHR
+    PFN_vkGetPhysicalDeviceMagmaPresentationSupportKHR GetPhysicalDeviceMagmaPresentationSupportKHR;
+#endif // VK_USE_PLATFORM_MAGMA_KHR
 
     // ---- VK_EXT_debug_report extension commands
     PFN_vkCreateDebugReportCallbackEXT CreateDebugReportCallbackEXT;
@@ -320,6 +322,9 @@ struct loader_icd_term_dispatch {
 #ifdef VK_USE_PLATFORM_MACOS_MVK
     PFN_vkCreateMacOSSurfaceMVK CreateMacOSSurfaceMVK;
 #endif // VK_USE_PLATFORM_MACOS_MVK
+
+    // ---- VK_EXT_sample_locations extension commands
+    PFN_vkGetPhysicalDeviceMultisamplePropertiesEXT GetPhysicalDeviceMultisamplePropertiesEXT;
 };
 
 union loader_instance_extension_enables {

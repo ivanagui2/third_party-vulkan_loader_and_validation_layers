@@ -22,6 +22,7 @@
 
 #include "core_validation_types.h"
 #include "core_validation_error_enums.h"
+#include "descriptor_sets.h"
 #include "vulkan/vk_layer.h"
 #include <limits.h>
 #include <memory>
@@ -147,10 +148,12 @@ void PreCallRecordCmdResolveImage(layer_data *device_data, GLOBAL_CB_NODE *cb_no
                                   IMAGE_STATE *dst_image_state);
 
 bool PreCallValidateCmdBlitImage(layer_data *device_data, GLOBAL_CB_NODE *cb_node, IMAGE_STATE *src_image_state,
-                                 IMAGE_STATE *dst_image_state, uint32_t regionCount, const VkImageBlit *pRegions, VkFilter filter);
+                                 IMAGE_STATE *dst_image_state, uint32_t region_count, const VkImageBlit *regions,
+                                 VkImageLayout src_image_layout, VkImageLayout dst_image_layout, VkFilter filter);
 
 void PreCallRecordCmdBlitImage(layer_data *device_data, GLOBAL_CB_NODE *cb_node, IMAGE_STATE *src_image_state,
-                               IMAGE_STATE *dst_image_state);
+                               IMAGE_STATE *dst_image_state, uint32_t region_count, const VkImageBlit *regions,
+                               VkImageLayout src_image_layout, VkImageLayout dst_image_layout);
 
 bool ValidateCmdBufImageLayouts(layer_data *device_data, GLOBAL_CB_NODE *pCB,
                                 std::unordered_map<ImageSubresourcePair, IMAGE_LAYOUT_NODE> const &globalImageLayoutMap,
@@ -186,8 +189,18 @@ void PostCallRecordCreateBufferView(layer_data *device_data, const VkBufferViewC
 bool ValidateImageAspectMask(layer_data *device_data, VkImage image, VkFormat format, VkImageAspectFlags aspect_mask,
                              const char *func_name);
 
-bool ValidateImageSubresourceRange(const layer_data *device_data, const IMAGE_STATE *image_state, const bool is_imageview_2d_array,
-                                   const VkImageSubresourceRange &subresourceRange, const char *cmd_name, const char *param_name);
+bool ValidateCreateImageViewSubresourceRange(const layer_data *device_data, const IMAGE_STATE *image_state,
+                                             bool is_imageview_2d_type, const VkImageSubresourceRange &subresourceRange);
+
+bool ValidateCmdClearColorSubresourceRange(const layer_data *device_data, const IMAGE_STATE *image_state,
+                                           const VkImageSubresourceRange &subresourceRange, const char *param_name);
+
+bool ValidateCmdClearDepthSubresourceRange(const layer_data *device_data, const IMAGE_STATE *image_state,
+                                           const VkImageSubresourceRange &subresourceRange, const char *param_name);
+
+bool ValidateImageBarrierSubresourceRange(const layer_data *device_data, const IMAGE_STATE *image_state,
+                                          const VkImageSubresourceRange &subresourceRange, const char *cmd_name,
+                                          const char *param_name);
 
 bool PreCallValidateCreateImageView(layer_data *device_data, const VkImageViewCreateInfo *create_info);
 

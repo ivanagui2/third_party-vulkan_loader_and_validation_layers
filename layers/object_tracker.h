@@ -145,7 +145,8 @@ void AllocateCommandBuffer(VkDevice device, const VkCommandPool command_pool, co
 void AllocateDescriptorSet(VkDevice device, VkDescriptorPool descriptor_pool, VkDescriptorSet descriptor_set);
 void CreateSwapchainImageObject(VkDevice dispatchable_object, VkImage swapchain_image, VkSwapchainKHR swapchain);
 void ReportUndestroyedObjects(VkDevice device, UNIQUE_VALIDATION_ERROR_CODE error_code);
-
+bool ValidateDeviceObject(uint64_t device_handle, enum UNIQUE_VALIDATION_ERROR_CODE invalid_handle_code,
+                          enum UNIQUE_VALIDATION_ERROR_CODE wrong_device_code);
 
 template <typename T1, typename T2>
 bool ValidateObject(T1 dispatchable_object, T2 object, VulkanObjectType object_type, bool null_allowed,
@@ -154,6 +155,11 @@ bool ValidateObject(T1 dispatchable_object, T2 object, VulkanObjectType object_t
         return false;
     }
     auto object_handle = HandleToUint64(object);
+
+    if (object_type == kVulkanObjectTypeDevice) {
+        return ValidateDeviceObject(object_handle, invalid_handle_code, wrong_device_code);
+    }
+
     VkDebugReportObjectTypeEXT debug_object_type = get_debug_report_enum[object_type];
 
     layer_data *device_data = GetLayerDataPtr(get_dispatch_key(dispatchable_object), layer_data_map);
@@ -170,7 +176,7 @@ bool ValidateObject(T1 dispatchable_object, T2 object, VulkanObjectType object_t
                         (object_type == kVulkanObjectTypeImage && other_device_data.second->swapchainImageMap.find(object_handle) !=
                                                                       other_device_data.second->swapchainImageMap.end())) {
                         // Object found on other device, report an error if object has a device parent error code
-                        if (wrong_device_code != VALIDATION_ERROR_UNDEFINED) {
+                        if ((wrong_device_code != VALIDATION_ERROR_UNDEFINED) && (object_type != kVulkanObjectTypeSurfaceKHR)) {
                             return log_msg(device_data->report_data, VK_DEBUG_REPORT_ERROR_BIT_EXT, debug_object_type,
                                            object_handle, __LINE__, wrong_device_code, LayerName,
                                            "Object 0x%" PRIxLEAST64

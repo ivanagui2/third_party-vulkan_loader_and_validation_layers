@@ -1,0 +1,6 @@
+Name: Vulkan-LoaderAndValidationLayers
+Upstream git: https://github.com/KhronosGroup/Vulkan-LoaderAndValidationLayers
+Description:
+
+Vulkan ICD desktop loader and the Vulkan validation layers.
+

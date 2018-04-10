@@ -17,7 +17,7 @@ executable("vulkaninfo_bin") {
 }
 
 package("vulkaninfo") {
-  system_image = true
+  deprecated_system_image = true
 
   deps = [
     ":vulkaninfo_bin",

@@ -23,7 +23,7 @@ import("//garnet/lib/magma/gnbuild/magma.gni")
 import("//build/package.gni")
 
 package("vulkan_loader_and_layers") {
-  system_image = true
+  deprecated_system_image = true
 
   deps = [
     ":layers",
@@ -77,7 +77,7 @@ package("vulkan_loader_and_layers") {
 
 package("vulkan_loader_and_layers_tests") {
   testonly = true
-  system_image = true
+  deprecated_system_image = true
 
   if (current_cpu == "x64") {
     deps = [

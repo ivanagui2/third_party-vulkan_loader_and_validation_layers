@@ -34,21 +34,20 @@ package("vulkan_loader_and_layers") {
     {
       name = "libvulkan.so"
     },
-
     {
       name = "libVkLayer_core_validation.so"
     },
-
     {
       name = "libVkLayer_threading.so"
     },
-
     {
       name = "libVkLayer_unique_objects.so"
     },
-
     {
       name = "libVkLayer_parameter_validation.so"
+    },
+    {
+      name = "libVkLayer_object_tracker.so"
     },
   ]
 
@@ -57,21 +56,26 @@ package("vulkan_loader_and_layers") {
       path = rebase_path("fuchsia/VkLayer_core_validation.json")
       dest = "vulkan/explicit_layer.d/VkLayer_core_validation.json"
     },
-
     {
       path = rebase_path("fuchsia/VkLayer_parameter_validation.json")
       dest = "vulkan/explicit_layer.d/VkLayer_parameter_validation.json"
     },
-
     {
       path = rebase_path("fuchsia/VkLayer_threading.json")
       dest = "vulkan/explicit_layer.d/VkLayer_threading.json"
     },
-
     {
       path = rebase_path("fuchsia/VkLayer_unique_objects.json")
       dest = "vulkan/explicit_layer.d/VkLayer_unique_objects.json"
     },
+    {
+      path = rebase_path("fuchsia/VkLayer_object_tracker.json")
+      dest = "vulkan/explicit_layer.d/VkLayer_object_tracker.json"
+    },
+    {
+      path = rebase_path("fuchsia/VkLayer_standard_validation.json")
+      dest = "vulkan/explicit_layer.d/VkLayer_standard_validation.json"
+    }
   ]
 }
 
@@ -101,6 +105,7 @@ group("layers") {
     ":VkLayer_parameter_validation",
     ":VkLayer_threading",
     ":VkLayer_unique_objects",
+    ":VkLayer_object_tracker",
   ]
 }
 
@@ -176,6 +181,16 @@ shared_library("VkLayer_threading") {
 shared_library("VkLayer_unique_objects") {
   sources = [
     "unique_objects.cpp",
+  ]
+  deps = [
+    ":layer_common",
+  ]
+}
+
+shared_library("VkLayer_object_tracker") {
+  sources = [
+    "../build-fuchsia/generated/include/object_tracker.cpp",
+    "object_tracker_utils.cpp",
   ]
   deps = [
     ":layer_common",

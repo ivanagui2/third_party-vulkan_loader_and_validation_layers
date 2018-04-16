@@ -9,6 +9,7 @@ root `BUILD.gn` file.
 cd $FUCHSIA_ROOT/third_party/vulkan_loader_and_validation_layers
 ./build-fuchsia/fuchsia-generate.sh build-fuchsia
 ```
+- Synchronize layer descriptions; see layers/fuchsia/README.md
 
 - The header files `vulkan.h` and `vulkan.hpp` are generated from `vk.xml`. If
 `vk.xml` changes, regenerate the files with the following steps:
